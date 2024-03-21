@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => '__root__',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => NULL,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '91337aa02f4f01af0b6e4f5fae2b5b68cece274f',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         '__root__' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => NULL,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '91337aa02f4f01af0b6e4f5fae2b5b68cece274f',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -25,6 +25,15 @@
             'reference' => '55657b76da8a0a509250fb55b9dd24e1aa237eba',
             'type' => 'library',
             'install_path' => __DIR__ . '/../bramus/router',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'fortawesome/font-awesome' => array(
+            'pretty_version' => '6.5.1',
+            'version' => '6.5.1.0',
+            'reference' => 'deeea78c52bfe00b6e251ffddccf5570d5fdb05e',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../fortawesome/font-awesome',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
@@ -72,6 +81,21 @@
             'install_path' => __DIR__ . '/../symfony/polyfill-php80',
             'aliases' => array(),
             'dev_requirement' => false,
+        ),
+        'twbs/bootstrap' => array(
+            'pretty_version' => 'v5.3.3',
+            'version' => '5.3.3.0',
+            'reference' => '6e1f75f420f68e1d52733b8e407fc7c3766c9dba',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../twbs/bootstrap',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'twitter/bootstrap' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => 'v5.3.3',
+            ),
         ),
         'vlucas/phpdotenv' => array(
             'pretty_version' => 'v5.6.0',
