@@ -67,9 +67,8 @@ create table if not exists marks (
 create table if not exists teaching (
     teacher_id int not null,
     subject_id int not null,
-    semester tinyint not null,
     academic_year char(9) not null,
-    primary key (teacher_id, subject_id, semester, academic_year),
+    primary key (teacher_id, subject_id, academic_year),
     foreign key (teacher_id) references teachers(teacher_id),
     foreign key (subject_id) references subjects(subject_id),
     foreign key (academic_year) references academic_years(academic_year)
@@ -182,10 +181,10 @@ begin
 end $$
 
 -- [example]:
-call add_class(-1, '10A5', '2023-2024');
-call add_class(-1, '11A5', '2022-2023');
-call add_class(-1, '12A5', '2023-2024');
-call add_class(2, '10A6', '2023-2024');
+-- call add_class(-1, '10A5', '2023-2024');
+-- call add_class(-1, '11A5', '2022-2023');
+-- call add_class(-1, '12A5', '2023-2024');
+-- call add_class(2, '10A6', '2023-2024');
 
 -- [procedure]: delete_class(_class_id)
 -- [author]: phamvlap
@@ -628,8 +627,15 @@ create procedure add_subject (
     in _grade tinyint
 )
 begin 
-    insert into subjects (subject_id, subject_name, grade) 
-        values (_subject_id, _subject_name, _grade);
+    if(_subject_id = -1)
+    then
+        insert into subjects (subject_name, grade) 
+            values ( _subject_name, _grade);
+    else
+        update subjects 
+        set subject_name = _subject_name, grade = _grade 
+        where subject_id = _subject_id;
+    end if;
 end $$
 
 -- [example]: call add_subject(1, 'English', 1);
@@ -649,17 +655,6 @@ end $$
 -- [example]: call delete_subject(1);
 -- [procedure]: update_subject(subject_id, subject_name, grade)
 -- author: camtu
-drop procedure if exists update_subject $$
-create procedure update_subject (
-    in _subject_id int, 
-    in _subject_name varchar(255), 
-    in _grade tinyint
-)
-begin
-    update subjects 
-    set subject_name = _subject_name, grade = _grade 
-    where subject_id = _subject_id;
-end $$
 
 -- [example]: call update_subject(1, 'English', 1);
 
@@ -789,7 +784,7 @@ drop procedure if exists add_teaching $$
 create procedure add_teaching(
 	in _teacher_id int, 
 	in _subject_id int,
-	in _academic_year int
+	in _academic_year char(9)
 )
 begin
 	insert into teaching(teacher_id, subject_id, academic_year)
@@ -802,7 +797,7 @@ drop procedure if exists delete_teaching $$
 create procedure delete_teaching(
 	in _teacher_id int,
 	in _subject_id int,
-	in _academic_year int
+	in _academic_year char(9)
 )
 begin
 	delete from teaching
@@ -817,7 +812,7 @@ drop procedure if exists update_teaching $$
 create procedure update_teaching(
 	in _teacher_id int,
 	in _subject_id int, 
-	in _academic_year int
+	in _academic_year char(9)
 )
 begin
 	call delete_teaching(_teacher_id, _subject_id, _academic_year);

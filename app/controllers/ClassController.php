@@ -7,17 +7,19 @@ use App\db\PDOFactory;
 use PDO;
 use PDOException;
 
-class ClassController {
-	public function index() {
-		try{
+class ClassController
+{
+	public function index()
+	{
+		try {
 			$pdo = PDOFactory::connect();
 			// print_r($pdo);
 			echo 'hi world';
-			// $classModel = new ClassModel();
+			$classModel = new ClassModel();
 			// $classes = $classModel->getAll();
 			// var_dump($classes);
 			// echo 'hi world';
-	
+
 			// $preparedStmt = "call get_all_classes(:k1, :k2, :k3, :k4);";
 			$preparedStmt = "select * from classes";
 			$statement = $pdo->prepare($preparedStmt);
@@ -30,22 +32,26 @@ class ClassController {
 			var_dump($result);
 		} catch (PDOException $e) {
 			echo $e->getMessage();
-
 		}
 	}
-	public function create() {
+	public function create()
+	{
 		echo 'class create';
 	}
-	public function store() {
+	public function store()
+	{
 		echo 'class store';
 	}
-	public function edit() {
+	public function edit()
+	{
 		echo 'class edit';
 	}
-	public function update() {
+	public function update()
+	{
 		echo 'class update';
 	}
-	public function delete() {
-		echo 'class delete';	
+	public function delete()
+	{
+		echo 'class delete';
 	}
 }
