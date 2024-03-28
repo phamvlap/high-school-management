@@ -18,6 +18,7 @@
 --
 -- Table structure for table `academic_years`
 --
+create database high_school_management;
 
 DROP TABLE IF EXISTS `academic_years`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
