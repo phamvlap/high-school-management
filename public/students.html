@@ -28,7 +28,7 @@
             <div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary">
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li class="nav-item">
-                        <a href="#" class="nav-link active" aria-current="page">
+                        <a href="#" class="nav-link link-body-emphasis" aria-current="page">
                             <i class="fa fa-home"></i>
                             Quản lý lớp học
                         </a>
@@ -40,15 +40,9 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="nav-link link-body-emphasis">
+                        <a href="#" class="nav-link active">
                             <i class="fa fa-users"></i>
-                            Quản lý sinh viên
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link link-body-emphasis">
-                            <i class="fa-solid fa-pen"></i>
-                            Quản lý điểm
+                            Quản lý học sinh
                         </a>
                     </li>
                     <li>
@@ -65,30 +59,30 @@
             <div class="row">
                 <div class="col-3 border-end">
                     <form action="">
-                        <span class="fw-bold mb-5" style="font-size: 1rem;">Nhập điểm học sinh</span>
+                        <span class="fw-bold" style="font-size: 1rem;">Nhập thông tin học sinh</span>
                         <div class="mb-1">
-                            <label for="name" class="form-label mb-0">Mã số học sinh</label>
-                            <input type="text" class="form-control" id="id_student" name="id_student">
+                            <label for="name" class="form-label mb-0">Họ tên</label>
+                            <input type="text" class="form-control" id="name" name="name">
                         </div>
                         <div class="mb-1">
-                            <label for="subject" class="form-label mb-0">Môn học</label>
-                            <input type="text" class="form-control" id="subject" name="subject">
+                            <label for="dob" class="form-label mb-0">Ngày sinh</label>
+                            <input type="date" class="form-control" id="dob" name="dob">
                         </div>
                         <div class="mb-1">
-                            <label for="oral_score" class="form-label mb-0"> Điểm kiểm tra miệng</label>
-                            <input type="number" class="form-control" id="oral_score" name="oral_score">
+                            <label for="address" class="form-label mb-0">Địa chỉ</label>
+                            <input type="text" class="form-control" id="address" name="address">
                         </div>
                         <div class="mb-1">
-                            <label for="_15_minutes_score" class="form-label mb-0">Điểm kiểm tra 15 phút</label>
-                            <input type="number" class="form-control" id="phone" name="_15_minutes_score">
+                            <label for="phone" class="form-label mb-0">Số điện thoại phụ huynh</label>
+                            <input type="text" class="form-control" id="phone" name="phone">
                         </div>
                         <div class="mb-1">
-                            <label for="_1_period_score" class="form-label mb-0">Điểm kiểm tra một tiết</label>
-                            <input type="number" class="form-control" id="class" name="_1_period_score">
+                            <label for="class" class="form-label mb-0">Tên lớp</label>
+                            <input type="text" class="form-control" id="class" name="class">
                         </div>
                         <div class="mb-1">
-                            <label for="school-year" class="form-label mb-0">Điểm kiểm tra cuối kỳ</label>
-                            <input type="number" class="form-control" id="semester_score" name="semester_score">
+                            <label for="school-year" class="form-label mb-0">Năm học</label>
+                            <input type="text" class="form-control" id="school-year" name="school-year">
                         </div>
                         <div class="d-flex mt-2">
                             <button type="reset" class="ms-auto me-2 px-3 btn btn-sm btn-outline-danger">
@@ -99,35 +93,40 @@
                             </button>
                         </div>
                     </form>
+
+                    <!-- Thêm button cho phép them cùng lúc nhiều dữ liệu từ file excel -->
                     <div class="d-flex mt-5">
                         <button class="ms-auto px-3 btn btn-sm btn-outline-success">
                             Thêm từ file excel
                         </button>
                     </div>
                 </div>
-
-                <!-- Hiển thị thông tin tất cả học sinh từ cơ sở dữ liệu kèm theo 2 button xem, sửa và xóa (sử dụng fa icon), ẩn địa chỉ-->
-                <!-- Hiển thị thanh filter và search -->
                 <div class="col-9">
+                    <!-- Hiển thị thông tin tất cả học sinh từ cơ sở dữ liệu kèm theo 2 button xem, sửa và xóa (sử dụng fa icon), ẩn địa chỉ-->
+                    <!-- Hiển thị thanh filter và search -->
                     <form class="d-flex justify-content-between">
                         <div class="d-flex">
                             <div class="mb-1">
-                                <label for="student_name" class="form-label mb-0">Lọc theo năm</label>
-                                <select class="form-select" id="class" name="student_name">
-                                    <option value="2023-2024">2023-2024</option>
-                                    <option value="2023-2024">2022-2023</option>
+                                <label for="class" class="form-label mb-0">Lọc theo lớp</label>
+                                <select class="form-select" id="class" name="class">
+                                    <option selected>Lớp học</option>
+                                    <option value="10A1">10A1</option>
+                                    <option value="10A2">10A2</option>
+                                    <option value="10A3">10A3</option>
                                 </select>
                             </div>
                             <div class="ms-1 mb-1">
-                                <label for="school-year" class="form-label mb-0">Môn học</label>
+                                <label for="school-year" class="form-label mb-0">Lọc theo năm học</label>
                                 <select class="form-select" id="school-year" name="school-year">
-                                    <option value="Sinh">Sinh</option>
-                                    <option value="Lý">Lý</option>
+                                    <option selected>Năm học</option>
+                                    <option value="2024-2025">2024-2025</option>
+                                    <option value="2025-2026">2025-2026</option>
                                 </select>
                             </div>
                             <div class="ms-1 mb-1">
                                 <label for="sort" class="form-label mb-0">Sắp xếp</label>
                                 <select class="form-select" id="sort" name="sort">
+                                    <option selected>Họ tên</option>
                                     <option value="name-asc">Tên A-Z</option>
                                     <option value="name-desc">Tên Z-A</option>
                                 </select>
@@ -148,14 +147,10 @@
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">Mã số</th>
                                 <th scope="col">Họ tên</th>
-                                <th scope="col">Môn học</th>
-                                <th scope="col">Miệng</th>
-                                <th scope="col">15 phút</th>
-                                <th scope="col">Một tiết</th>
-                                <th scope="col">Cuối kì</th>
-                                <th scope="col">Học kì</th>
+                                <th scope="col">Ngày sinh</th>
+                                <th scope="col">Số điện thoại phụ huynh</th>
+                                <th scope="col">Tên lớp</th>
                                 <th scope="col">Năm học</th>
                                 <th scope="col">Hành động</th>
                             </tr>
@@ -163,37 +158,29 @@
                         <tbody>
                             <tr>
                                 <th scope="row">1</th>
-                                <td>3</td>
                                 <td>Nguyễn Văn A</td>
-                                <td>Toán</td>
-                                <td>6</td>
-                                <td>7</td>
-                                <td>8</td>
-                                <td>9</td>
-                                <td>1</td>
+                                <td>01/01/2001</td>
+                                <td>0123456789</td>
+                                <td>10A1</td>
                                 <td>2023-2024</td>
                                 <td>
-                                    <button class="btn btn-sm btn-outline-primary">
+                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Chi tiết">
                                         <i class="fa fa-eye"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-warning">
+                                    <button class="btn btn-sm btn-outline-warning" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Chỉnh sửa">
                                         <i class="fa fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-danger">
+                                    <button class="btn btn-sm btn-outline-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Xóa">
                                         <i class="fa fa-trash"></i>
                                     </button>
                                 </td>
                             </tr>
                             <tr>
                                 <th scope="row">2</th>
-                                <td>2</td>
                                 <td>Nguyễn Văn B</td>
-                                <td>Lí</td>
-                                <td>6</td>
-                                <td>7</td>
-                                <td>8</td>
-                                <td>9</td>
-                                <td>1</td>
+                                <td>01/01/2002</td>
+                                <td>0123456789</td>
+                                <td>10A2</td>
                                 <td>2023-2024</td>
                                 <td>
                                     <button class="btn btn-sm btn-outline-primary">
@@ -202,6 +189,25 @@
                                     <button class="btn btn-sm btn-outline-warning">
                                         <i class="fa fa-edit">
                                         </i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>Nguyễn Văn C</td>
+                                <td>01/01/2003</td>
+                                <td>0123456789</td>
+                                <td>10A3</td>
+                                <td>2023-2024</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fa fa-edit"></i>
                                     </button>
                                     <button class="btn btn-sm btn-outline-danger">
                                         <i class="fa fa-trash"></i>
@@ -251,6 +257,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" i
+        ntegrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" 
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
         integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
