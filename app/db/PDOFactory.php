@@ -12,7 +12,7 @@ class PDOFactory {
 		$user = $_ENV['DB_USER'];
 		$password = $_ENV['DB_PASS'];
 
-		$dsn = "mysql:host=$host;dbname=$dbname;charset=utf8";
+		$dsn = "mysql:host=$host;port=3306;dbname=$dbname;charset=utf8";
 		try {
 			return new PDO($dsn, $user, $password);
 		}

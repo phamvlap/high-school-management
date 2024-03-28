@@ -12,15 +12,15 @@ require_once __DIR__ . '/../app/routes/auth.php';
 require_once __DIR__ . '/../app/routes/classes.php';
 // marks
 require_once __DIR__ . '/../app/routes/marks.php';
-// // rooms
+// rooms
 require_once __DIR__ . '/../app/routes/rooms.php';
-// // statistics
+// statistics
 require_once __DIR__ . '/../app/routes/statistics.php';
 // // students
 require_once __DIR__ . '/../app/routes/students.php';
-// // teachers
+// teachers
 require_once __DIR__ . '/../app/routes/teachers.php';
-// // errors
+// errors
 require_once __DIR__ . '/../app/routes/errors.php';
 
 $router->run();
