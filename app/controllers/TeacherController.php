@@ -3,7 +3,7 @@
 namespace App\controllers;
 
 use App\models\TeacherModel;
-use App\utils\Validator;
+use App\utils\{Validator, Helper};
 
 class TeacherController
 {
@@ -39,9 +39,8 @@ class TeacherController
 	public function index()
 	{
 		$teacherModel = new TeacherModel();
-		$teachers = $teacherModel->getAll();
-		render_view('teachers/index', [
-			'teachers' => $teachers
+		Helper::renderPage('/teachers/index.php', [
+			'teachers' => $teacherModel->getAll()
 		]);
 	}
 	public function create()
@@ -61,12 +60,12 @@ class TeacherController
 
 		$errors = Validator::validate($data, $this->rules);
 		if ($errors) {
-			$this->index();
+			Helper::redirectTo('teachers/create', $errors);
 			return;
 		}
 
 		$teacherModel->store($data);
-		$this->index();
+		Helper::redirectTo('teachers', ['success' => 'Thêm mới giáo viên thành công']);
 	}
 	public function edit()
 	{

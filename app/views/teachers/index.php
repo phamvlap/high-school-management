@@ -1,5 +1,7 @@
 <?php
 
+use App\utils\Helper;
+
 require_once __DIR__ . '/../partials/header.php';
 require_once __DIR__ . '/../partials/nav.php';
 
@@ -37,7 +39,6 @@ require_once __DIR__ . '/../partials/nav.php';
                 </div>
             </form>
 
-            <!-- Thêm button cho phép them cùng lúc nhiều dữ liệu từ file excel -->
             <div class="d-flex mt-5">
                 <button class="ms-auto px-3 btn btn-sm btn-outline-success">
                     Thêm từ file excel
@@ -45,8 +46,6 @@ require_once __DIR__ . '/../partials/nav.php';
             </div>
         </div>
         <div class="col-9">
-            <!-- Hiển thị thông tin tất cả học sinh từ cơ sở dữ liệu kèm theo 2 button xem, sửa và xóa (sử dụng fa icon), ẩn địa chỉ-->
-            <!-- Hiển thị thanh filter và search -->
             <form class="d-flex justify-content-between">
                 <div class="d-flex">
                     <div class="mb-1">
@@ -69,8 +68,6 @@ require_once __DIR__ . '/../partials/nav.php';
                             <option selected>Họ tên</option>
                             <option value="name-asc">Tên A-Z</option>
                             <option value="name-desc">Tên Z-A</option>
-                            <!--<option value="dob-asc">Ngày sinh tăng dần</option>
-                                    <option value="dob-desc">Ngày sinh giảm dần</option>-->
                         </select>
                     </div>
                 </div>
@@ -98,11 +95,11 @@ require_once __DIR__ . '/../partials/nav.php';
                 <tbody>
                     <?php foreach ($teachers as $teacher) : ?>
                         <tr>
-                            <td><?= $teacher['teacher_id'] ?></td>
-                            <td><?= $teacher['full_name'] ?></td>
-                            <td><?= $teacher['date_of_birth'] ?></td>
-                            <td><?= $teacher['phone_number'] ?></td>
-                            <td><?= $teacher['address'] ?></td>
+                            <td><?= Helper::htmlEscape($teacher['teacher_id']) ?></td>
+                            <td><?= Helper::htmlEscape($teacher['full_name']) ?></td>
+                            <td><?= Helper::htmlEscape($teacher['date_of_birth']) ?></td>
+                            <td><?= Helper::htmlEscape($teacher['phone_number']) ?></td>
+                            <td><?= Helper::htmlEscape($teacher['address']) ?></td>
                             <td>
                                 <button class="btn btn-sm ">
                                     <i class="fa fa-eye"></i>
