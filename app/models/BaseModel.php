@@ -16,13 +16,13 @@ abstract class BaseModel {
 		return $this->pdo;
 	}
 
-	abstract protected function getAll(): array {}
+	// abstract protected function getAll(): array {}
 
-	abstract protected function getById(int $id): array {}
+	// abstract protected function getById(int $id): array {}
 
-	abstract protected function store(array $data): void {}
+	// abstract protected function store(array $data): void {}
 
-	abstract protected function update(int $id, array $data): void {}
+	// abstract protected function update(int $id, array $data): void {}
 
-	abstract protected function delete(int $id): void {}
+	// abstract protected function delete(int $id): void {}
 }
