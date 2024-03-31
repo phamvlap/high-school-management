@@ -2,10 +2,9 @@
 
 namespace App\models;
 
-use App\models\{HomeRoomTeacherModel, RoomClassModel, RoomModel, TeacherModel};
-use PDOException;
 use PDO;
 use App\db\PDOFactory;
+use PDOException;
 
 
 class ClassModel {
@@ -80,5 +79,11 @@ class ClassModel {
 		$statement = $this->pdo->prepare($preparedStmt);
 		$statement->bindParam(':id', $id, PDO::PARAM_INT);
 		$statement->execute();
+	}
+	public function count(): int
+    {
+            $statement = $this->pdo->prepare("select count(*) from classes");
+            $statement->execute();
+            return $statement->fetchColumn();
 	}
 }

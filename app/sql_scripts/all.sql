@@ -226,7 +226,7 @@ create procedure get_all_classes(
     in _is_order_by_class_name int
 )
 begin
-	select c.class_id, c.class_name, t.academic_year, 
+	select c.class_id, c.class_name, c.academic_year, 
 			t.teacher_id, t.full_name, t.date_of_birth, t.address, t.phone_number,
             rc.room_id, rc.semester,
             r.room_number, r.maximum_capacity
@@ -243,15 +243,15 @@ begin
 		and (_grade is null or c.class_name like concat('%', _grade, '%'))
 		and (_academic_year is null or c.academic_year = _academic_year)
 	order by
-		case
-			when _is_order_by_class_name = 0 then class_name
+        case
+			when _is_order_by_class_name = 0 then c.class_id
 			when _is_order_by_class_name = 1 then class_name
             else 'class_name'
 		end,
 		case
-			when _is_order_by_class_name = 0 then 'desc'
+			when _is_order_by_class_name = 0 then 'asc'
 			when _is_order_by_class_name = 1 then 'asc'
-            else ''
+            else 'desc'
 		end;
 end $$
 
