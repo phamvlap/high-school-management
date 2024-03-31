@@ -41,20 +41,6 @@ class TeacherModel
     public function store(array $data): void
     {
         try {
-            $statement = $this->pdo->prepare("call add_teacher(-1, :full_name, :date_of_birth, :address, :phone_number)");
-            $statement->bindParam(':full_name', $data['full_name'], PDO::PARAM_STR);
-            $statement->bindParam(':date_of_birth', $data['date_of_birth'], PDO::PARAM_STR);
-            $statement->bindParam(':address', $data['address'], PDO::PARAM_STR);
-            $statement->bindParam(':phone_number', $data['phone_number'], PDO::PARAM_STR);
-            $statement->execute();
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
-    }
-
-    public function update(array $data): void
-    {
-        try {
             $statement = $this->pdo->prepare("call add_teacher(:teacher_id, :full_name, :date_of_birth, :address, :phone_number)");
             $statement->bindParam(':teacher_id', $data['teacher_id'], PDO::PARAM_INT);
             $statement->bindParam(':full_name', $data['full_name'], PDO::PARAM_STR);

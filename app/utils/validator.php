@@ -25,7 +25,7 @@ class Validator
 		if (!isset($value)) {
 			return false;
 		}
-		return preg_match('/((09|03|07|08|05)+([0-9]{8})\b)/', $value);
+		return preg_match('/((09|03|07|08|05|01)+([0-9]{8})\b)/', $value);
 	}
 	// validate date
 	static function isDate($value)
@@ -113,13 +113,13 @@ class Validator
 					$errors[$key] = $message;
 				}
 				if (str_starts_with($r, 'maxLength')) {
-					$maxLength = explode(':', $message)[1];
+					$maxLength = (int)explode(':', $r)[1];
 					if (!self::isMaxLength($data[$key], $maxLength)) {
 						$errors[$key] = $message;
 					}
 				}
 				if (str_starts_with($r, 'minLength')) {
-					$minLength = explode(':', $message)[1];
+					$minLength = (int)explode(':', $r)[1];
 					if (!self::isMinLength($data[$key], $minLength)) {
 						$errors[$key] = $message;
 					}
