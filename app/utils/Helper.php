@@ -9,7 +9,7 @@ class Helper
         foreach ($data as $key => $value) {
             $_SESSION[$key] = $value;
         }
-        header('Location:' . $url);
+        header('Location: ' . $url);
         exit();
     }
 

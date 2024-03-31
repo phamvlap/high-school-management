@@ -6,7 +6,7 @@ use PDO;
 use PDOException;
 
 class PDOFactory {
-	static public function connect() {
+	static public function connect(): PDO {
 		$host = $_ENV['DB_HOST'];
 		$dbname = $_ENV['DB_NAME'];
 		$user = $_ENV['DB_USER'];
