@@ -50,4 +50,15 @@ class Helper
         unset($_SESSION['errors'][$key]);
         return self::htmlEscape($value);
     }
+
+    static public function setIntoSession(string $key, string|array $value): void
+    {
+        $_SESSION[$key] = $value;
+    }
+
+    static public function getPrefixUrl(): string
+    {
+        $uri = explode('?', $_SERVER['REQUEST_URI'])[0];
+        return explode('/', $uri)[1];
+    }
 }

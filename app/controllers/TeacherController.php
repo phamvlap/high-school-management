@@ -3,7 +3,7 @@
 namespace App\controllers;
 
 use App\models\TeacherModel;
-use App\utils\{Validator, Helper};
+use App\utils\{Validator, Helper, Paginator};
 use PDOException;
 
 class TeacherController
@@ -42,8 +42,20 @@ class TeacherController
 	{
 		try {
 			$teacherModel = new TeacherModel();
+			$paginator = new Paginator(
+				$_GET['limit'] ?? 10,
+				$teacherModel->count(),
+				$_GET['page'] ?? 1
+			);
 			Helper::renderPage('/teachers/index.php', [
-				'teachers' => $teacherModel->getAll()
+				'teachers' => $teacherModel->getAll(),
+				'pagination' => [
+					'currPage' => $_GET['page'] ?? 1,
+					'totalPages' => $paginator->getTotalPages(),
+					'prevPage' => $paginator->getPrevPage(),
+					'nextPage' => $paginator->getNextPage(),
+					'pages' => $paginator->getPages()
+				]
 			]);
 		} catch (PDOException $e) {
 			Helper::renderPage('/teachers/index.php', [
@@ -103,5 +115,19 @@ class TeacherController
 				'message' => 'Xóa giáo viên thất bại'
 			]);
 		}
+	}
+
+	public function download()
+	{
+		$teacherModel = new TeacherModel();
+
+		Helper::setIntoSession('download_data', [
+			'title' => 'DANH SÁCH GIÁO VIÊN',
+			'header' => ['Mã giáo viên', 'Họ và tên', 'Ngày sinh', 'Địa chỉ', 'Số điện thoại'],
+			'data' => $teacherModel->getAll()
+		]);
+
+		Helper::setIntoSession('previous_page', '/teachers');
+		Helper::redirectTo('/excel');
 	}
 }
