@@ -63,4 +63,15 @@ class TeacherModel
             echo $e->getMessage();
         }
     }
+
+    public function count(): int
+    {
+        try {
+            $statement = $this->pdo->prepare("select count(*) from teachers");
+            $statement->execute();
+            return $statement->fetchColumn();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
 }

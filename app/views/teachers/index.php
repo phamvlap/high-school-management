@@ -44,9 +44,12 @@ require_once __DIR__ . '/../partials/nav.php';
             </form>
 
             <div class="d-flex mt-5">
-                <button class="ms-auto px-3 btn btn-sm btn-outline-success">
-                    Thêm từ file excel
-                </button>
+                <a class="ms-auto px-3 btn btn-sm btn-outline-success">
+                    Thêm từ excel
+                </a>
+                <a href="/teachers/download" class="ms-auto px-3 btn btn-sm btn-outline-success">
+                    Xuất ra excel
+                </a>
             </div>
         </div>
         <div class="col-9">
@@ -120,32 +123,7 @@ require_once __DIR__ . '/../partials/nav.php';
                 </tbody>
             </table>
 
-            <!-- Thêm phân trang -->
-            <div class="d-flex justify-content-center">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">1</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">2</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">3</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+            <?php require_once __DIR__ . '/../partials/pagination.php'; ?>
 
 
         </div>
