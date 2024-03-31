@@ -11,7 +11,7 @@
     --color-success: #9CFDAC;
     --color-info: #9CE0FF;
     --header-height: 50px;
-    --nav-width: 200px;
+    --nav-width: 210px;
     --footer-height: 20px;
 }
 
@@ -47,6 +47,7 @@ form textarea {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    z-index: 100;
 }
 
 #nav {
@@ -164,5 +165,24 @@ form textarea {
     background-color: var(--color-info) !important;
 }
 
+.nav-link {
+    margin-top: 2px;
+}
 
-/* Nav */
+.nav-link--hover:not(.custom-color-info):hover{
+    background-color: var(--color-info) !important;
+}
+
+.nav-logout--hover:hover {
+    background-color: var(--color-error) !important;
+}
+
+.card {
+    transition: all 0.3s;
+}
+
+.card--hover:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    transform: translate(2px, -5px);
+    cursor: pointer;
+}

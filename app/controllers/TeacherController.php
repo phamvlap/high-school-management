@@ -3,11 +3,13 @@
 namespace App\controllers;
 
 use App\models\TeacherModel;
-use App\utils\{Validator, Helper};
+use App\utils\{Validator, Helper, Paginator};
+use PDOException;
 
 class TeacherController
 {
 	private $rules;
+
 	public function __construct()
 	{
 		$this->rules = [
@@ -15,12 +17,12 @@ class TeacherController
 			[
 				'isRequired' => 'Tên không được để trống',
 				'isString' => 'Tên phải là chuỗi',
-				'maxLength:255', 'message' => 'Tên không được quá 255 ký tự'
+				'maxLength:255' => 'Tên không được quá 255 ký tự'
 			],
 			'date_of_birth' =>
 			[
 				'isRequired' => 'Ngày sinh không được để trống',
-				'isDate' => 'Ngày sinh không hợp lệ'
+				// 'isDate' => 'Ngày sinh không hợp lệ'
 			],
 			'address' =>
 			[
@@ -38,45 +40,94 @@ class TeacherController
 
 	public function index()
 	{
-		$teacherModel = new TeacherModel();
-		Helper::renderPage('/teachers/index.php', [
-			'teachers' => $teacherModel->getAll()
-		]);
+		try {
+			$teacherModel = new TeacherModel();
+			$paginator = new Paginator(
+				$_GET['limit'] ?? 10,
+				$teacherModel->count(),
+				$_GET['page'] ?? 1
+			);
+			Helper::renderPage('/teachers/index.php', [
+				'teachers' => $teacherModel->getAll(),
+				'pagination' => [
+					'currPage' => $_GET['page'] ?? 1,
+					'totalPages' => $paginator->getTotalPages(),
+					'prevPage' => $paginator->getPrevPage(),
+					'nextPage' => $paginator->getNextPage(),
+					'pages' => $paginator->getPages()
+				]
+			]);
+		} catch (PDOException $e) {
+			Helper::renderPage('/teachers/index.php', [
+				'status' => 'danger',
+				'message' => 'Lấy dữ liệu thất bại'
+			]);
+		}
 	}
-	public function create()
-	{
-		echo 'teacher create';
-	}
+
 	public function store()
 	{
-		$teacherModel = new TeacherModel();
+		try {
+			$teacherModel = new TeacherModel();
 
-		// Validation
-		$data = [];
-		$data['full_name'] = $_POST['full_name'] ?? '';
-		$data['date_of_birth'] = $_POST['date_of_birth'] ?? '';
-		$data['address'] = $_POST['address'] ?? '';
-		$data['phone_number'] = $_POST['phone_number'] ?? '';
+			// Validation
+			$data = [];
+			$data['teacher_id'] = $_POST['teacher_id'] ?? '-1';
+			$data['full_name'] = $_POST['full_name'] ?? '';
+			$data['date_of_birth'] = $_POST['date_of_birth'] ?? '';
+			$data['address'] = $_POST['address'] ?? '';
+			$data['phone_number'] = $_POST['phone_number'] ?? '';
 
-		$errors = Validator::validate($data, $this->rules);
-		if ($errors) {
-			Helper::redirectTo('teachers/create', $errors);
-			return;
+			$errors = Validator::validate($data, $this->rules);
+
+			if ($errors) {
+				throw new PDOException('Thông tin không hợp lệ');
+			}
+
+
+			$teacherModel->store($data);
+			Helper::redirectTo('/teachers', [
+				'status' => 'success',
+				'message' => $data['teacher_id'] == '-1' ? 'Thêm giáo viên thành công' : 'Cập nhật giáo viên thành công'
+			]);
+		} catch (PDOException $e) {
+			Helper::redirectTo('/teachers', [
+				'form' => $data,
+				'errors' => $errors,
+				'status' => 'danger',
+				'message' => 'Thêm giáo viên thất bại'
+			]);
 		}
+	}
 
-		$teacherModel->store($data);
-		Helper::redirectTo('teachers', ['success' => 'Thêm mới giáo viên thành công']);
-	}
-	public function edit()
-	{
-		echo 'teacher edit';
-	}
-	public function update()
-	{
-		echo 'teacher update';
-	}
 	public function delete()
 	{
-		echo 'teacher delete';
+		try {
+			$teacherModel = new TeacherModel();
+			$teacherModel->delete($_POST['teacher_id']);
+			Helper::redirectTo('/teachers', [
+				'status' => 'success',
+				'message' => 'Xóa giáo viên thành công'
+			]);
+		} catch (PDOException $e) {
+			Helper::redirectTo('/teachers', [
+				'status' => 'danger',
+				'message' => 'Xóa giáo viên thất bại'
+			]);
+		}
+	}
+
+	public function download()
+	{
+		$teacherModel = new TeacherModel();
+
+		Helper::setIntoSession('download_data', [
+			'title' => 'DANH SÁCH GIÁO VIÊN',
+			'header' => ['Mã giáo viên', 'Họ và tên', 'Ngày sinh', 'Địa chỉ', 'Số điện thoại'],
+			'data' => $teacherModel->getAll()
+		]);
+
+		Helper::setIntoSession('previous_page', '/teachers');
+		Helper::redirectTo('/excel');
 	}
 }

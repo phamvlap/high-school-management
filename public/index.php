@@ -6,6 +6,8 @@ $router = new \Bramus\Router\Router();
 
 $router->setNamespace('\App\controllers');
 
+// home
+require_once __DIR__ . '/../app/routes/home.php';
 // auth
 require_once __DIR__ . '/../app/routes/auth.php';
 // classes
