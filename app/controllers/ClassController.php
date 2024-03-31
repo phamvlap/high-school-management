@@ -2,35 +2,24 @@
 
 namespace App\controllers;
 
-use App\models\{ClassModel, BaseModel};
+use App\models\{ClassModel};
 use App\db\PDOFactory;
 use PDO;
 use PDOException;
+use App\utils\{Validator, Helper};
 
 class ClassController
 {
 	public function index()
 	{
-		try {
-			$pdo = PDOFactory::connect();
-			// print_r($pdo);
-			echo 'hi world';
-			$classModel = new ClassModel();
-			// $classes = $classModel->getAll();
-			// var_dump($classes);
-			// echo 'hi world';
-
-			// $preparedStmt = "call get_all_classes(:k1, :k2, :k3, :k4);";
-			$preparedStmt = "select * from classes";
-			$statement = $pdo->prepare($preparedStmt);
-			// $statement->bindParam(':k1', null, PDO::PARAM_INT);
-			// $statement->bindParam(':k2', null, PDO::PARAM_INT);
-			// $statement->bindParam(':k3', null, PDO::PARAM_INT);
-			// $statement->bindParam(':k4', null, PDO::PARAM_INT);
-			$statement->execute();
-			$result = $statement->fetchAll(PDO::FETCH_ASSOC);
-			var_dump($result);
-		} catch (PDOException $e) {
+		try{
+			$ClassModel = new ClassModel();
+		$classes = $ClassModel->getAll();
+		Helper::renderPage('/classes/index.php', [
+			'classes' => $classes
+		]);
+		}
+		catch(PDOException $e){
 			echo $e->getMessage();
 		}
 	}
@@ -40,7 +29,16 @@ class ClassController
 	}
 	public function store()
 	{
-		echo 'class store';
+		try{
+			$ClassModel = new ClassModel();
+			$data = [];
+			$data['class_id'] = $_POST['class_id'] ?? '-1';
+			$data['class_name'] = $_POST['class_name'] ?? '';
+			$data['academic_year'] = $_POST['academic_year'] ?? '';
+			$data['']
+			
+		}
+		
 	}
 	public function edit()
 	{
