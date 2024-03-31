@@ -1,6 +1,7 @@
 <?php
 
 define('APP_DIR', __DIR__);
+define('MAX_RECORDS_PER_PAGE', 10);
 
 require __DIR__ . '/../vendor/autoload.php';
 

@@ -113,13 +113,13 @@ class Validator
 					$errors[$key] = $message;
 				}
 				if (str_starts_with($r, 'maxLength')) {
-					$maxLength = explode(':', $message)[1];
+					$maxLength = (int)explode(':', $r)[1];
 					if (!self::isMaxLength($data[$key], $maxLength)) {
 						$errors[$key] = $message;
 					}
 				}
 				if (str_starts_with($r, 'minLength')) {
-					$minLength = explode(':', $message)[1];
+					$minLength = (int)explode(':', $r)[1];
 					if (!self::isMinLength($data[$key], $minLength)) {
 						$errors[$key] = $message;
 					}

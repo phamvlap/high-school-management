@@ -26,7 +26,7 @@ class TeacherController
 			[
 				'isRequired' => 'Địa chỉ không được để trống',
 				'isString' => 'Địa chỉ phải là chuỗi',
-				'maxLength:255', 'message' => 'Địa chỉ không được quá 255 ký tự'
+				'maxLength:255' => 'Địa chỉ không được quá 255 ký tự'
 			],
 			'phone_number' =>
 			[
