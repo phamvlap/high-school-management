@@ -25,7 +25,7 @@ class Validator
 		if (!isset($value)) {
 			return false;
 		}
-		return preg_match('/((09|03|07|08|05)+([0-9]{8})\b)/', $value);
+		return preg_match('/((09|03|07|08|05|01)+([0-9]{8})\b)/', $value);
 	}
 	// validate date
 	static function isDate($value)
