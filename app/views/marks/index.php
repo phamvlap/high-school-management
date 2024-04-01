@@ -88,11 +88,11 @@ require_once __DIR__ . '/../partials/nav.php';
                     </div>
                     <div class="col-3">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Tìm kiếm theo mã môn" name="subject_id">
+                            <input type="text" class="form-control" placeholder="Tìm  theo mã môn" name="subject_id">
                         </div>
                     </div>
-                    <div class="col-4">
-                        <input type="text" class="form-control" placeholder="Tìm kiếm theo mã học sinh" name="student_id">
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="Tìm  theo mã học sinh" name="student_id">
                     </div>
                     <div class="col-1">
                         <button type="submit" class="btn btn-outline-primary" type="button" id="button-addon2">

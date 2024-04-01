@@ -6,47 +6,81 @@ use PDO;
 use App\db\PDOFactory;
 use PDOException;
 
-class ClassModel {
+class ClassModel
+{
 	private PDO $pdo;
 
-	public function __construct() {
-		$this -> pdo = PDOFactory::connect();
+	public function __construct()
+	{
+		$this->pdo = PDOFactory::connect();
 	}
 
-	public function getAll(): array {
-        $preparedStmt = "call get_all_classes(null, null, null, 1);";
-        $statement = $this->pdo->prepare($preparedStmt);
-        $statement->execute();
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+	public function getAll(int $limit, int $offset): array
+	{
+		$preparedStmt = 'call get_all_classes(null, null, null, null, :limit, :offset)';
+		try {
+			$statement = $this->pdo->prepare($preparedStmt);
+			$statement->bindParam(':limit', $limit, PDO::PARAM_INT);
+			$statement->bindParam(':offset', $offset, PDO::PARAM_INT);
+			$statement->execute();
+			return $statement->fetchAll(PDO::FETCH_ASSOC);
+		} catch (PDOException $e) {
+			echo $e->getMessage();
+		}
 	}
 
-	public function getById(int $id): array {
+	public function getByFilter(array $filter, int $limit, int $offset): array
+	{
+		$preparedStmt = 'call get_all_classes(:class_name, :grade, :academic_year, :limit, :offset)';
+		try {
+			$statement = $this->pdo->prepare($preparedStmt);
+			$statement->bindParam(':class_name', $filter['class_name'], PDO::PARAM_STR);
+			$statement->bindParam(':grade', $filter['grade'], PDO::PARAM_STR);
+			$statement->bindParam(':academic_year', $filter['academic_year'], PDO::PARAM_STR);
+			$statement->bindParam(':limit', $limit, PDO::PARAM_INT);
+			$statement->bindParam(':offset', $offset, PDO::PARAM_INT);
+			$statement->execute();
+			return $statement->fetchAll(PDO::FETCH_ASSOC);
+		} catch (PDOException $e) {
+			echo $e->getMessage();
+		}
+	}
+
+	public function getCount(array $filter): int
+	{
+		$preparedStmt = 'select get_total_classes(:class_name, :grade, :academic_year)';
+		try {
+			$statement = $this->pdo->prepare($preparedStmt);
+			$statement->bindParam(':class_name', $filter['class_name'], PDO::PARAM_STR);
+			$statement->bindParam(':grade', $filter['grade'], PDO::PARAM_STR);
+			$statement->bindParam(':academic_year', $filter['academic_year'], PDO::PARAM_STR);
+			$statement->execute();
+			return $statement->fetchColumn();
+		} catch (PDOException $e) {
+			echo $e->getMessage();
+		}
+	}
+
+	public function getById(int $id): array
+	{
 		$preparedStmt = 'call get_class_by_id(:id)';
 		$statement = $this->pdo->prepare($preparedStmt);
 		$statement->bindParam(':id', $id, PDO::PARAM_INT);
 		$statement->execute();
 		return $statement->fetchAll(PDO::FETCH_ASSOC);
 	}
-	public function getClassId(): int {
+	public function getClassId(): int
+	{
 		$preparedStmt = 'select get_inserted_id()';
 		$statement = $this->pdo->prepare($preparedStmt);
 		$statement->execute();
 		return $statement->fetchColumn();
 	}
 
-	public function getByFilter(array $filter): array {
-        $preparedStmt = 'call get_all_classes(:class_name, :grade, :academic_year, :is_order_by_class_id)';
-        $statement = $this->pdo->prepare($preparedStmt);
-        $statement->bindParam(':class_name', $filter['class_name'], PDO::PARAM_STR);
-        $statement->bindParam(':grade', $filter['grade'], PDO::PARAM_STR);
-        $statement->bindParam(':academic_year', $filter['academic_year)'], PDO::PARAM_STR);
-        $statement->bindParam(':is_order_by_class_id', $filter['is_order_by_class_id'], PDO::PARAM_INT);
-        $statement->execute();
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
-	}
 
-	public function store(array $data): void {
-		try{
+	public function store(array $data): void
+	{
+		try {
 			$preparedStmt = 'call add_class(:class_id, :class_name, :academic_year)';
 			$statement = $this->pdo->prepare($preparedStmt);
 			$statement->bindParam(':class_id', $data['class_id'], PDO::PARAM_INT);
@@ -58,17 +92,11 @@ class ClassModel {
 		}
 	}
 
-	public function delete(int $class_id): void {
+	public function delete(int $class_id): void
+	{
 		$preparedStmt = 'call delete_class(:class_id)';
 		$statement = $this->pdo->prepare($preparedStmt);
 		$statement->bindParam(':class_id', $class_id, PDO::PARAM_INT);
 		$statement->execute();
 	}
-
-    public function count(): int {
-        $preparedStmt = 'select count(*) from classes';
-        $statement = $this->pdo->prepare($preparedStmt);
-        $statement->execute();
-        return $statement->fetchColumn();
-    }
 }

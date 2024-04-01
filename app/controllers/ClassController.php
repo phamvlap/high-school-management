@@ -14,8 +14,8 @@ class ClassController
 		$this->rules = [
 			'class_id' =>
 			[
-                'isRequired' => 'Mã lớp không được để trống',
-            ],
+				'isRequired' => 'Mã lớp không được để trống',
+			],
 			'class_name' =>
 			[
 				'isRequired' => 'Tên lớp không được để trống',
@@ -40,20 +40,36 @@ class ClassController
 	{
 		try {
 			$classModel = new ClassModel();
-			$paginator = new Paginator(
-				$_GET['limit'] ?? 10,
-				$classModel->count(),
-				$_GET['page'] ?? 1
-			);
+
+			$limit = (isset($_GET['limit']) && $_GET['limit'] !== 'none') ? (int)$_GET['limit'] : MAX_RECORDS_PER_PAGE;
+			$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+			$filter = [
+				'class_name' => (isset($_GET['class_name']) && $_GET['class_name'] !== '') ? $_GET['class_name'] : null,
+				'grade' => (isset($_GET['grade']) && $_GET['grade'] !== '') ? $_GET['grade'] : null,
+				'academic_year' => (isset($_GET['academic_year']) && $_GET['academic_year'] !== '') ? $_GET['academic_year'] : null,
+			];
+
+
+			$totalRecords = $classModel->getCount($filter);
+			$paginator = new Paginator($limit, $totalRecords, $page);
+			$classes = $classModel->getByFilter($filter, $limit, ($page - 1) * $limit);
+
+			Helper::setIntoSession('download_data', [
+				'title' => 'DANH SÁCH LỚP',
+				'header' => ['Mã giáo viên', 'Họ và tên', 'Ngày sinh', 'Địa chỉ', 'Số điện thoại'],
+				'data' => $classes
+			]);
+
 			Helper::renderPage('/classes/index.php', [
-				'classes' => $classModel->getAll(),
+				'classes' => $classes,
 				'pagination' => [
-					'currPage' => $_GET['page'] ?? 1,
-					'totalPages' => $paginator->getTotalPages(),
 					'prevPage' => $paginator->getPrevPage(),
+					'currPage' => $paginator->getCurrPage(),
 					'nextPage' => $paginator->getNextPage(),
-					'pages' => $paginator->getPages()
-				]
+					'pages' => $paginator->getPages(),
+				],
+				'filter' => $filter,
+				'total' => $totalRecords,
 			]);
 		} catch (PDOException $e) {
 			Helper::renderPage('/classes/index.php', [
@@ -82,21 +98,21 @@ class ClassController
 			if ($errors) {
 				throw new PDOException('Thông tin không hợp lệ');
 			}
-			
+
 			$classModel->store($data);
 
-            if($data['class_id'] == -1){
-                $data['class_id'] = $classModel->getClassId();
-            }
-		
+			if ($data['class_id'] == -1) {
+				$data['class_id'] = $classModel->getClassId();
+			}
+
 			$homeRoomTeacherModel->store($data);
 			$roomClassModel->store($data);
 
-            // var_dump($data);
+			// var_dump($data);
 			Helper::redirectTo('/classes', [
 				'status' => 'success',
 				'message' => 'Thêm mới lớp học thành công',
-                'data' => $data,
+				'data' => $data,
 			]);
 		} catch (PDOException $e) {
 			Helper::redirectTo('/classes', [
@@ -107,7 +123,7 @@ class ClassController
 			]);
 		}
 	}
-	
+
 
 	// public function update()
 	// {
@@ -116,7 +132,7 @@ class ClassController
 	// 	$homeRoomTeacherModel = new HomeRoomTeacherModel();
 
 	// 	//Validation
-    //     $data = [];
+	//     $data = [];
 	// 	$data['class_id'] = $_POST['class_id'];
 	// 	$data['class_name'] = $_POST['new_class_name'] ?? '';
 	// 	$data['academic_year'] = $_POST['new_academic_year'] ?? '';
@@ -129,10 +145,10 @@ class ClassController
 
 
 	// 	$errors = Validator::validate($data, $this->rules);
-    //     if ($errors) {
-    //         Helper::redirectTo('classes/create', $errors);
-    //         return;
-    //     }
+	//     if ($errors) {
+	//         Helper::redirectTo('classes/create', $errors);
+	//         return;
+	//     }
 
 	// 		$classModel->update([
 	// 			'class_id' => $data['class_id'],
@@ -158,15 +174,15 @@ class ClassController
 	public function delete()
 	{
 		try {
-            $classModel = new ClassModel();
+			$classModel = new ClassModel();
 			if (is_numeric((int)($_POST['class_id'] ?? -1)) === false) {
 				throw new PDOException('Thông tin không hợp lệ');
 			}
-            $classModel->delete((int)$_POST['class_id']);
-            Helper::redirectTo('/classes', [
-                'status' => 'success',
-                'message' => 'Xóa lớp học thành công'
-            ]);
+			$classModel->delete((int)$_POST['class_id']);
+			Helper::redirectTo('/classes', [
+				'status' => 'success',
+				'message' => 'Xóa lớp học thành công'
+			]);
 		} catch (PDOException $e) {
 			Helper::redirectTo('/classes', [
 				'status' => 'danger',

@@ -47,27 +47,11 @@ require __DIR__ . '/../partials/nav.php';
             <div class="d-flex justify-content-between">
                 <form action="/rooms" class="row align-items-end">
                     <div class="col-2">
-                        <label for="min_capacity" class="form-label mb-0">Sức chứa tối thiểu</label>
-                        <input type="text" id="min_capacity" name="min_capacity" class="form-control" value="<?= isset($_GET['min_capacity']) ? $_GET['min_capacity'] : '' ?>">
-                    </div>
-                    <div class="col-2">
-                        <label for="max_capacity" class="form-label mb-0">Sức chứa tối đa</label>
-                        <input type="text" id="max_capacity" name="max_capacity" class="form-control" value="<?= isset($_GET['max_capacity']) ? $_GET['max_capacity'] : '' ?>">
-                    </div>
-                    <div class="col-2">
-                        <label for="is_sort_by_capacity" class="form-label mb-0">Sắp xếp theo sức chứa</label>
-                        <select class="form-select" id="is_sort_by_capacity" name="is_sort_by_capacity">
-                            <option value="none" <?= ($_GET['is_sort_by_capacity'] === 'none') ? 'selected' : '' ?>>-- Chọn --</option>
-                            <option value="1" <?= (isset($_GET['is_sort_by_capacity']) && (int)$_GET['is_sort_by_capacity'] === 1) ? 'selected' : '' ?>>Tăng dần</option>
-                            <option value="0" <?= (isset($_GET['is_sort_by_capacity']) && $_GET['is_sort_by_capacity'] !== 'none' && (int)$_GET['is_sort_by_capacity'] === 0) ? 'selected' : '' ?>>Giảm dần</option>
-                        </select>
-                    </div>
-                    <div class="col-2">
                         <label for="limit" class="form-label mb-0">Hiển thị</label>
                         <select class="form-select" id="limit" name="limit">
                             <?php
                             $limit = (!empty($_GET['limit']) && $_GET['limit'] !== 'all') ? (int)$_GET['limit'] : (int)MAX_RECORDS_PER_PAGE;
-                            if(isset($_GET['limit']) && $_GET['limit'] === 'all') {
+                            if (isset($_GET['limit']) && $_GET['limit'] === 'all') {
                                 $limit = MAX_LIMIT;
                             }
                             ?>
@@ -78,8 +62,25 @@ require __DIR__ . '/../partials/nav.php';
                             <option value="all" <?= ($limit === MAX_LIMIT) ? 'selected' : '' ?>>Tất cả</option>
                         </select>
                     </div>
+                    <div class="col-2">
+                        <label for="is_sort_by_capacity" class="form-label mb-0">Sắp xếp</label>
+                        <select class="form-select" id="is_sort_by_capacity" name="is_sort_by_capacity">
+                            <option value="none" <?= (isset($_GET['is_sort_by_capacity']) && $_GET['is_sort_by_capacity'] === 'none') ? 'selected' : '' ?>>-- Chọn --</option>
+                            <option value="1" <?= (isset($_GET['is_sort_by_capacity']) && (int)$_GET['is_sort_by_capacity'] === 1) ? 'selected' : '' ?>>Sức chứa tăng dần</option>
+                            <option value="0" <?= (isset($_GET['is_sort_by_capacity']) && $_GET['is_sort_by_capacity'] !== 'none' && (int)$_GET['is_sort_by_capacity'] === 0) ? 'selected' : '' ?>>Sức chứa giảm dần</option>
+                        </select>
+                    </div>
+                    <div class="col-2">
+                        <label for="min_capacity" class="form-label mb-0">Sức chứa</label>
+                        <input type="text" id="min_capacity" name="min_capacity" class="form-control" value="<?= isset($_GET['min_capacity']) ? $_GET['min_capacity'] : '' ?>" placeholder="Tối thiểu">
+                    </div>
+                    <div class="col-2">
+                        <label for="max_capacity" class="form-label mb-0">Sức chứa</label>
+                        <input type="text" id="max_capacity" name="max_capacity" class="form-control" value="<?= isset($_GET['max_capacity']) ? $_GET['max_capacity'] : '' ?>" placeholder="Tối đa">
+                    </div>
+
                     <div class="col-3">
-                        <input type="text" class="form-control" placeholder="Tìm kiếm theo số phòng" name="room_number" value="<?= isset($_GET['room_number']) ? $_GET['room_number'] : '' ?>">
+                        <input type="text" class="form-control" placeholder="Tìm theo số phòng" name="room_number" value="<?= isset($_GET['room_number']) ? $_GET['room_number'] : '' ?>">
                     </div>
                     <div class="col-1">
                         <button type="submit" class="btn btn-outline-primary" type="button">
@@ -87,14 +88,6 @@ require __DIR__ . '/../partials/nav.php';
                         </button>
                     </div>
                 </form>
-                <div class="ms-2 ms-auto d-flex align-items-end">
-                    <a href="/rooms">
-                        <button class="btn btn-sm btn-outline-primary">
-                            <i class="fa-solid fa-rotate-right"></i>
-                            Làm mới
-                        </button>
-                    </a>
-                </div>
             </div>
 
             <table class="table table-striped table-hover mt-2">
@@ -108,7 +101,7 @@ require __DIR__ . '/../partials/nav.php';
                 </thead>
                 <tbody>
 
-                    <?php foreach($rooms as $room): ?>
+                    <?php foreach ($rooms as $room) : ?>
                         <tr class="room">
                             <td scope="row" class="room_id">
                                 <?= Helper::htmlEscape($room['room_id']) ?>
@@ -128,7 +121,7 @@ require __DIR__ . '/../partials/nav.php';
                             </td>
                         </tr>
                     <?php endforeach ?>
-                    
+
                 </tbody>
             </table>
 

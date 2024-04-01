@@ -14,7 +14,7 @@ require_once __DIR__ . '/../partials/nav.php';
                 <input type="hidden" name="class_id" id="class_id" value="-1">
                 <div class="mb-1">
                     <label for="class_name" class="form-label mb-0">Tên lớp<span style="color: red;"> *</span></label>
-                    <input type="text" class="form-control" id="class_name" name="class_name"value="<?= Helper::getFormDataFromSession('class_name') ?>">
+                    <input type="text" class="form-control" id="class_name" name="class_name" value="<?= Helper::getFormDataFromSession('class_name') ?>">
                     <p class="text-danger text-end"><?= Helper::getFormErrorFromSession('class_name') ?></p>
                 </div>
                 <div class="mb-1">
@@ -59,46 +59,46 @@ require_once __DIR__ . '/../partials/nav.php';
             </div>
         </div>
 
-       
+
         <div class="col-9">
-            <form class="d-flex justify-content-between">
-                <div class="d-flex">
-                    <div class="ms-1 mb-1">
-                        <label for="class_semester" class="form-label mb-0">Lọc theo học kỳ</label>
-                        <select class="form-select" id="class_semester" name="class_semester">
-                            <option selected>Học kỳ</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
+            <form action="/classes" method="GET">
+                <div class="row align-items-end">
+                    <div class="col-2">
+                        <label for="limit" class="form-label mb-0">Hiển thị</label>
+                        <?php $limit = $_GET['limit'] ?? '10'; ?>
+                        <select class="form-select" id="limit" name="limit">
+                            <option value="<?= MAX_LIMIT ?>" <?= ($limit === 'all') ? 'selected' : '' ?>>Tất cả</option>
+                            <option value="10" <?= ($limit === '10') ? 'selected' : '' ?>>10</option>
+                            <option value="20" <?= ($limit === '20') ? 'selected' : '' ?>>20</option>
+                            <option value="50" <?= ($limit === '50') ? 'selected' : '' ?>>50</option>
                         </select>
                     </div>
-                    <div class="ms-1 mb-1">
-                        <label for="school-year" class="form-label mb-0">Lọc theo năm học</label>
-                        <select class="form-select" id="school-year" name="school-year">
-                            <option selected>Năm học</option>
-                            <option value="2023-2024">2023-2024</option>
-                            <option value="2024-2025">2024-2025</option>
-                            <option value="2025-2026">2025-2026</option>
+                    <div class="col-2">
+                        <label for="grade" class="form-label mb-0">Khối</label>
+                        <?php $grade = $_GET['grade'] ?? 'all'; ?>
+                        <select class="form-select" id="grade" name="grade">
+                            <option value="" <?= ($grade === 'all') ? 'selected' : '' ?>>Tất cả</option>
+                            <option value="10" <?= ($grade === '10') ? 'selected' : '' ?>>10</option>
+                            <option value="11" <?= ($grade === '11') ? 'selected' : '' ?>>11</option>
+                            <option value="12" <?= ($grade === '12') ? 'selected' : '' ?>>12</option>
                         </select>
                     </div>
-                    <div class="ms-1 mb-1">
-                        <label for="sort" class="form-label mb-0">Sắp xếp</label>
-                        <select class="form-select" id="sort" name="sort">
-                            <option selected>Họ tên</option>
-                            <option value="name-asc">Tên A-Z</option>
-                            <option value="name-desc">Tên Z-A</option>
-                        </select>
+                    <div class="col-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Tìm theo tên lớp" name="class_name">
+                        </div>
                     </div>
-                </div>
-                <div class="mt-2 align-self-center">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Tìm kiếm" aria-label="Recipient's username" aria-describedby="button-addon2">
-                        <button class="btn btn-outline-primary" type="button" id="button-addon2">
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="Tìm theo năm học" name="academic_year">
+                    </div>
+                    <div class="col-1">
+                        <button type="submit" class="btn btn-outline-primary" type="button" id="button-addon2">
                             <i class="fa fa-search"></i>
                         </button>
                     </div>
                 </div>
             </form>
-            
+
 
             <table class="table table-striped table-hover mt-2">
                 <thead>
@@ -131,7 +131,7 @@ require_once __DIR__ . '/../partials/nav.php';
                                 </button>
                                 <form action="/classes/delete" class="d-inline" method="POST">
                                     <input hidden type="text" name="class_id" value="<?= Helper::htmlEscape($class['class_id']) ?>">
-                                    <button type="submit" class="btn btn-outline-danger btn-sm onclick="deleteClass(<?= Helper::htmlEscape($class['class_id'])?>)">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm onclick=" deleteClass(<?= Helper::htmlEscape($class['class_id']) ?>)">
                                         <i class="fa fa-trash" aria-hidden="true"></i>
                                     </button>
                                 </form>
@@ -143,18 +143,18 @@ require_once __DIR__ . '/../partials/nav.php';
 
             <?php require_once __DIR__ . '/../partials/pagination.php'; ?>
 
-    <script>
-        const fields = {
-            'class_id': 'class_id',
-            'class_name': 'class_name',
-            'room_id': 'room_id',
-            'teacher_id': 'teacher_id',
-            'semester': 'semester',
-            'academic_year': 'academic_year',
-        };
-        const formId = 'class_form';
-        const trClass = 'class';
-    </script>
-<?php
+            <script>
+                const fields = {
+                    'class_id': 'class_id',
+                    'class_name': 'class_name',
+                    'room_id': 'room_id',
+                    'teacher_id': 'teacher_id',
+                    'semester': 'semester',
+                    'academic_year': 'academic_year',
+                };
+                const formId = 'class_form';
+                const trClass = 'class';
+            </script>
+            <?php
 
-require_once __DIR__ . '/../partials/footer.php';
+            require_once __DIR__ . '/../partials/footer.php';

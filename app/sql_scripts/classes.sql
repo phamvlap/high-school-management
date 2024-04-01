@@ -85,7 +85,8 @@ create procedure get_all_classes(
 	in _class_name varchar(10),
 	in _grade varchar(10),
 	in _academic_year char(9),
-    in _is_order_by_class_id int
+	in _limit int, 
+	in _offset int
 )
 begin
 	select c.class_id, c.class_name, c.academic_year, 
@@ -102,11 +103,41 @@ begin
 		left join rooms as r
 			on rc.room_id = r.room_id
 	where (_class_name is null or c.class_name like concat('%', _class_name, '%'))
-		and (_grade is null or c.class_name like concat('%', _grade, '%'))
+		and (_grade is null or c.class_name like concat(_grade, '%'))
 		and (_academic_year is null or c.academic_year = _academic_year)
-	order by
-		case when _is_order_by_class_id = 1 then c.class_id end asc,
-		case when _is_order_by_class_id = 0 then c.class_name end asc;
+	limit _limit
+	offset _offset;
+end $$
+
+-- [function]: get_all(_class_name, _grade, _academic_year)
+-- [author]: phamvlap
+
+drop function if exists get_total_classes $$
+
+create function get_total_classes(
+	_class_name varchar(10),
+	_grade varchar(10),
+	_academic_year char(9)
+)
+returns int
+reads sql data
+deterministic
+begin
+	declare total int;
+	select count(*) into total
+	from classes as c
+		left join homeroom_teachers as ht
+			on c.class_id = ht.class_id 
+		left join teachers as t
+			on ht.teacher_id = t.teacher_id
+		left join room_class as rc
+			on c.class_id = rc.class_id
+		left join rooms as r
+			on rc.room_id = r.room_id
+	where (_class_name is null or c.class_name like concat('%', _class_name, '%'))
+		and (_grade is null or c.class_name like concat(_grade, '%'))
+		and (_academic_year is null or c.academic_year = _academic_year);
+	return total;
 end $$
 
 drop procedure if exists get_class_by_id $$
