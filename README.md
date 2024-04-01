@@ -1,29 +1,25 @@
 Cài đặt Web Root:
 
 -> Điều chỉnh Path to /public folder
-
-<VirtualHost *:80>	
-
-  DocumentRoot "C:/xampp/htdocs" 
-  
-  ServerName localhost
-  
+```
+<VirtualHost *:80>  
+    DocumentRoot "C:/xampp/htdocs" 
+    ServerName localhost
 </VirtualHost>
 
-<VirtualHost *:80>	
-DocumentRoot "Path to /public folder" 
-ServerName school.localhost    
+<VirtualHost *:80>  
+    DocumentRoot "<Link to yourz project directory>\high-school-management\public" 
+    ServerName highschool.localhost
+    # Set access permission 
+    <Directory "<Link to your project directory>\high-school-management\public"> 
+        Options Indexes FollowSymLinks Includes ExecCGI
+        AllowOverride All
+        Require all granted
 
-#Set access permission 
-
-<Directory "Path to /public folder"> 
-
-Options Indexes FollowSymLinks Includes ExecCGI
-
-AllowOverride All
-
-Require all granted
-
-</Directory>
-
+  RewriteEngine On
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . index.php [L]
+    </Directory>
 </VirtualHost>
+```
