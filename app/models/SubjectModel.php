@@ -1,8 +1,10 @@
 <?php
+
 namespace App\models;
 use PDO;
 use App\db\PDOFactory;
 use PDOException;
+
  class SubjectModel{
     private PDO $pdo;
     public function __construct() {

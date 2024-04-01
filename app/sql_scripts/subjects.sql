@@ -10,8 +10,15 @@ create procedure add_subject (
     in _grade tinyint
 )
 begin 
-    insert into subjects (subject_id, subject_name, grade) 
-        values (_subject_id, _subject_name, _grade);
+    if(_subject_id = -1)
+    then
+		insert into subjects (subject_name, grade)
+			values (_subject_name, _grade);
+	else
+		update subjects
+		set subject_name = _subject_name, grade = _grade
+		where subject_id = _subject_id;
+	end if;
 end $$
 
 -- [example]: call add_subject(1, 'English', 1);

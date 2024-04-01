@@ -37,9 +37,9 @@ require_once __DIR__ . '/../partials/nav.php';
 
             <!-- Thêm button cho phép them cùng lúc nhiều dữ liệu từ file excel -->
             <div class="d-flex mt-5">
-                <button class="ms-auto px-3 btn btn-sm btn-outline-success">
-                    Thêm từ file excel
-                </button>
+                <a href="/excel" class="ms-auto px-3 btn btn-sm btn-outline-success">
+                    Xuất ra file excel
+                </a>
             </div>
         </div>
         <div class="col-9">
@@ -114,7 +114,6 @@ require_once __DIR__ . '/../partials/nav.php';
             </table>
 
             <?php require_once __DIR__ . '/../partials/pagination.php'; ?>
-
 
         </div>
     </div>

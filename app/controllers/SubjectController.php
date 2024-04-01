@@ -12,6 +12,10 @@ class SubjectController
     public function __construct()
     {
         $this->rules = [
+            'subject_id' => [
+                'isRequired' => 'Mã môn học không được để trống',
+                'isNumber' => 'Mã môn học phải là số',
+            ],
             'subject_name' =>
             [
                 'isRequired' => 'Tên không được để trống',
@@ -41,6 +45,12 @@ class SubjectController
 			$paginator = new Paginator($limit, $totalRecords, $page);
 	
 			$subjects = $subjectModel->getByFilter($filter, $limit, ($page - 1) * $limit);
+
+            Helper::setIntoSession('download_data', [
+				'title' => 'DANH SÁCH MÔN HỌC',
+				'header' => ['Mã môn', 'Tên môn', 'Khối'],
+				'data' => $subjects
+			]);
 	
 			Helper::renderPage('/subjects/index.php', [
 				'subjects' => $subjects,
@@ -71,7 +81,7 @@ class SubjectController
             $subjectModel = new SubjectModel();
             // Validation
             $data = [];
-            $data['subject_id'] = $_POST['subject_id'] ?? '-1';
+            $data['subject_id'] = $_POST['subject_id'] ?? -1;
             $data['subject_name'] = $_POST['subject_name'] ?? '';
             $data['grade'] = $_POST['grade'] ?? '';
 
