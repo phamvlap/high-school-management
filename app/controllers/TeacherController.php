@@ -132,18 +132,4 @@ class TeacherController
 			]);
 		}
 	}
-
-	public function download()
-	{
-		$teacherModel = new TeacherModel();
-
-		Helper::setIntoSession('download_data', [
-			'title' => 'DANH SÁCH GIÁO VIÊN',
-			'header' => ['Mã giáo viên', 'Họ và tên', 'Ngày sinh', 'Địa chỉ', 'Số điện thoại'],
-			'data' => $teacherModel->getAll(10000, 0)
-		]);
-
-		Helper::setIntoSession('previous_page', '/teachers');
-		Helper::redirectTo('/excel');
-	}
 }
