@@ -35,7 +35,7 @@ class RoomClassModel {
         try {
             $preparedStmt = 'call delete_room_class(:room_id, :class_id, :semester)';
             $statement = $this->pdo->prepare($preparedStmt);
-            $statement->bindParam(':room_id', $id, PDO::PARAM_INT);
+            $statement->bindParam(':room_id', $data['room_id'], PDO::PARAM_INT);
             $statement->bindParam(':class_id', $data['class_id'], PDO::PARAM_INT);
             $statement->bindParam(':semester', $data['semester'], PDO::PARAM_INT);
             $statement->execute();

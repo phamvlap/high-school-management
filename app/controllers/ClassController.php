@@ -2,8 +2,8 @@
 
 namespace App\controllers;
 
-use App\models\{ClassModel, RoomClassModel, HomeRoomTeacherModel};
-use App\utils\{Validator, Helper};
+use App\models\{ClassModel, RoomClassModel, HomeRoomTeacherModel, StudentModel};
+use App\utils\{Validator, Helper, Paginator};
 use PDOException;
 
 class ClassController
@@ -40,11 +40,23 @@ class ClassController
 	{
 		try {
 			$classModel = new ClassModel();
+			$paginator = new Paginator(
+				$_GET['limit'] ?? 10,
+				$classModel->count(),
+				$_GET['page'] ?? 1
+			);
 			Helper::renderPage('/classes/index.php', [
-				'classes' => $classModel->getAll()
+				'classes' => $classModel->getAll(),
+				'pagination' => [
+					'currPage' => $_GET['page'] ?? 1,
+					'totalPages' => $paginator->getTotalPages(),
+					'prevPage' => $paginator->getPrevPage(),
+					'nextPage' => $paginator->getNextPage(),
+					'pages' => $paginator->getPages()
+				]
 			]);
 		} catch (PDOException $e) {
-			Helper::renderPage('/teachers/index.php', [
+			Helper::renderPage('/classes/index.php', [
 				'status' => 'danger',
 				'message' => 'Lấy dữ liệu thất bại'
 			]);
@@ -77,7 +89,8 @@ class ClassController
 			]);
 
 			$classID = $classModel->getClassID(['class_name' => $data['class_name'],'academic_year'=>$data['academic_year']]);
-
+			var_dump($classID);
+		
 			$homeRoomTeacherModel->store([
 				'teacher_id' => $data['teacher_id'],
 				'class_id' => $classID,
@@ -91,7 +104,7 @@ class ClassController
 
 			Helper::redirectTo('/classes', [
 				'status' => 'success',
-				'success' => 'Thêm mới lớp học thành công'
+				'message' => 'Thêm mới lớp học thành công'
 			]);
 		} catch (PDOException $e) {
 			Helper::redirectTo('/classes', [
@@ -104,51 +117,51 @@ class ClassController
 	}
 	
 
-	public function update()
-	{
-		$classModel = new ClassModel();
-		$roomClassModel = new RoomClassModel();
-		$homeRoomTeacherModel = new HomeRoomTeacherModel();
+	// public function update()
+	// {
+	// 	$classModel = new ClassModel();
+	// 	$roomClassModel = new RoomClassModel();
+	// 	$homeRoomTeacherModel = new HomeRoomTeacherModel();
 
-		//Validation
-        $data = [];
-		$data['class_id'] = $_POST['edited_class_id'];
-		$data['class_name'] = $_POST['new_class_name'] ?? '';
-		$data['academic_year'] = $_POST['new_academic_year'] ?? '';
-		$data['teacher_id'] = $_POST['old_teacher_id'] ?? '';
-		$data['new_teacher_id'] = $_POST['new_teacher_id'] ?? '';
-		$data['room_id'] = $_POST['old_room_id'] ?? '';
-		$data['new_room_id'] = $_POST['new_room_id'] ?? '';
-		$data['semester'] = $_POST['old_semester'] ?? '';
-		$data['new_semester'] = $_POST['new_semester'] ?? '';
+	// 	//Validation
+    //     $data = [];
+	// 	$data['class_id'] = $_POST['class_id'];
+	// 	$data['class_name'] = $_POST['new_class_name'] ?? '';
+	// 	$data['academic_year'] = $_POST['new_academic_year'] ?? '';
+	// 	$data['teacher_id'] = $_POST['old_teacher_id'] ?? '';
+	// 	$data['new_teacher_id'] = $_POST['new_teacher_id'] ?? '';
+	// 	$data['room_id'] = $_POST['old_room_id'] ?? '';
+	// 	$data['new_room_id'] = $_POST['new_room_id'] ?? '';
+	// 	$data['semester'] = $_POST['old_semester'] ?? '';
+	// 	$data['new_semester'] = $_POST['new_semester'] ?? '';
 
 
-		$errors = Validator::validate($data, $this->rules);
-        if ($errors) {
-            Helper::redirectTo('classes/create', $errors);
-            return;
-        }
+	// 	$errors = Validator::validate($data, $this->rules);
+    //     if ($errors) {
+    //         Helper::redirectTo('classes/create', $errors);
+    //         return;
+    //     }
 
-			$classModel->update([
-				'class_id' => $data['class_id'],
-				'class_name' => $data['class_name'],
-				'academic_year' => $data['academic_year']
-			]);
-			$homeRoomTeacherModel->update([
-				'teacher_id' => $data['teacher_id'],
-				'class_id' => $data['edited_class_id'],
-				'new_teacher_id' => $data['new_teacher_id'],
-			]);
-			$roomClassModel->update([
-				'class_id' => $data['edited_class_id'],
-				'room_id' => $data['old_room_id'],
-				'new_room_id' => $data['new_room_id'],
-				'semester' => $data['old_semester'],
-				'new_semester' => $data['new_semester'],
-			]);
+	// 		$classModel->update([
+	// 			'class_id' => $data['class_id'],
+	// 			'class_name' => $data['class_name'],
+	// 			'academic_year' => $data['academic_year']
+	// 		]);
+	// 		$homeRoomTeacherModel->update([
+	// 			'teacher_id' => $data['teacher_id'],
+	// 			'class_id' => $data['edited_class_id'],
+	// 			'new_teacher_id' => $data['new_teacher_id'],
+	// 		]);
+	// 		$roomClassModel->update([
+	// 			'class_id' => $data['edited_class_id'],
+	// 			'room_id' => $data['old_room_id'],
+	// 			'new_room_id' => $data['new_room_id'],
+	// 			'semester' => $data['old_semester'],
+	// 			'new_semester' => $data['new_semester'],
+	// 		]);
 
-			Helper::redirectTo('/classes', ['success' => 'Cập nhật lớp học thành công']);
-	}
+	// 		Helper::redirectTo('/classes', ['success' => 'Cập nhật lớp học thành công']);
+	// }
 
 	public function delete()
 	{
@@ -156,6 +169,7 @@ class ClassController
 			$classModel = new ClassModel();
 			$roomClassModel = new RoomClassModel();
 			$homeRoomTeacherModel = new HomeRoomTeacherModel();
+			$studentModel = new StudentModel();
 
 			//Validation
 			$data = [];
@@ -163,11 +177,12 @@ class ClassController
 			$data['teacher_id'] = $_POST['teacher_id'] ?? '';
 			$data['room_id'] = $_POST['room_id'] ?? '';
 			$data['semester'] = $_POST['semester'] ?? '';
+			$data['new_class_id'] = $_POST['new_class_id'] ?? '';
 
-			$errors = Validator::validate($data, $this->rules);
-			if ($errors) {
-				throw new PDOException('Thông tin không hợp lệ');
-			}
+			// $errors = Validator::validate($data, $this->rules);
+			// if ($errors) {
+			// 	throw new PDOException('Thông tin không hợp lệ');
+			// }
 
 			$homeRoomTeacherModel->delete([
 				'class_id' => $data['class_id'],
@@ -178,6 +193,9 @@ class ClassController
 				'room_id' => $data['room_id'],
 				'semester' => $data['semester']
 			]);
+
+			// $studentModel->updateClassID($data['class_id'], $data['new_class_id']);
+			
 			$classModel->delete($data['class_id']);
 			
 			Helper::redirectTo('/classes', [

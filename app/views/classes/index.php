@@ -1,7 +1,6 @@
 <?php
 
 use App\utils\Helper;
-use App\utils\Paginator;
 
 
 require_once __DIR__ . '/../partials/header.php';
@@ -107,7 +106,9 @@ require_once __DIR__ . '/../partials/nav.php';
                     <tr>
                         <th scope="col">Mã lớp</th>
                         <th scope="col">Tên lớp</th>
+                        <th scope="col" style="display: none;">Mã giáo viên</th>
                         <th scope="col">Giáo viên chủ nhiệm</th>
+                        <th scope="col" style="display: none;">Mã phòng</th>
                         <th scope="col">Phòng học</th>
                         <th scope="col">Học kỳ</th>
                         <th scope="col">Năm học</th>
@@ -119,12 +120,14 @@ require_once __DIR__ . '/../partials/nav.php';
                         <tr class="class">
                             <td class="class_id"><?= Helper::htmlEscape((string)$class['class_id']) ?></td>
                             <td class="class_name"><?= Helper::htmlEscape((string)$class['class_name']) ?></td>
+                            <td class="teacher_id" style="display: none;"><?= Helper::htmlEscape((string)$class['teacher_id']) ?></td>
                             <td class="full_name"><?= Helper::htmlEscape((string)$class['full_name']) ?></td>
+                            <td class="room_id" style="display: none;"><?= Helper::htmlEscape((string)$class['room_id']) ?></td>
                             <td class="room_number"><?= Helper::htmlEscape((string)$class['room_number']) ?></td>
                             <td class="semester"><?= Helper::htmlEscape((string)$class['semester']) ?></td>
                             <td class="academic_year"><?= Helper::htmlEscape((string)$class['academic_year']) ?></td>
                             <td>
-                                <button class="btn btn-sm" onclick="showEditForm()">
+                                <button class="btn btn-sm btn-outline-warning edit_btn">
                                     <i class="fa fa-edit"></i>
                                 </button>
                                 <form action="/classes/delete" class="d-inline" method="POST">
@@ -132,7 +135,7 @@ require_once __DIR__ . '/../partials/nav.php';
                                     <input hidden type="text" name="teacher_id" value="<?= Helper::htmlEscape($class['teacher_id']) ?>">
                                     <input hidden type="text" name="room_id" value="<?= Helper::htmlEscape($class['room_id']) ?>">
                                     <input hidden type="text" name="semester" value="<?= Helper::htmlEscape($class['semester']) ?>">
-                                    <button type="submit" class="btn btn-outline-danger btn-sm border-0 py-0">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm onclick="deleteClass(<?= Helper::htmlEscape($class['class_id'])?>)">
                                         <i class="fa fa-trash" aria-hidden="true"></i>
                                     </button>
                                 </form>
@@ -142,21 +145,22 @@ require_once __DIR__ . '/../partials/nav.php';
                 </tbody>
             </table>
 
+            <?php require_once __DIR__ . '/../partials/pagination.php'; ?>
 
-
-<script>
-    const fields = {
-        'class_id': 'class_id',
-        'class_name': 'class_name',
-        'room_id': 'room_id',
-        'teacher_id': 'teacher_id',
-        'semester': 'semester',
-        'academic_year': 'academic_year'
-    };
-    const formId = 'class_form';
-    const trClass = 'class';
-</script>
-
+    <script>
+        const fields = {
+            'class_id': 'class_id',
+            'class_name': 'class_name',
+            'room_id': 'room_id',
+            'teacher_id': 'teacher_id',
+            'semester': 'semester',
+            'academic_year': 'academic_year',
+            'room_number': 'room_number',
+            'full_name': 'full_name'
+        };
+        const formId = 'class_form';
+        const trClass = 'class';
+    </script>
 <?php
 
 require_once __DIR__ . '/../partials/footer.php';

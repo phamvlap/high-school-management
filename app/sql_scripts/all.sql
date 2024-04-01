@@ -188,28 +188,14 @@ end $$
 
 -- [procedure]: delete_class(_class_id)
 -- [author]: phamvlap
+delimiter $$
 drop procedure if exists delete_class $$
 create procedure delete_class(
 	in _class_id int
 )
 begin
-	set @academic_year_of_class = (
-		select academic_year
-		from classes
-		where class_id = _class_id
-	);
-
-	delete from classes
-	where class_id = _class_id;
-	if not exists (
-		select *
-		from classes
-		where academic_year = @academic_year_of_class
-	)
-		then
-			delete from academic_years
-			where academic_year = @academic_year_of_class;
-	end if;
+	delete from classes 
+    where class_id = _class_id;
 end $$
 
 -- [example]:
@@ -217,13 +203,14 @@ call delete_class(2);
 
 -- [function]: get_all(_class_name, _grade, _academic_year)
 -- [author]: phamvlap
+delimiter $$
 drop procedure if exists get_all_classes $$
 
 create procedure get_all_classes(
 	in _class_name varchar(10),
 	in _grade varchar(10),
 	in _academic_year char(9),
-    in _is_order_by_class_name int
+    in _is_order_by_class_id int
 )
 begin
 	select c.class_id, c.class_name, c.academic_year, 
@@ -243,16 +230,8 @@ begin
 		and (_grade is null or c.class_name like concat('%', _grade, '%'))
 		and (_academic_year is null or c.academic_year = _academic_year)
 	order by
-        case
-			when _is_order_by_class_name = 0 then c.class_id
-			when _is_order_by_class_name = 1 then class_name
-            else 'class_name'
-		end,
-		case
-			when _is_order_by_class_name = 0 then 'asc'
-			when _is_order_by_class_name = 1 then 'asc'
-            else 'desc'
-		end;
+		case when _is_order_by_class_id = 1 then c.class_id end asc,
+		case when _is_order_by_class_id = 0 then c.class_name end asc;
 end $$
 
 -- [example]:
@@ -314,7 +293,7 @@ end $$
 drop procedure if exists update_homeroom_teacher $$
 create procedure update_homeroom_teacher(
 	in _teacher_id int,
-	in _class_id int
+	in _class_id int,
 	in _new_teacher_id int
 )
 begin
@@ -568,6 +547,19 @@ begin
 	where student_id = _student_id;
 end $$
 -- [excample]: call delete_student(1);
+
+-- [procedure]: update_students_class_id(class_id)
+-- [author]: camtu
+delimiter $$
+drop procedure if exists  delete_students_from_class $$
+create procedure  delete_students_from_class (
+	in _class_id int
+)
+begin
+   update students
+   set class_id = _new_class_id
+   where class_id = _class_id;
+end $$
 
 -- [procedure]: delete_student(student_id)
 -- [author]: camtu
@@ -836,8 +828,9 @@ end $$
 
 -- [function]: get_class_id(_class_name, _grade, _academic_year)
 -- [author]: camtu
+delimiter $$
 drop function if exists get_class_id $$
-create function get_class_id(
+create function get_classId(
 	_class_name varchar(10),
 	_academic_year char(9)
 )
@@ -848,7 +841,8 @@ begin
 	select class_id into selected_class_id
 	from classes 
     where class_name = _class_name
-		and academic_year = _academic_year;
+		and academic_year = _academic_year
+	limit 1,1;
 	return selected_class_id;
 		
 end $$
