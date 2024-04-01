@@ -2,11 +2,10 @@
 
 use App\utils\Helper;
 
-
 require_once __DIR__ . '/../partials/header.php';
 require_once __DIR__ . '/../partials/nav.php';
-?>
 
+?>
 <div id="main" class="">
     <div class="row">
         <div class="col-3 border-end">
@@ -36,12 +35,12 @@ require_once __DIR__ . '/../partials/nav.php';
                             <option value="2">2</option>
                         </select>
                         <p class="text-danger text-end"><?= Helper::getFormErrorFromSession('semester') ?></p>
-                        </span>
-                        <span class="col">
-                            <label for="academic_year" class="form-label mb-0">Năm học<span style="color: red;"> *</span></label>
-                             <input type="text" class="form-control" id="academic_year" name="academic_year" value="<?= Helper::getFormDataFromSession('academic_year') ?>">
-                             <p class="text-danger text-end"><?= Helper::getFormErrorFromSession('academic_year') ?></p>
-                        </span>
+                    </span>
+                    <span class="col">
+                        <label for="academic_year" class="form-label mb-0">Năm học<span style="color: red;"> *</span></label>
+                        <input type="text" class="form-control" id="academic_year" name="academic_year" value="<?= Helper::getFormDataFromSession('academic_year') ?>">
+                        <p class="text-danger text-end"><?= Helper::getFormErrorFromSession('academic_year') ?></p>
+                    </span>
                 </div>
                 <div class="d-flex mt-3">
                     <button type="reset" class="ms-auto me-2 px-3 btn btn-sm btn-outline-danger">
@@ -54,9 +53,9 @@ require_once __DIR__ . '/../partials/nav.php';
             </form>
 
             <div class="d-flex mt-5">
-                <button class="ms-auto px-3 btn btn-sm btn-outline-success">
-                    Thêm từ file excel
-                </button>
+                <a href="/excel" class="ms-auto px-3 btn btn-sm btn-outline-success">
+                    Xuất ra file excel
+                </a>
             </div>
         </div>
 
@@ -132,9 +131,6 @@ require_once __DIR__ . '/../partials/nav.php';
                                 </button>
                                 <form action="/classes/delete" class="d-inline" method="POST">
                                     <input hidden type="text" name="class_id" value="<?= Helper::htmlEscape($class['class_id']) ?>">
-                                    <input hidden type="text" name="teacher_id" value="<?= Helper::htmlEscape($class['teacher_id']) ?>">
-                                    <input hidden type="text" name="room_id" value="<?= Helper::htmlEscape($class['room_id']) ?>">
-                                    <input hidden type="text" name="semester" value="<?= Helper::htmlEscape($class['semester']) ?>">
                                     <button type="submit" class="btn btn-outline-danger btn-sm onclick="deleteClass(<?= Helper::htmlEscape($class['class_id'])?>)">
                                         <i class="fa fa-trash" aria-hidden="true"></i>
                                     </button>
@@ -155,8 +151,6 @@ require_once __DIR__ . '/../partials/nav.php';
             'teacher_id': 'teacher_id',
             'semester': 'semester',
             'academic_year': 'academic_year',
-            'room_number': 'room_number',
-            'full_name': 'full_name'
         };
         const formId = 'class_form';
         const trClass = 'class';
@@ -164,5 +158,3 @@ require_once __DIR__ . '/../partials/nav.php';
 <?php
 
 require_once __DIR__ . '/../partials/footer.php';
-
-

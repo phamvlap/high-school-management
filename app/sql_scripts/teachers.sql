@@ -1,4 +1,5 @@
-drop procedure if exists get_all_teachers$$
+delimiter $$
+drop procedure if exists get_all_teachers $$
 create procedure get_all_teachers(  
     in _full_name varchar(255),
     in _address varchar(255),

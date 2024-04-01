@@ -14,7 +14,7 @@ class ClassController
 		$this->rules = [
 			'class_id' =>
 			[
-                'isRequired' => 'Mã lớp không được để trống'
+                'isRequired' => 'Mã lớp không được để trống',
             ],
 			'class_name' =>
 			[
@@ -71,40 +71,32 @@ class ClassController
 
 			//Validation
 			$data = [];
-			$data['class_id'] = $_POST['class_id'] ?? '-1';
+			$data['class_id'] = $_POST['class_id'] ?? -1;
 			$data['class_name'] = $_POST['class_name'] ?? '';
 			$data['academic_year'] = $_POST['academic_year'] ?? '';
 			$data['teacher_id'] = $_POST['teacher_id'] ?? '';
 			$data['room_id'] = $_POST['room_id'] ?? '';
-			$data['semester'] = $_POST['semester'];
+			$data['semester'] = $_POST['semester'] ?? 1;
 
 			$errors = Validator::validate($data, $this->rules);
 			if ($errors) {
 				throw new PDOException('Thông tin không hợp lệ');
 			}
 			
-			$classModel->store([
-				'class_name' => $data['class_name'],
-				'academic_year' => $data['academic_year']
-			]);
+			$classModel->store($data);
 
-			$classID = $classModel->getClassID(['class_name' => $data['class_name'],'academic_year'=>$data['academic_year']]);
-			var_dump($classID);
+            if($data['class_id'] == -1){
+                $data['class_id'] = $classModel->getClassId();
+            }
 		
-			$homeRoomTeacherModel->store([
-				'teacher_id' => $data['teacher_id'],
-				'class_id' => $classID,
-			]);
+			$homeRoomTeacherModel->store($data);
+			$roomClassModel->store($data);
 
-			$roomClassModel->store([
-				'room_id' => $data['room_id'],
-				'class_id' => $classID,
-				'semester' => $data['semester'],
-			]);
-
+            // var_dump($data);
 			Helper::redirectTo('/classes', [
 				'status' => 'success',
-				'message' => 'Thêm mới lớp học thành công'
+				'message' => 'Thêm mới lớp học thành công',
+                'data' => $data,
 			]);
 		} catch (PDOException $e) {
 			Helper::redirectTo('/classes', [
@@ -166,42 +158,15 @@ class ClassController
 	public function delete()
 	{
 		try {
-			$classModel = new ClassModel();
-			$roomClassModel = new RoomClassModel();
-			$homeRoomTeacherModel = new HomeRoomTeacherModel();
-			$studentModel = new StudentModel();
-
-			//Validation
-			$data = [];
-			$data['class_id'] = $_POST['class_id'] ?? '';
-			$data['teacher_id'] = $_POST['teacher_id'] ?? '';
-			$data['room_id'] = $_POST['room_id'] ?? '';
-			$data['semester'] = $_POST['semester'] ?? '';
-			$data['new_class_id'] = $_POST['new_class_id'] ?? '';
-
-			// $errors = Validator::validate($data, $this->rules);
-			// if ($errors) {
-			// 	throw new PDOException('Thông tin không hợp lệ');
-			// }
-
-			$homeRoomTeacherModel->delete([
-				'class_id' => $data['class_id'],
-				'teacher_id' => $data['teacher_id']
-			]);
-			$roomClassModel->delete([
-				'class_id' => $data['class_id'],
-				'room_id' => $data['room_id'],
-				'semester' => $data['semester']
-			]);
-
-			// $studentModel->updateClassID($data['class_id'], $data['new_class_id']);
-			
-			$classModel->delete($data['class_id']);
-			
-			Helper::redirectTo('/classes', [
-				'status' => 'success',
-				'success' => 'Xóa lớp học thành công'
-			]);
+            $classModel = new ClassModel();
+			if (is_numeric((int)($_POST['class_id'] ?? -1)) === false) {
+				throw new PDOException('Thông tin không hợp lệ');
+			}
+            $classModel->delete((int)$_POST['class_id']);
+            Helper::redirectTo('/classes', [
+                'status' => 'success',
+                'message' => 'Xóa lớp học thành công'
+            ]);
 		} catch (PDOException $e) {
 			Helper::redirectTo('/classes', [
 				'status' => 'danger',

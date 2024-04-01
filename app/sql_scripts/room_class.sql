@@ -8,7 +8,9 @@ create procedure add_room_class(
 	in _class_id int, 
 	in _semester tinyint
 )
-begin 
+begin
+	delete from room_class
+	where class_id = _class_id;
 	insert into room_class(room_id, class_id, semester)
 		values (_room_id, _class_id, _semester);
 end $$
@@ -30,21 +32,3 @@ begin
 		and semester = _semester;
 end $$
 -- [example]: call delete_room_class(3, 1, 1);
-
--- [procedure]: update_room_class(_room_id, _class_id, _semester, _new_room_id, _new_class_id, _new_semester)
--- [author]: tronghuu
-drop procedure if exists update_room_class $$
-create procedure update_room_class(
-	in _room_id int, 
-	in _class_id int, 
-	in _semester tinyint, 
-	in _new_room_id int, 
-	in _new_class_id int, 
-	in _new_semester tinyint
-)
-begin 
-	call add_room_class(_new_room_id, _new_class_id, _new_semester);
-	call delete_room_class(_room_id, _class_id, _semester);
-end $$
--- [example]:
--- call update_room_class(1, 1, 1, 2, 2, 2);
