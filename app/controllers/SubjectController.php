@@ -25,25 +25,41 @@ class SubjectController
             ]
         ];
     }
-    public function index()
-    {
-        $subjectModel = new SubjectModel();
-        $paginator = new Paginator(
-            $_GET['limit'] ?? 10,
-            $subjectModel->count(),
-            $_GET['page'] ?? 1
-        );
-        Helper::renderPage('/subjects/index.php', [
-            'subjects' => $subjectModel->getAll(),
-            'pagination' => [
-                'currPage' => $_GET['page'] ?? 1,
-                'totalPages' => $paginator->getTotalPages(),
-                'prevPage' => $paginator->getPrevPage(),
-                'nextPage' => $paginator->getNextPage(),
-                'pages' => $paginator->getPages()
-            ]
-        ]);
-    }
+    public function index() {
+		try {
+			$subjectModel = new subjectModel();
+	
+			$limit = (isset($_GET['limit']) && $_GET['limit'] !== 'none') ? (int)$_GET['limit'] : MAX_RECORDS_PER_PAGE;
+			$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+			$filter = [
+				'subject_name' => (isset($_GET['subject_name']) && $_GET['subject_name'] !== '') ? $_GET['subject_name'] : null,
+				'grade' => (!empty($_GET['grade']) && $_GET['grade'] !== '') ? (int)$_GET['grade'] : null,
+			];
+	
+			$totalRecords = $subjectModel->getCount($filter);
+	
+			$paginator = new Paginator($limit, $totalRecords, $page);
+	
+			$subjects = $subjectModel->getByFilter($filter, $limit, ($page - 1) * $limit);
+	
+			Helper::renderPage('/subjects/index.php', [
+				'subjects' => $subjects,
+				'pagination' => [
+					'prevPage' => $paginator->getPrevPage(),
+					'currPage' => $paginator->getCurrPage(),
+					'nextPage' => $paginator->getNextPage(),
+					'pages' => $paginator->getPages(),
+				],
+				'filter' => $filter,
+				'total' => $totalRecords
+			]);
+		} catch (PDOException $e) {
+			Helper::redirectTo('/subjects', [
+				'status' => 'danger',
+				'message' => 'Lấy dữ liệu môn học thất bại'
+			]);
+		}
+	}
     public function create()
     {
         Helper::renderPage('/subjects/create.php');

@@ -6,4 +6,5 @@ $router->mount('/marks', function() use ($router) {
 	$router->post('/store', 'MarkController@store');
 	$router->get('/(\d+)/edit', 'MarkController@edit');
 	$router->post('/(\d+)/update', 'MarkController@update');
+	$router->post('/delete', 'MarkController@delete');
 });

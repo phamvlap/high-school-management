@@ -45,21 +45,35 @@ require_once __DIR__ . '/../partials/nav.php';
         <div class="col-9">
             <!-- Hiển thị thông tin tất cả học sinh từ cơ sở dữ liệu kèm theo 2 button xem, sửa và xóa (sử dụng fa icon), ẩn địa chỉ-->
             <!-- Hiển thị thanh filter và search -->
-            <form class="d-flex justify-content-between">
-                <div class="d-flex">
-                    <div class="mb-1">
-                        <label for="class" class="form-label mb-0">Lọc theo khối</label>
-                        <select class="form-select" id="class" name="class">
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
+            <form action="/subjects" method="GET">
+                <div class="row align-items-end">
+                    <div class="col-2">
+                        <label for="limit" class="form-label mb-0">Hiển thị</label>
+                        <?php $limit = $_GET['limit'] ?? '10'; ?>
+                        <select class="form-select" id="limit" name="limit">
+                            <option value="<?= MAX_LIMIT ?>" <?= ($limit === 'all') ? 'selected' : '' ?>>Tất cả</option>
+                            <option value="10" <?= ($limit === '10') ? 'selected' : '' ?>>10</option>
+                            <option value="20" <?= ($limit === '20') ? 'selected' : '' ?>>20</option>
+                            <option value="50" <?= ($limit === '50') ? 'selected' : '' ?>>50</option>
                         </select>
                     </div>
-                </div>
-                <div class="mb-1">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Tìm kiếm" aria-label="Recipient's username" aria-describedby="button-addon2">
-                        <button class="btn btn-outline-primary" type="button" id="button-addon2">
+                    <div class="col-2">
+                        <label for="grade" class="form-label mb-0">Khối</label>
+                        <?php $grade = $_GET['grade'] ?? 'all'; ?>
+                        <select class="form-select" id="grade" name="grade">
+                            <option value="" <?= ($grade === 'all') ? 'selected' : '' ?>>Tất cả</option>
+                            <option value="10" <?= ($grade === '10') ? 'selected' : '' ?>>10</option>
+                            <option value="11" <?= ($grade === '11') ? 'selected' : '' ?>>11</option>
+                            <option value="12" <?= ($grade === '12') ? 'selected' : '' ?>>12</option>
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Tìm kiếm theo tên môn" name="subject_name">
+                        </div>
+                    </div>
+                    <div class="col-1">
+                        <button type="submit" class="btn btn-outline-primary" type="button" id="button-addon2">
                             <i class="fa fa-search"></i>
                         </button>
                     </div>
@@ -99,7 +113,7 @@ require_once __DIR__ . '/../partials/nav.php';
                 </tbody>
             </table>
 
-         <?php require_once __DIR__ . '/../partials/pagination.php'; ?>
+            <?php require_once __DIR__ . '/../partials/pagination.php'; ?>
 
 
         </div>

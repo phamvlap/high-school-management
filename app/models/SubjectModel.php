@@ -48,6 +48,21 @@ use PDOException;
             echo $e->getMessage();
         }
     }
+    public function getByFilter(array $filter, int $limit, int $offset): array
+    {
+        $preparedStmt = 'call get_all_subject(:subject_name, :grade, :limit, :offset)';
+        try {
+            $statement = $this->pdo->prepare($preparedStmt);
+            $statement->bindParam(':subject_name', $filter['subject_name'], PDO::PARAM_STR);
+            $statement->bindParam(':grade', $filter['grade'], PDO::PARAM_INT);
+            $statement->bindParam(':limit', $limit, PDO::PARAM_INT);
+            $statement->bindParam(':offset', $offset, PDO::PARAM_INT);
+            $statement->execute();
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
     public function delete(int $subject_id): void {
         $preparedStmt = "call delete_subject(:subject_id)";
         $statement = $this->pdo->prepare($preparedStmt);
@@ -55,14 +70,18 @@ use PDOException;
         $statement->execute();
         
     }
-    public function count(): int
+    public function getCount($filter): int
     {
         try {
-            $statement = $this->pdo->prepare("select count(*) from subjects");
+            $preparedStmt = 'select count_all_subjects(:subject_name,:grade)';
+            $statement = $this->pdo->prepare($preparedStmt);
+            $statement->bindParam(':subject_name', $filter['subject_name'], PDO::PARAM_INT);
+            $statement->bindParam(':grade', $filter['grade'], PDO::PARAM_INT);
             $statement->execute();
             return $statement->fetchColumn();
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
     }
+
  }
