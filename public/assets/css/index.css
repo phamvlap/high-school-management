@@ -30,10 +30,14 @@ h6 {
     font-weight: 500;
 }
 
+form label {
+    font-size: .9rem !important;
+}
+
 form input,
 form select,
 form textarea {
-    font-size: .8rem !important;
+    font-size: .9rem !important;
 }
 /* Layouts */
 
@@ -65,8 +69,8 @@ form textarea {
 #footer {
     background-color: var(--color-secondary);
     height: var(--footer-height);
-    width: calc(100% - var(--nav-width));
-    left: var(--nav-width);
+    width: calc(100%);
+    /* padding-left: var(--nav-width); */
     position: fixed;
     bottom: 0;
     display: flex;
@@ -83,6 +87,10 @@ form textarea {
     padding: 20px;
     font-size: .7rem;
     min-height: calc(100vh - var(--header-height) - var(--footer-height));
+}
+
+#main.main--auth {
+    margin-left: 0;
 }
 
 /* Header */
@@ -185,4 +193,12 @@ form textarea {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     transform: translate(2px, -5px);
     cursor: pointer;
+}
+
+.auth-form {
+    width: 500px;
+}
+
+#toast-message {
+    z-index: 101;
 }
