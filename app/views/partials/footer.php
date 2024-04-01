@@ -1,11 +1,9 @@
 <div class="position-fixed top-0 end-0 p-3" style="z-index: 101">
     <div id="toast-message" class="toast <?php
-
-                                            use App\utils\Helper;
-
-                                            echo (Helper::getFromSession('status')) ? 'show' : '';
-                                            $textClass = "text-" . Helper::getOnceFromSession('status');
-                                            ?>" role="alert" aria-live="assertive" aria-atomic="true">
+        use App\utils\Helper;
+        echo (Helper::getFromSession('status')) ? 'show' : '';
+        $textClass = "text-" . Helper::getOnceFromSession('status');
+        ?>" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
             <strong class="me-auto <?= $textClass ?>">
                 <?php
