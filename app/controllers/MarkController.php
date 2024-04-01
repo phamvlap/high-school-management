@@ -62,7 +62,13 @@ class MarkController {
 			$paginator = new Paginator($limit, $totalRecords, $page);
 	
 			$marks = $MarkModel->getByFilter($filter, $limit, ($page - 1) * $limit);
-	
+            
+            Helper::setIntoSession('download_data', [
+				'title' => 'BẢNG ĐIÊM',
+				'header' => ['Mã số', 'Họ tên', 'Môn học(mã môn)', 'Miệng', '15 phút', 'Một tiết', 'Cuối kì', 'Học kì', 'Năm học'],
+				'data' => $marks,
+			]);
+
 			Helper::renderPage('/marks/index.php', [
 				'marks' => $marks,
 				'pagination' => [
@@ -81,10 +87,8 @@ class MarkController {
 			]);
 		}
 	}
-	public function create() {
-		echo 'mark create';
-	}
-	public function store() {
+
+    public function store() {
 		try{
 			$markModel = new MarkModel();
 			$data = [];
@@ -108,9 +112,8 @@ class MarkController {
 			
 			Helper::redirectTo('/marks', ['form' => $data, 'errors' => $errors, 'status' => 'danger', 'message' => 'Cập nhật điểm thất bại']);
 		}
-		
-
 	}
+    
 	public function delete() {
 		try{
 			$markModel = new MarkModel();
@@ -125,12 +128,5 @@ class MarkController {
 		catch(PDOException $e) {
 			Helper::redirectTo('/marks', ['status' => 'danger', 'message' => 'Xóa điểm thất bại']);
 		}
-	
-	}
-	public function edit() {
-		echo 'mark edit';
-	}
-	public function update() {
-		echo 'mark update';
 	}
 }

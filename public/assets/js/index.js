@@ -6,7 +6,6 @@ window.addEventListener('load', () => {
         item.querySelector('.edit_btn').addEventListener('click', () => {
             Object.keys(fields).forEach((key) => {
                 const value = item.querySelector(`.${fields[key]}`).textContent;
-                console.log(key, value);
                 form.querySelector(`#${key}`).value = value;
             });
 

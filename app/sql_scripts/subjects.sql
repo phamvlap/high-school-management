@@ -66,8 +66,7 @@ create procedure get_all_subject (
     in _subject_name varchar(255), 
     in _grade tinyint, 
     in _limit int,
-    in _offset int,
-
+    in _offset int
 )
 begin
     select * 
@@ -78,13 +77,15 @@ begin
 end $$
 
 -- [example]: call get_all_subject('Vật lí', 1, 10, 0);
---function count_all_subject(subject_name, grade)
-drop function if exists count_all_subject $$
-create function count_all_subject (
-    in _subject_name varchar(255), 
-    in _grade tinyint
+-- function count_all_subject(subject_name, grade)
+drop function if exists count_all_subjects $$
+create function count_all_subjects (
+    _subject_name varchar(255),
+    _grade tinyint
 )
-returns int
+	returns int
+    reads sql data
+    deterministic
 begin
     declare count int;
     select count(*) into count 
@@ -94,5 +95,4 @@ begin
     return count;
 end $$
 -- [example]: select count_all_subject('Vật lí', 1);
-delimiter$$
 

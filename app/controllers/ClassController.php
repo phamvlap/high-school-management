@@ -2,16 +2,9 @@
 
 namespace App\controllers;
 
-<<<<<<< HEAD
 use App\models\{ClassModel, RoomClassModel, HomeRoomTeacherModel, StudentModel};
 use App\utils\{Validator, Helper, Paginator};
-=======
-use App\models\{ClassModel};
-use App\db\PDOFactory;
-use PDO;
->>>>>>> e6e9b51064ca6db0fdddc989b73ac59232503d33
 use PDOException;
-use App\utils\{Validator, Helper};
 
 class ClassController
 {
@@ -45,7 +38,6 @@ class ClassController
 	}
 	public function index()
 	{
-<<<<<<< HEAD
 		try {
 			$classModel = new ClassModel();
 			$paginator = new Paginator(
@@ -68,37 +60,20 @@ class ClassController
 				'status' => 'danger',
 				'message' => 'Lấy dữ liệu thất bại'
 			]);
-=======
-		try{
-			$ClassModel = new ClassModel();
-		$classes = $ClassModel->getAll();
-		Helper::renderPage('/classes/index.php', [
-			'classes' => $classes
-		]);
-		}
-		catch(PDOException $e){
-			echo $e->getMessage();
->>>>>>> e6e9b51064ca6db0fdddc989b73ac59232503d33
 		}
 	}
 	public function store()
 	{
-<<<<<<< HEAD
 		try {
 			$classModel = new ClassModel();
 			$roomClassModel = new RoomClassModel();
 			$homeRoomTeacherModel = new HomeRoomTeacherModel();
 
 			//Validation
-=======
-		try{
-			$ClassModel = new ClassModel();
->>>>>>> e6e9b51064ca6db0fdddc989b73ac59232503d33
 			$data = [];
 			$data['class_id'] = $_POST['class_id'] ?? '-1';
 			$data['class_name'] = $_POST['class_name'] ?? '';
 			$data['academic_year'] = $_POST['academic_year'] ?? '';
-<<<<<<< HEAD
 			$data['teacher_id'] = $_POST['teacher_id'] ?? '';
 			$data['room_id'] = $_POST['room_id'] ?? '';
 			$data['semester'] = $_POST['semester'];
@@ -139,20 +114,6 @@ class ClassController
 				'message' => 'Thêm mới lớp học thất bại'
 			]);
 		}
-=======
-			$data['']
-			
-		}
-		
-	}
-	public function edit()
-	{
-		echo 'class edit';
-	}
-	public function update()
-	{
-		echo 'class update';
->>>>>>> e6e9b51064ca6db0fdddc989b73ac59232503d33
 	}
 	
 

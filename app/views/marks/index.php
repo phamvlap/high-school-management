@@ -4,11 +4,12 @@ use App\utils\Helper;
 
 require_once __DIR__ . '/../partials/header.php';
 require_once __DIR__ . '/../partials/nav.php';
+
 ?>
 <div id="main" class="">
     <div class="row">
         <div class="col-3 border-end">
-            <form action="/marks/store" method="post" form-control id="form_mark">
+            <form action="/marks/store" method="post" id="form_mark">
                 <span class="fw-bold mb-5" style="font-size: 1rem;">Nhập điểm học sinh</span>
                 <div class="mb-1">
                     <label for="student_id" class="form-label mb-0">Mã số học sinh <span class="text-danger">*</span></label>
@@ -42,7 +43,7 @@ require_once __DIR__ . '/../partials/nav.php';
                 </div>
                 <div class="mb-1">
                     <label for="semester" class="form-label mb-0">Học kì</label>
-                    <select class="form-select" id="class" name="semester">
+                    <select class="form-select" id="semester" name="semester">
                         <option value="1">1</option>
                         <option value="2">2</option>
                     </select>
@@ -57,14 +58,12 @@ require_once __DIR__ . '/../partials/nav.php';
                 </div>
             </form>
             <div class="d-flex mt-5">
-                <button class="ms-auto px-3 btn btn-sm btn-outline-success">
-                    Thêm từ file excel
-                </button>
+                <a href="/excel" class="ms-auto px-3 btn btn-sm btn-outline-success">
+                    Xủất ra file excel
+                </a>
             </div>
         </div>
 
-        <!-- Hiển thị thông tin tất cả học sinh từ cơ sở dữ liệu kèm theo 2 button xem, sửa và xóa (sử dụng fa icon), ẩn địa chỉ-->
-        <!-- Hiển thị thanh filter và search -->
         <div class="col-9">
             <form action="/marks" method="GET">
                 <div class="row align-items-end">
@@ -125,10 +124,10 @@ require_once __DIR__ . '/../partials/nav.php';
                             <td class="student_id"><?= Helper::htmlEscape($mark['student_id']) ?></td>
                             <td><?= Helper::htmlEscape($mark['full_name']) ?></td>
                             <td class="subject_id"><?= Helper::htmlEscape($mark['subject_name']) ?>(<?= Helper::htmlEscape($mark['subject_id']) ?>)</td>
-                            <td class="oral_score"><?= Helper::htmlEscape($mark['oral_score']) ?></td>
-                            <td class="_15_minutes_score"><?= Helper::htmlEscape($mark['_15_minutes_score']) ?></td>
-                            <td class="_1_period_score"><?= Helper::htmlEscape($mark['_1_period_score']) ?></td>
-                            <td class="semester_score"><?= Helper::htmlEscape($mark['semester_score']) ?></td>
+                            <td class="oral_score"><?= Helper::htmlEscape(!empty($mark['oral_score']) ? $mark['oral_score'] : '--') ?></td>
+                            <td class="_15_minutes_score"><?= Helper::htmlEscape(!empty($mark['_15_minutes_score']) ? $mark['_15_minutes_score'] : '--') ?></td>
+                            <td class="_1_period_score"><?= Helper::htmlEscape(!empty($mark['_1_period_score']) ? $mark['_1_period_score'] : '--') ?></td>
+                            <td class="semester_score"><?= Helper::htmlEscape(!empty($mark['semester_score']) ? $mark['semester_score'] : '--') ?></td>
                             <td class="semester"><?= Helper::htmlEscape($mark['semester']) ?></td>
                             <td class="academic_year"><?= Helper::htmlEscape($mark['academic_year']) ?></td>
                             <td>

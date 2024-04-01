@@ -77,13 +77,15 @@ end $$
 
 -- [example]: call get_all_marks(null, null, null,3,0);
 -- viết hàm đếm toàn bộ bảng marks
-drop function if exists count_all_marks$$
+drop function if exists count_all_marks $$
 create function count_all_marks(
-    in _student_id int,
-    in _subject_name int,
-    in _semester tinyint
+    _student_id int,
+    _subject_name int,
+    _semester tinyint
 )
-returns int
+	returns int
+	reads sql data
+    deterministic
 begin
     declare count int;
     select count(*) into count from marks

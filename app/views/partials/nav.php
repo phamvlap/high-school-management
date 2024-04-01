@@ -35,12 +35,17 @@ $links = [
         'title' => 'Quản lý môn học',
         'url' => '/subjects'
     ],
-    // công tác giảng dạy
     [
-        'icon' => 'fa fa-chalkboard',
-        'title' => 'Công tác giảng dạy',
-        'url' => '/teaching'
+        'icon' => 'fa fa-pen',
+        'title' => 'Quản lý điểm',
+        'url' => '/marks'
     ],
+    // công tác giảng dạy
+    // [
+    //     'icon' => 'fa fa-chalkboard',
+    //     'title' => 'Công tác giảng dạy',
+    //     'url' => '/teaching'
+    // ],
 ];
 
 
