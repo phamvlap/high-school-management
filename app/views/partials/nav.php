@@ -58,12 +58,14 @@ $links = [
                 </li>
             <?php endforeach; ?>
             <hr>
-            <li>
-                <a href="#" class="nav-link link-body-emphasis text-danger nav-logout--hover">
-                    <i class="fa fa-sign-out-alt"></i> &nbsp;
-                    Đăng xuất
-                </a>
-            </li>
+            <form action="/logout" method="POST" class="d-block w-100">
+                <li>
+                    <button type="submit" class="nav-link link-body-emphasis text-danger nav-logout--hover w-100 text-start">
+                        <i class="fa fa-sign-out-alt"></i> &nbsp;
+                        Đăng xuất
+                    </button>
+                </li>
+            </form>
         </ul>
     </div>
 </div>

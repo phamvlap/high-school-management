@@ -17,7 +17,7 @@
             </div>
 
             <div class="header-homepage">
-                <a href="index.html">
+                <a href="/">
                     <i class="fa fa-home"></i>
                 </a>
             </div>

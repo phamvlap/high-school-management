@@ -36,6 +36,7 @@ class ComposerStaticInit34c36c05260b7e8e8b2fbced22e7ef39
             'Symfony\\Polyfill\\Intl\\Grapheme\\' => 31,
             'Symfony\\Polyfill\\Iconv\\' => 23,
             'Symfony\\Polyfill\\Ctype\\' => 23,
+            'Symfony\\Component\\Finder\\' => 25,
         ),
         'P' => 
         array (
@@ -51,6 +52,7 @@ class ComposerStaticInit34c36c05260b7e8e8b2fbced22e7ef39
         ),
         'G' => 
         array (
+            'Gregwar\\' => 8,
             'GrahamCampbell\\ResultType\\' => 26,
         ),
         'D' => 
@@ -74,8 +76,8 @@ class ComposerStaticInit34c36c05260b7e8e8b2fbced22e7ef39
         ),
         'voku\\' => 
         array (
-            0 => __DIR__ . '/..' . '/voku/portable-utf8/src/voku',
-            1 => __DIR__ . '/..' . '/voku/portable-ascii/src/voku',
+            0 => __DIR__ . '/..' . '/voku/portable-ascii/src/voku',
+            1 => __DIR__ . '/..' . '/voku/portable-utf8/src/voku',
         ),
         'ZipStream\\' => 
         array (
@@ -109,14 +111,18 @@ class ComposerStaticInit34c36c05260b7e8e8b2fbced22e7ef39
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
         ),
+        'Symfony\\Component\\Finder\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/finder',
+        ),
         'Psr\\SimpleCache\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/simple-cache/src',
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -133,6 +139,10 @@ class ComposerStaticInit34c36c05260b7e8e8b2fbced22e7ef39
         'Matrix\\' => 
         array (
             0 => __DIR__ . '/..' . '/markbaker/matrix/classes/src',
+        ),
+        'Gregwar\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/gregwar/captcha/src/Gregwar',
         ),
         'GrahamCampbell\\ResultType\\' => 
         array (

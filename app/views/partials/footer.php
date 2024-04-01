@@ -1,4 +1,4 @@
-<div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 101">
     <div id="toast-message" class="toast <?php
 
                                             use App\utils\Helper;
@@ -7,7 +7,19 @@
                                             $textClass = "text-" . Helper::getOnceFromSession('status');
                                             ?>" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
-            <strong class="me-auto <?= $textClass ?>">Thành công</strong>
+            <strong class="me-auto <?= $textClass ?>">
+                <?php
+                if ($textClass == "text-danger") {
+                    echo "Thất bại";
+                } elseif ($textClass == "text-success") {
+                    echo "Thành công";
+                } elseif ($textClass == "text-warning") {
+                    echo "Cảnh báo";
+                } elseif ($textClass == "text-info") {
+                    echo "Thông báo";
+                }
+                ?>
+            </strong>
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body <?= $textClass ?>">

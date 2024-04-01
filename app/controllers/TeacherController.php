@@ -42,20 +42,36 @@ class TeacherController
 	{
 		try {
 			$teacherModel = new TeacherModel();
-			$paginator = new Paginator(
-				$_GET['limit'] ?? 10,
-				$teacherModel->count(),
-				$_GET['page'] ?? 1
-			);
+
+			$limit = (isset($_GET['limit']) && $_GET['limit'] !== 'none') ? (int)$_GET['limit'] : MAX_RECORDS_PER_PAGE;
+			$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+			$filter = [
+				'full_name' => (isset($_GET['full_name']) && $_GET['full_name'] !== '') ? $_GET['full_name'] : null,
+				'address' => (isset($_GET['address']) && $_GET['address'] !== '') ? $_GET['address'] : null,
+				'is_sort_by_name' => (isset($_GET['sort']) && $_GET['sort'] !== 'none') ? (int)$_GET['sort'] : null
+			];
+
+
+			$totalRecords = $teacherModel->getCount($filter);
+			$paginator = new Paginator($limit, $totalRecords, $page);
+			$teachers = $teacherModel->getByFilter($filter, $limit, ($page - 1) * $limit);
+
+			Helper::setIntoSession('download_data', [
+				'title' => 'DANH SÁCH GIÁO VIÊN',
+				'header' => ['Mã giáo viên', 'Họ và tên', 'Ngày sinh', 'Địa chỉ', 'Số điện thoại'],
+				'data' => $teachers
+			]);
+
 			Helper::renderPage('/teachers/index.php', [
-				'teachers' => $teacherModel->getAll(),
+				'teachers' => $teachers,
 				'pagination' => [
-					'currPage' => $_GET['page'] ?? 1,
-					'totalPages' => $paginator->getTotalPages(),
 					'prevPage' => $paginator->getPrevPage(),
+					'currPage' => $paginator->getCurrPage(),
 					'nextPage' => $paginator->getNextPage(),
-					'pages' => $paginator->getPages()
-				]
+					'pages' => $paginator->getPages(),
+				],
+				'filter' => $filter,
+				'total' => $totalRecords,
 			]);
 		} catch (PDOException $e) {
 			Helper::renderPage('/teachers/index.php', [
@@ -124,7 +140,7 @@ class TeacherController
 		Helper::setIntoSession('download_data', [
 			'title' => 'DANH SÁCH GIÁO VIÊN',
 			'header' => ['Mã giáo viên', 'Họ và tên', 'Ngày sinh', 'Địa chỉ', 'Số điện thoại'],
-			'data' => $teacherModel->getAll()
+			'data' => $teacherModel->getAll(10000, 0)
 		]);
 
 		Helper::setIntoSession('previous_page', '/teachers');

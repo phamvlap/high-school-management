@@ -3,9 +3,11 @@
 use App\utils\Helper;
 
 $queryArray = [];
-foreach ($filter as $key => $value) {
-    if ($value) {
-        $queryArray[$key] = $value;
+if (isset($filter)) {
+    foreach ($filter as $key => $value) {
+        if (isset($value)) {
+            $queryArray[$key] = $value;
+        }
     }
 }
 $queryString = implode('&', array_map(fn ($key, $value) => "$key=$value", array_keys($queryArray), $queryArray));

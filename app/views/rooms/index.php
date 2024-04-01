@@ -71,17 +71,16 @@ require __DIR__ . '/../partials/nav.php';
                             <option value="none" <?= ($_GET['sort'] === 'none') ? 'selected' : '' ?>>-- Chọn --</option>
                             <option value="1" <?= ((int)$_GET['sort'] === 1) ? 'selected' : '' ?>>Tăng dần</option>
                             <option value="0" <?= ((int)$_GET['sort'] === 0) ? 'selected' : '' ?>>Giảm dần</option>
-                            <!--<option value="dob-asc">Ngày sinh tăng dần</option>
-                            <option value="dob-desc">Ngày sinh giảm dần</option>-->
                         </select>
                     </div>
                     <div class="ms-1 mb-1">
                         <label for="limit" class="form-label mb-0">Hiển thị</label>
+                        <?php $limit = $_GET['limit'] ?? 10; ?>
                         <select class="form-select" id="limit" name="limit">
-                            <option value="none" <?= ($_GET['limit'] === 'none') ? 'selected' : '' ?>>Số hàng</option>
-                            <option value="10" <?= ((int)$_GET['limit'] === 10) ? 'selected' : '' ?>>10</option>
-                            <option value="20" <?= ((int)$_GET['limit'] === 20) ? 'selected' : '' ?>>20</option>
-                            <option value="25" <?= ((int)$_GET['limit'] === 25) ? 'selected' : '' ?>>25</option>
+                            <option value="<?= MAX_LIMIT ?>" <?= ($limit === 'all') ? 'selected' : '' ?>>Số hàng</option>
+                            <option value="10" <?= ((int)$limit === '10') ? 'selected' : '' ?>>10</option>
+                            <option value="20" <?= ((int)$limit === '20') ? 'selected' : '' ?>>20</option>
+                            <option value="25" <?= ((int)$limit === '50') ? 'selected' : '' ?>>50</option>
                         </select>
                     </div>
                     <div class="ms-1 mb-1 d-flex align-items-end">
@@ -91,8 +90,7 @@ require __DIR__ . '/../partials/nav.php';
 
                 <div class="mt-2 align-self-center">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Tìm kiếm"
-                            aria-label="Recipient's username" aria-describedby="button-addon2">
+                        <input type="text" class="form-control" placeholder="Tìm kiếm" aria-label="Recipient's username" aria-describedby="button-addon2">
                         <button class="btn " type="button" id="button-addon2">
                             <i class="fa fa-search"></i>
                         </button>
@@ -111,7 +109,7 @@ require __DIR__ . '/../partials/nav.php';
                 </thead>
                 <tbody>
 
-                    <?php foreach($rooms as $room): ?>
+                    <?php foreach ($rooms as $room) : ?>
                         <tr class="room">
                             <td scope="row" class="room_id">
                                 <?= Helper::htmlEscape($room['room_id']) ?>
@@ -131,7 +129,7 @@ require __DIR__ . '/../partials/nav.php';
                             </td>
                         </tr>
                     <?php endforeach ?>
-                    
+
                 </tbody>
             </table>
 
