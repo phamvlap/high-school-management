@@ -13,25 +13,33 @@ class StudentModel {
 	public function __construct() {
 		$this -> pdo = PDOFactory::connect();
 	}
-
-	public function getPDO(): PDO {
-		return $this->pdo;
-	}
+	public function getCount(array $filter): int {
+		try {
+			$stmt = $this -> pdo -> prepare('select get_total_students(:address, :class_id, :academic_year);');
+			$stmt -> bindParam(':address', $filter['address'], PDO::PARAM_STR);
+			$stmt -> bindParam(':class_id', $filter['class_id'], PDO::PARAM_INT);
+			$stmt -> bindParam(':academic_year', $filter['academic_year'], PDO::PARAM_STR);
+            $stmt -> execute();
+            return $stmt -> fetchColumn();
+		} catch(PDOException $e) {
+			echo $e -> getMessage();
+		}
+}
 	public function getAll(): array {
-			$preparedStmt = "call get_all_students(null, null, null, 1);";
+			$preparedStmt = "call get_all_students(null, null, null, 0);";
 			$statement = $this->pdo->prepare($preparedStmt);
 			$statement->execute();
 			return $statement->fetchAll(PDO::FETCH_ASSOC);
 	}
 
-	public function getById(int $student_id): array {
-		$preparedStmt = 'call get_student_by_id(:student_id)';
-		$statement = $this->pdo->prepare($preparedStmt);
-		$statement->bindParam(':student_id', $student_id, PDO::PARAM_INT);
-		$statement->execute();
-		return $statement->fetchAll(PDO::FETCH_ASSOC);
-	}
-	public function getByFilter(array $filter): array {
+	// public function getById(int $student_id): array {
+	// 	$preparedStmt = 'call get_student_by_id(:student_id)';
+	// 	$statement = $this->pdo->prepare($preparedStmt);
+	// 	$statement->bindParam(':student_id', $student_id, PDO::PARAM_INT);
+	// 	$statement->execute();
+	// 	return $statement->fetchAll(PDO::FETCH_ASSOC);
+	// }
+	public function getByFilter(array $filter, int $limit, int $offset): array {
 			$preparedStmt = 'call get_all_students(:address, :class_id, :academic_year, :is_sort_by_name_desc)';
 			$statement = $this->pdo->prepare($preparedStmt);
 			$statement->bindParam(':address', $filter['address'], PDO::PARAM_STR);

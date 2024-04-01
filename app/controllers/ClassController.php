@@ -193,8 +193,6 @@ class ClassController
 				'room_id' => $data['room_id'],
 				'semester' => $data['semester']
 			]);
-
-			// $studentModel->updateClassID($data['class_id'], $data['new_class_id']);
 			
 			$classModel->delete($data['class_id']);
 			

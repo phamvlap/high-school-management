@@ -41,6 +41,11 @@ $links = [
         'title' => 'Công tác giảng dạy',
         'url' => '/teaching'
     ],
+    [
+        'icon' => 'fa fa-user',
+        'title' => 'Quản lý người dùng',
+        'url' => '/users'
+    ]
 ];
 
 

@@ -90,7 +90,9 @@ create procedure get_all_students   (
 	in  _address varchar(255),
 	in _class_id int,
 	in _academic_year char(9),
-	in _is_sort_by_name_desc tinyint
+	in _is_sort_by_name_desc tinyint,
+	in _limit int,
+	in _offset int
 )
 begin
     select * 
@@ -101,7 +103,9 @@ begin
 		  and (_academic_year is null or academic_year like concat('%', concat( _academic_year, '%')))
 	order by 
 		case when _is_sort_by_name_desc = 1 then full_name end desc,
-		case when _is_sort_by_name_desc = 0 then full_name end asc;
+		case when _is_sort_by_name_desc = 0 then full_name end asc
+	limit _limit
+	offset _offset;;
 end $$
 
 -- [excample]: call get_all_students('Ha Noi','2',null);
@@ -117,3 +121,25 @@ begin
 end $$
 
 -- [excample]: call delete_all_students();
+
+-- [function]: get_total_students()
+-- [author]: camtu
+drop function if exists get_total_students $$
+create function get_total_students (
+	_address varchar(255),
+    _class_id int,
+    _academic_year char(9)
+)
+begin
+    declare total_students int;
+
+	select count(*) into total_students
+    from students
+	where (_address is null or address like concat('%', _address, '%')) 
+		and (_class_id is null or type like class_id = _class_id)
+		and (_academic_year is null or address like concat('%', _academic_year, '%')) 
+	limit _limit 
+    offset _offset;
+
+    return total_students;
+end $$

@@ -25,7 +25,7 @@ create table if not exists students (
     address varchar(255) not null,
     parent_phone_number char(10) not null,
     class_id int not null,
-    foreign key (class_id) references classes(class_id)
+    foreign key (class_id) references classes(class_id) on delete cascade
 );
 create table if not exists homeroom_teachers (
     teacher_id int not null,
@@ -82,9 +82,10 @@ delimiter $$
 
 -- [procedure]: add_account(username, password, type)
 -- [author]: tronghuu
+drop procedure if exists add_account $$
 create procedure add_account(
     in _username varchar(50), 
-    in _password varchar(50), 
+    in _password varchar(255), 
     in _type varchar(50)
 )
 begin
@@ -115,12 +116,57 @@ end $$
 
 -- [procedure]: get_all_accounts()
 -- [author]: tronghuu
-create procedure get_all_accounts()
+delimiter $$
+drop procedure if exists get_all_accounts $$
+create procedure get_all_accounts(
+	in _username varchar(50),
+	in _type varchar(50),
+    in _limit int,
+    in _offset int
+)
 begin 
-    select username, type from accounts;
+	select * 
+	from accounts
+	where (_username is null or username like concat('%', _username, '%')) 
+		and (_type is null or type like concat('%', _type, '%'))
+	limit _limit offset _offset;
 end $$
 -- [example]: call get_all_accounts();use high_school_management;
 delimiter $$
+
+-- [procedure]: get_all_accounts_by_type()
+-- [author]: camtu
+-- delimiter $$
+-- drop procedure if exists get_all_accounts_by_type $$
+-- create procedure get_all_accounts_by_type(
+-- 	in _type varchar(50)
+-- )
+-- begin 
+--     select username, type from accounts
+--     where type = _type;
+-- end $$
+-- [example]: call get_all_accounts();use high_school_management;
+delimiter $$
+
+-- [function]: get_total_accounts(username, type)
+-- [author]: camtu
+delimiter $$
+drop function if exists get_total_accounts $$
+create function get_total_accounts(
+	_username varchar(50),
+	_type varchar(50)
+)
+returns int
+begin 
+	declare total_accounts int;
+    
+    select count(*) into total_accounts
+    from accounts
+    where (_username is null or username like concat('%', _username, '%')) 
+		and (_type is null or type like concat('%', _type, '%'));
+	return total_accounts;
+end $$
+
 
 -- [procedure]: add_class(_class_id, _class_name, _academic_year)
 -- [author]: phamvlap
@@ -556,9 +602,7 @@ create procedure  delete_students_from_class (
 	in _class_id int
 )
 begin
-   update students
-   set class_id = _new_class_id
-   where class_id = _class_id;
+   delete 
 end $$
 
 -- [procedure]: delete_student(student_id)
@@ -845,4 +889,20 @@ begin
 	limit 1,1;
 	return selected_class_id;
 		
+end $$
+
+[function]: get_total_accounts(:username, :type)
+[author]: camtu
+drop function if exists get_total_accounts $$
+create function get_total_accounts (
+	_username varchar(50), 
+    type varchar(50)
+)
+returns int 
+begin
+	declare total_accounts
+    
+    select count(*) into total_account
+    from accounts
+    where 
 end $$

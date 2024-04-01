@@ -128,14 +128,14 @@ require_once __DIR__ . '/../partials/nav.php';
                             <td class="academic_year"><?= Helper::htmlEscape((string)$class['academic_year']) ?></td>
                             <td>
                                 <button class="btn btn-sm btn-outline-warning edit_btn">
-                                    <i class="fa fa-edit"></i>
+                                    <i class="fa fa-edit" aria-hidden="true"></i>
                                 </button>
                                 <form action="/classes/delete" class="d-inline" method="POST">
                                     <input hidden type="text" name="class_id" value="<?= Helper::htmlEscape($class['class_id']) ?>">
                                     <input hidden type="text" name="teacher_id" value="<?= Helper::htmlEscape($class['teacher_id']) ?>">
                                     <input hidden type="text" name="room_id" value="<?= Helper::htmlEscape($class['room_id']) ?>">
                                     <input hidden type="text" name="semester" value="<?= Helper::htmlEscape($class['semester']) ?>">
-                                    <button type="submit" class="btn btn-outline-danger btn-sm onclick="deleteClass(<?= Helper::htmlEscape($class['class_id'])?>)">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">
                                         <i class="fa fa-trash" aria-hidden="true"></i>
                                     </button>
                                 </form>
@@ -146,7 +146,9 @@ require_once __DIR__ . '/../partials/nav.php';
             </table>
 
             <?php require_once __DIR__ . '/../partials/pagination.php'; ?>
-
+        </div>
+    </div>
+</div>
     <script>
         const fields = {
             'class_id': 'class_id',
