@@ -33,6 +33,8 @@ require_once __DIR__ . '/../app/routes/statistics.php';
 require_once __DIR__ . '/../app/routes/students.php';
 // teachers
 require_once __DIR__ . '/../app/routes/teachers.php';
+//users
+require_once __DIR__ . '/../app/routes/users.php';
 // subjects
 require_once __DIR__ . '/../app/routes/subjects.php';
 //excel
