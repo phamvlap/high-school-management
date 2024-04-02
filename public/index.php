@@ -13,7 +13,8 @@ $router->before('GET|POST', '/admin/.*', function () {
         return;
     }
 });
-
+// guest
+require_once __DIR__ . '/../app/routes/guest.php';
 // home
 require_once __DIR__ . '/../app/routes/home.php';
 // auth
@@ -38,6 +39,5 @@ require_once __DIR__ . '/../app/routes/subjects.php';
 $router->get('/excel', 'ExcelController@index');
 // errors
 require_once __DIR__ . '/../app/routes/errors.php';
-
 
 $router->run();
