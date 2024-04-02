@@ -93,6 +93,10 @@ form textarea {
     margin-left: 0;
 }
 
+#main.main--guest {
+    margin-left: 0;
+}
+
 /* Header */
 
 .header-brand {
@@ -209,4 +213,15 @@ form textarea {
 
 #toast-message {
     z-index: 101;
+}
+
+.mark-table {
+    background-color: #fff;
+}
+.info-section {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+.info-section h5 {
+    padding: 4px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
