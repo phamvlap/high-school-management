@@ -22,12 +22,17 @@ $links = [
     ],
     [
         'icon' => 'fa fa-tachometer-alt',
+        'title' => 'Quản lý phòng - lớp',
+        'url' => '/roomclass',
+    ],
+    [
+        'icon' => 'fa-solid fa-chalkboard-teacher',
         'title' => 'Quản lý giáo viên',
         'url' => '/teachers',
     ],
     [
         'icon' => 'fa fa-users',
-        'title' => 'Quản lý sinh viên',
+        'title' => 'Quản lý học sinh',
         'url' => '/students'
     ],
     [
@@ -40,19 +45,19 @@ $links = [
         'title' => 'Quản lý điểm',
         'url' => '/marks'
     ],
-    // công tác giảng dạy
-    // [
-    //     'icon' => 'fa fa-chalkboard',
-    //     'title' => 'Công tác giảng dạy',
-    //     'url' => '/teaching'
-    // ],
+    // thống kê
+    [
+        'icon' => 'fa fa-chart-bar',
+        'title' => 'Thống kê',
+        'url' => '/statistics'
+    ]
 ];
 
 
 ?>
 
 <div id="nav">
-    <div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary">
+    <div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary h-100">
         <ul class="nav nav-pills flex-column mb-auto">
             <?php foreach ($links as $link) : ?>
                 <li>

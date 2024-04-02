@@ -66,7 +66,7 @@ require_once __DIR__ . '/../partials/nav.php';
                         <label for="sort" class="form-label mb-0">Sắp xếp</label>
                         <?php $sort = $_GET['sort'] ?? 'none'; ?>
                         <select class="form-select" id="sort" name="sort">
-                            <option value="none" <?= ($sort === 'none') ? 'selected' : '' ?>>Không</option>
+                            <option value="none" <?= ($sort === 'none') ? 'selected' : '' ?>>-- Chọn --</option>
                             <option value="1" <?= ($sort === '1') ? 'selected' : '' ?>>Tên(A-Z)</option>
                             <option value="0" <?= ($sort === '0') ? 'selected' : '' ?>>Tên(Z-A)</option>
                         </select>

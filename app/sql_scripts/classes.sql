@@ -73,7 +73,7 @@ begin
 end $$
 
 -- [example]:
-call delete_class(2);
+-- call delete_class(2);
 
 -- [function]: get_all(_class_name, _grade, _academic_year)
 -- [author]: phamvlap
@@ -90,18 +90,12 @@ create procedure get_all_classes(
 )
 begin
 	select c.class_id, c.class_name, c.academic_year, 
-			t.teacher_id, t.full_name, t.date_of_birth, t.address, t.phone_number,
-            rc.room_id, rc.semester,
-            r.room_number, r.maximum_capacity
+			t.teacher_id, t.full_name
 	from classes as c
 		left join homeroom_teachers as ht
 			on c.class_id = ht.class_id 
 		left join teachers as t
 			on ht.teacher_id = t.teacher_id
-		left join room_class as rc
-			on c.class_id = rc.class_id
-		left join rooms as r
-			on rc.room_id = r.room_id
 	where (_class_name is null or c.class_name like concat('%', _class_name, '%'))
 		and (_grade is null or c.class_name like concat(_grade, '%'))
 		and (_academic_year is null or c.academic_year = _academic_year)
@@ -130,32 +124,10 @@ begin
 			on c.class_id = ht.class_id 
 		left join teachers as t
 			on ht.teacher_id = t.teacher_id
-		left join room_class as rc
-			on c.class_id = rc.class_id
-		left join rooms as r
-			on rc.room_id = r.room_id
 	where (_class_name is null or c.class_name like concat('%', _class_name, '%'))
 		and (_grade is null or c.class_name like concat(_grade, '%'))
 		and (_academic_year is null or c.academic_year = _academic_year);
 	return total;
-end $$
-
-drop procedure if exists get_class_by_id $$
-create procedure get_class_by_id(
-	in _class_id int
-)
-begin
-	select *
-	from room_class as rc
-		join homeroom_teachers as ht
-			on rc.class_id = ht.class_id 
-		join teachers as t
-			on ht.teacher_id = t.teacher_id
-		join classes as c
-			on c.class_id = rc.class_id
-		join rooms as r
-			on rc.room_id = r.room_id
-	where c.class_id = _class_id;
 end $$
 
 delimiter $$
@@ -174,4 +146,4 @@ begin
 	return selected_class_id;
 end $$
 
-select get_inserted_id();
+-- select get_inserted_id();

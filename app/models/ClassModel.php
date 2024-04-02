@@ -61,14 +61,6 @@ class ClassModel
 		}
 	}
 
-	public function getById(int $id): array
-	{
-		$preparedStmt = 'call get_class_by_id(:id)';
-		$statement = $this->pdo->prepare($preparedStmt);
-		$statement->bindParam(':id', $id, PDO::PARAM_INT);
-		$statement->execute();
-		return $statement->fetchAll(PDO::FETCH_ASSOC);
-	}
 	public function getClassId(): int
 	{
 		$preparedStmt = 'select get_inserted_id()';
@@ -76,7 +68,6 @@ class ClassModel
 		$statement->execute();
 		return $statement->fetchColumn();
 	}
-
 
 	public function store(array $data): void
 	{

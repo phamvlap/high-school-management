@@ -2,7 +2,7 @@
 
 namespace App\controllers;
 
-use App\models\{ClassModel, RoomClassModel, HomeRoomTeacherModel, StudentModel};
+use App\models\{ClassModel,  HomeRoomTeacherModel};
 use App\utils\{Validator, Helper, Paginator};
 use PDOException;
 
@@ -29,10 +29,6 @@ class ClassController
 			'teacher_id' =>
 			[
 				'isRequired' => 'Mã giáo viên không được để trống'
-			],
-			'room_id' =>
-			[
-				'isRequired' => 'Mã phòng không được để trống'
 			]
 		];
 	}
@@ -56,7 +52,7 @@ class ClassController
 
 			Helper::setIntoSession('download_data', [
 				'title' => 'DANH SÁCH LỚP',
-				'header' => ['Mã giáo viên', 'Họ và tên', 'Ngày sinh', 'Địa chỉ', 'Số điện thoại'],
+				'header' => ['Mã lớp', 'Lớp', 'Năm học', 'Mã giáo viên', 'Tên giáo viên'],
 				'data' => $classes
 			]);
 
@@ -82,7 +78,6 @@ class ClassController
 	{
 		try {
 			$classModel = new ClassModel();
-			$roomClassModel = new RoomClassModel();
 			$homeRoomTeacherModel = new HomeRoomTeacherModel();
 
 			//Validation
@@ -91,8 +86,6 @@ class ClassController
 			$data['class_name'] = $_POST['class_name'] ?? '';
 			$data['academic_year'] = $_POST['academic_year'] ?? '';
 			$data['teacher_id'] = $_POST['teacher_id'] ?? '';
-			$data['room_id'] = $_POST['room_id'] ?? '';
-			$data['semester'] = $_POST['semester'] ?? 1;
 
 			$errors = Validator::validate($data, $this->rules);
 			if ($errors) {
@@ -106,70 +99,21 @@ class ClassController
 			}
 
 			$homeRoomTeacherModel->store($data);
-			$roomClassModel->store($data);
 
 			// var_dump($data);
 			Helper::redirectTo('/classes', [
 				'status' => 'success',
-				'message' => 'Thêm mới lớp học thành công',
-				'data' => $data,
+				'message' => ($data['class_id'] == -1 ? 'Thêm' : 'Cập nhật') . ' lớp học thành công'
 			]);
 		} catch (PDOException $e) {
 			Helper::redirectTo('/classes', [
 				'form' => $data,
 				'errors' => $errors,
 				'status' => 'danger',
-				'message' => 'Thêm mới lớp học thất bại'
+				'message' => ($data['class_id'] == -1 ? 'Thêm' : 'Cập nhật') . ' lớp học thất bại'
 			]);
 		}
 	}
-
-
-	// public function update()
-	// {
-	// 	$classModel = new ClassModel();
-	// 	$roomClassModel = new RoomClassModel();
-	// 	$homeRoomTeacherModel = new HomeRoomTeacherModel();
-
-	// 	//Validation
-	//     $data = [];
-	// 	$data['class_id'] = $_POST['class_id'];
-	// 	$data['class_name'] = $_POST['new_class_name'] ?? '';
-	// 	$data['academic_year'] = $_POST['new_academic_year'] ?? '';
-	// 	$data['teacher_id'] = $_POST['old_teacher_id'] ?? '';
-	// 	$data['new_teacher_id'] = $_POST['new_teacher_id'] ?? '';
-	// 	$data['room_id'] = $_POST['old_room_id'] ?? '';
-	// 	$data['new_room_id'] = $_POST['new_room_id'] ?? '';
-	// 	$data['semester'] = $_POST['old_semester'] ?? '';
-	// 	$data['new_semester'] = $_POST['new_semester'] ?? '';
-
-
-	// 	$errors = Validator::validate($data, $this->rules);
-	//     if ($errors) {
-	//         Helper::redirectTo('classes/create', $errors);
-	//         return;
-	//     }
-
-	// 		$classModel->update([
-	// 			'class_id' => $data['class_id'],
-	// 			'class_name' => $data['class_name'],
-	// 			'academic_year' => $data['academic_year']
-	// 		]);
-	// 		$homeRoomTeacherModel->update([
-	// 			'teacher_id' => $data['teacher_id'],
-	// 			'class_id' => $data['edited_class_id'],
-	// 			'new_teacher_id' => $data['new_teacher_id'],
-	// 		]);
-	// 		$roomClassModel->update([
-	// 			'class_id' => $data['edited_class_id'],
-	// 			'room_id' => $data['old_room_id'],
-	// 			'new_room_id' => $data['new_room_id'],
-	// 			'semester' => $data['old_semester'],
-	// 			'new_semester' => $data['new_semester'],
-	// 		]);
-
-	// 		Helper::redirectTo('/classes', ['success' => 'Cập nhật lớp học thành công']);
-	// }
 
 	public function delete()
 	{
@@ -186,7 +130,7 @@ class ClassController
 		} catch (PDOException $e) {
 			Helper::redirectTo('/classes', [
 				'status' => 'danger',
-				'message' => 'Xóa lớp học thất bại'
+				'message' => 'Xóa lớp học thất bại ' . $e->getMessage()
 			]);
 		}
 	}

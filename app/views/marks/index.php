@@ -88,11 +88,11 @@ require_once __DIR__ . '/../partials/nav.php';
                     </div>
                     <div class="col-3">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Tìm  theo mã môn" name="subject_id">
+                            <input type="text" class="form-control" placeholder="Tìm theo mã môn" name="subject_id">
                         </div>
                     </div>
                     <div class="col-3">
-                        <input type="text" class="form-control" placeholder="Tìm  theo mã học sinh" name="student_id">
+                        <input type="text" class="form-control" placeholder="Tìm theo mã học sinh" name="student_id">
                     </div>
                     <div class="col-1">
                         <button type="submit" class="btn btn-outline-primary" type="button" id="button-addon2">
@@ -108,7 +108,7 @@ require_once __DIR__ . '/../partials/nav.php';
 
                         <th scope="col">Mã số</th>
                         <th scope="col">Họ tên</th>
-                        <th scope="col">Môn học(mã môn)</th>
+                        <th scope="col">Môn học - Khối</th>
                         <th scope="col">Miệng</th>
                         <th scope="col">15 phút</th>
                         <th scope="col">Một tiết</th>
@@ -123,7 +123,8 @@ require_once __DIR__ . '/../partials/nav.php';
                         <tr class="mark">
                             <td class="student_id"><?= Helper::htmlEscape($mark['student_id']) ?></td>
                             <td><?= Helper::htmlEscape($mark['full_name']) ?></td>
-                            <td class="subject_id"><?= Helper::htmlEscape($mark['subject_name']) ?>(<?= Helper::htmlEscape($mark['subject_id']) ?>)</td>
+                            <td class="subject"><?= Helper::htmlEscape($mark['subject_name']) ?> - <?= Helper::htmlEscape($mark['grade']) ?></td>
+                            <td class="subject_id" hidden><?= Helper::htmlEscape($mark['subject_id']) ?></td>
                             <td class="oral_score"><?= Helper::htmlEscape(!empty($mark['oral_score']) ? $mark['oral_score'] : '--') ?></td>
                             <td class="_15_minutes_score"><?= Helper::htmlEscape(!empty($mark['_15_minutes_score']) ? $mark['_15_minutes_score'] : '--') ?></td>
                             <td class="_1_period_score"><?= Helper::htmlEscape(!empty($mark['_1_period_score']) ? $mark['_1_period_score'] : '--') ?></td>
@@ -164,5 +165,6 @@ require_once __DIR__ . '/../partials/nav.php';
         const formId = 'form_mark';
         const trClass = 'mark';
     </script>
+</div>
 
-    <?php require_once __DIR__ . '/../partials/footer.php'; ?>
+<?php require_once __DIR__ . '/../partials/footer.php'; ?>

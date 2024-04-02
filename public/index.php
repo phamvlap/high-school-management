@@ -24,6 +24,8 @@ require_once __DIR__ . '/../app/routes/classes.php';
 require_once __DIR__ . '/../app/routes/marks.php';
 // rooms
 require_once __DIR__ . '/../app/routes/rooms.php';
+// room_class
+require_once __DIR__ . '/../app/routes/roomclass.php';
 // statistics
 require_once __DIR__ . '/../app/routes/statistics.php';
 // // students

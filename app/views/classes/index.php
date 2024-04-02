@@ -18,29 +18,14 @@ require_once __DIR__ . '/../partials/nav.php';
                     <p class="text-danger text-end"><?= Helper::getFormErrorFromSession('class_name') ?></p>
                 </div>
                 <div class="mb-1">
-                    <label for="room_id" class="form-label mb-0">Mã phòng<span style="color: red;"> *</span></label>
-                    <input type="text" class="form-control" id="room_id" name="room_id" value="<?= Helper::getFormDataFromSession('room_id') ?>">
-                    <p class="text-danger text-end"><?= Helper::getFormErrorFromSession('room_id') ?></p>
+                    <label for="academic_year" class="form-label mb-0">Năm học<span style="color: red;"> *</span></label>
+                    <input type="text" class="form-control" id="academic_year" name="academic_year" value="<?= Helper::getFormDataFromSession('academic_year') ?>">
+                    <p class="text-danger text-end"><?= Helper::getFormErrorFromSession('academic_year') ?></p>
                 </div>
                 <div class="mb-1">
-                    <label for="teacher_id" class="form-label mb-0">Giáo viên chủ nhiệm<span style="color: red;"> *</span></label>
+                    <label for="teacher_id" class="form-label mb-0">Mã giáo viên chủ nhiệm<span style="color: red;"> *</span></label>
                     <input type="text" class="form-control" id="teacher_id" name="teacher_id" value="<?= Helper::getFormDataFromSession('teacher_id') ?>">
                     <p class="text-danger text-end"><?= Helper::getFormErrorFromSession('teacher') ?></p>
-                </div>
-                <div class="mb-1 row">
-                    <span class="col">
-                        <label for="semester" class="form-label mb-0">Học kỳ<span style="color: red;"> *</span></label>
-                        <select class="form-select" id="semester" name="semester" value="<?= Helper::getFormDataFromSession('semester') ?>">
-                            <option value="1" selected>1</option>
-                            <option value="2">2</option>
-                        </select>
-                        <p class="text-danger text-end"><?= Helper::getFormErrorFromSession('semester') ?></p>
-                    </span>
-                    <span class="col">
-                        <label for="academic_year" class="form-label mb-0">Năm học<span style="color: red;"> *</span></label>
-                        <input type="text" class="form-control" id="academic_year" name="academic_year" value="<?= Helper::getFormDataFromSession('academic_year') ?>">
-                        <p class="text-danger text-end"><?= Helper::getFormErrorFromSession('academic_year') ?></p>
-                    </span>
                 </div>
                 <div class="d-flex mt-3">
                     <button type="reset" class="ms-auto me-2 px-3 btn btn-sm btn-outline-danger">
@@ -105,12 +90,9 @@ require_once __DIR__ . '/../partials/nav.php';
                     <tr>
                         <th scope="col">Mã lớp</th>
                         <th scope="col">Tên lớp</th>
-                        <th scope="col" style="display: none;">Mã giáo viên</th>
-                        <th scope="col">Giáo viên chủ nhiệm</th>
-                        <th scope="col" style="display: none;">Mã phòng</th>
-                        <th scope="col">Phòng học</th>
-                        <th scope="col">Học kỳ</th>
                         <th scope="col">Năm học</th>
+                        <th scope="col">Giáo viên chủ nhiệm</th>
+                        <th scope="col">Mã giáo viên</th>
                         <th scope="col">Hành động</th>
                     </tr>
                 </thead>
@@ -119,19 +101,16 @@ require_once __DIR__ . '/../partials/nav.php';
                         <tr class="class">
                             <td class="class_id"><?= Helper::htmlEscape((string)$class['class_id']) ?></td>
                             <td class="class_name"><?= Helper::htmlEscape((string)$class['class_name']) ?></td>
-                            <td class="teacher_id" style="display: none;"><?= Helper::htmlEscape((string)$class['teacher_id']) ?></td>
-                            <td class="full_name"><?= Helper::htmlEscape((string)$class['full_name']) ?></td>
-                            <td class="room_id" style="display: none;"><?= Helper::htmlEscape((string)$class['room_id']) ?></td>
-                            <td class="room_number"><?= Helper::htmlEscape((string)$class['room_number']) ?></td>
-                            <td class="semester"><?= Helper::htmlEscape((string)$class['semester']) ?></td>
                             <td class="academic_year"><?= Helper::htmlEscape((string)$class['academic_year']) ?></td>
+                            <td class="full_name"><?= Helper::htmlEscape((string)$class['full_name']) ?></td>
+                            <td class="teacher_id"><?= Helper::htmlEscape((string)$class['teacher_id']) ?></td>
                             <td>
-                                <button class="btn btn-sm btn-outline-warning edit_btn">
+                                <button class="btn btn-sm btn-outline-warning edit_btn border-0 py-0">
                                     <i class="fa fa-edit"></i>
                                 </button>
                                 <form action="/classes/delete" class="d-inline" method="POST">
                                     <input hidden type="text" name="class_id" value="<?= Helper::htmlEscape($class['class_id']) ?>">
-                                    <button type="submit" class="btn btn-outline-danger btn-sm onclick=" deleteClass(<?= Helper::htmlEscape($class['class_id']) ?>)">
+                                    <button type="submit" class="btn btn-outline-danger border-0 py-0 btn-sm onclick=" deleteClass(<?= Helper::htmlEscape($class['class_id']) ?>)">
                                         <i class="fa fa-trash" aria-hidden="true"></i>
                                     </button>
                                 </form>
@@ -140,21 +119,22 @@ require_once __DIR__ . '/../partials/nav.php';
                     <?php endforeach ?>
                 </tbody>
             </table>
+        </div>
+    </div>
 
-            <?php require_once __DIR__ . '/../partials/pagination.php'; ?>
+    <?php require_once __DIR__ . '/../partials/pagination.php'; ?>
 
-            <script>
-                const fields = {
-                    'class_id': 'class_id',
-                    'class_name': 'class_name',
-                    'room_id': 'room_id',
-                    'teacher_id': 'teacher_id',
-                    'semester': 'semester',
-                    'academic_year': 'academic_year',
-                };
-                const formId = 'class_form';
-                const trClass = 'class';
-            </script>
-            <?php
+    <script>
+        const fields = {
+            'class_id': 'class_id',
+            'class_name': 'class_name',
+            'teacher_id': 'teacher_id',
+            'academic_year': 'academic_year',
+        };
+        const formId = 'class_form';
+        const trClass = 'class';
+    </script>
+</div>
+<?php
 
-            require_once __DIR__ . '/../partials/footer.php';
+require_once __DIR__ . '/../partials/footer.php';
