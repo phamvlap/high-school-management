@@ -57,7 +57,6 @@ require __DIR__ . '/../partials/nav.php';
                 </div>
             </form>
 
-            <!-- Thêm button cho phép them cùng lúc nhiều dữ liệu từ file excel -->
             <div class="d-flex mt-5">
                 <a href="/excel" class="ms-auto px-3 btn btn-sm btn-outline-success">
                     Xuất ra file excel
@@ -65,45 +64,45 @@ require __DIR__ . '/../partials/nav.php';
             </div>
         </div>
         <div class="col-9">
-        <form action="/students" method="GET">
-            <div class="row align-items-end">
-                <div class="col-2">
-                    <label for="limit" class="form-label mb-0">Hiển thị</label>
-                    <?php $limit = $_GET['limit'] ?? '10'; ?>
-                    <select class="form-select" id="limit" name="limit">
-                        <option value="<?= MAX_LIMIT ?>" <?= ($limit === 'all') ? 'selected' : '' ?>>Tất cả</option>
-                        <option value="10" <?= ($limit === '10') ? 'selected' : '' ?>>10</option>
-                        <option value="20" <?= ($limit === '20') ? 'selected' : '' ?>>20</option>
-                        <option value="50" <?= ($limit === '50') ? 'selected' : '' ?>>50</option>
-                    </select>
-                </div>
-                <div class="col-2">
-                    <label for="is_order_by_name" class="form-label mb-0">Sắp xếp</label>
-                    <?php $is_order_by_name = $_GET['is_order_by_name'] ?? 'none'; ?>
-                    <select class="form-select" id="is_order_by_name" name="is_order_by_name">
-                        <option value="none" <?= ($is_order_by_name === 'none') ? 'selected' : '' ?>>Chọn</option>
-                        <option value="1" <?= ($is_order_by_name === '1') ? 'selected' : '' ?>>Theo tên</option>
-                        <option value="0" <?= ($is_order_by_name === '0') ? 'selected' : '' ?>>Tên mã</option>
-                    </select>
-                </div>
-                <div class="col-2">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Tên" name="full_name">
+            <form action="/students" method="GET">
+                <div class="row align-items-end">
+                    <div class="col-2">
+                        <label for="limit" class="form-label mb-0">Hiển thị</label>
+                        <?php $limit = $_GET['limit'] ?? '10'; ?>
+                        <select class="form-select" id="limit" name="limit">
+                            <option value="<?= MAX_LIMIT ?>" <?= ($limit === 'all') ? 'selected' : '' ?>>Tất cả</option>
+                            <option value="10" <?= ($limit === '10') ? 'selected' : '' ?>>10</option>
+                            <option value="20" <?= ($limit === '20') ? 'selected' : '' ?>>20</option>
+                            <option value="50" <?= ($limit === '50') ? 'selected' : '' ?>>50</option>
+                        </select>
+                    </div>
+                    <div class="col-2">
+                        <label for="is_order_by_name" class="form-label mb-0">Sắp xếp</label>
+                        <?php $is_order_by_name = $_GET['is_order_by_name'] ?? 'none'; ?>
+                        <select class="form-select" id="is_order_by_name" name="is_order_by_name">
+                            <option value="none" <?= ($is_order_by_name === 'none') ? 'selected' : '' ?>>Chọn</option>
+                            <option value="1" <?= ($is_order_by_name === '1') ? 'selected' : '' ?>>Theo tên</option>
+                            <option value="0" <?= ($is_order_by_name === '0') ? 'selected' : '' ?>>Tên mã</option>
+                        </select>
+                    </div>
+                    <div class="col-2">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Tên" name="full_name">
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <input type="text" class="form-control" placeholder="Địa chỉ" name="address">
+                    </div>
+                    <div class="col-2">
+                        <input type="text" class="form-control" placeholder="Năm học" name="academic_year">
+                    </div>
+                    <div class="col-1">
+                        <button type="submit" class="btn btn-outline-primary" type="button" id="button-addon2">
+                            <i class="fa fa-search"></i>
+                        </button>
                     </div>
                 </div>
-                <div class="col-2">
-                    <input type="text" class="form-control" placeholder="Địa chỉ" name="address">
-                </div>
-                <div class="col-2">
-                    <input type="text" class="form-control" placeholder="Năm học" name="academic_year">
-                </div>
-                <div class="col-1">
-                    <button type="submit" class="btn btn-outline-primary" type="button" id="button-addon2">
-                        <i class="fa fa-search"></i>
-                    </button>
-                </div>
-            </div>
-        </form>
+            </form>
 
             <table class="table table-striped table-hover mt-2">
                 <thead>
@@ -111,7 +110,7 @@ require __DIR__ . '/../partials/nav.php';
                         <th scope="col">Mã</th>
                         <th scope="col">Họ và tên</th>
                         <th scope="col">Ngày sinh</th>
-                        <th scope="col" >Địa chỉ</th>
+                        <th scope="col">Địa chỉ</th>
                         <th scope="col">SĐT cha mẹ</th>
                         <th scope="col">Mã lớp</th>
                         <th scope="col">Năm học</th>
@@ -119,7 +118,7 @@ require __DIR__ . '/../partials/nav.php';
                     </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($students as $student) : ?>
+                    <?php foreach ($students as $student) : ?>
                         <tr class="student">
                             <td scope="row" class="student_id"><?= Helper::htmlEscape($student['student_id']) ?></td>
                             <td class="full_name"><?= Helper::htmlEscape($student['full_name']) ?></td>
@@ -150,13 +149,12 @@ require __DIR__ . '/../partials/nav.php';
 
 <script>
     const fields = {
-        'student_id' : 'student_id',
-        'full_name' : 'full_name',
-        'date_of_birth' : 'date_of_birth',
-        'address' : 'address',
-        'parent_phone_number' : 'parent_phone_number',
-        'class_id' : 'class_id',
-        'academic_year' : 'academic_year'
+        'student_id': 'student_id',
+        'full_name': 'full_name',
+        'date_of_birth': 'date_of_birth',
+        'address': 'address',
+        'parent_phone_number': 'parent_phone_number',
+        'class_id': 'class_id',
     };
     const formId = 'student_form';
     const trClass = 'student';
