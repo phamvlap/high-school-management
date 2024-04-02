@@ -24,41 +24,71 @@ class GuestController {
 				]);
 			}
 
-			$student = [];
-			$class = [];
-			$teacher = [];
-			$marks = [];
+            $student = [];
+            $class = [];
+            $teacher = [];
+            $marks = [];
+            $students = [];
+            $studentId = $result[0]['student_id'];
+            foreach($result[0] as $key => $value) {
+                if(str_starts_with($key, 'student_')) {
+                    $student[substr($key, 8)] = $value;
+                }
+                if(str_starts_with($key, 'class_')) {
+                    $class[substr($key, 6)] = $value;
+                }
+                if(str_starts_with($key, 'teacher_')) {
+                    $teacher[substr($key, 8)] = $value;
+                }
+            }
 
-			foreach($result[0] as $key => $value) {
-				if(str_starts_with($key, 'student_')) {
-					$student[substr($key, 8)] = $value;
-				}
-				if(str_starts_with($key, 'class_')) {
-					$class[substr($key, 6)] = $value;
-				}
-				if(str_starts_with($key, 'teacher_')) {
-					$teacher[substr($key, 8)] = $value;
-				}
-			}
-			foreach($result as $key => $value) {
-				$mark = [];
-				foreach($value as $k => $v) {
-					if(!str_starts_with($k, 'student_') && !str_starts_with($k, 'class_') && !str_starts_with($k, 'teacher_')) {
-						$mark[$k] = $v;
-					}
-				}
-				$marks[] = $mark;
-			}
+            foreach($result as $key => $value) {
+                if($studentId !== $value['student_id']) {
+                    $student = [
+                        'info' => $student,
+                        'class' => $class,
+                        'teacher' => $teacher,
+                        'marks' => $this->splitMarkByGrade($marks),
+                    ];
+                    $students[] = $student;
 
-			$markTable = [
-				'student' => $student,
-				'class' => $class,
-				'teacher' => $teacher,
-				'marks' => $marks
-			];
+                    $studentId = $value['student_id'];
+                    
+                    $student = [];
+                    $class = [];
+                    $teacher = [];
+                    $marks = [];
+
+                    foreach($value as $k => $v) {
+                        if(str_starts_with($k, 'student_')) {
+                            $student[substr($k, 8)] = $v;
+                        }
+                        if(str_starts_with($k, 'class_')) {
+                            $class[substr($k, 6)] = $v;
+                        }
+                        if(str_starts_with($k, 'teacher_')) {
+                            $teacher[substr($k, 8)] = $v;
+                        }
+                    }
+                }
+                $mark = [];
+                foreach($value as $k => $v) {
+                    if(!str_starts_with($k, 'student_') && !str_starts_with($k, 'class_') && !str_starts_with($k, 'teacher_')) {
+                        $mark[$k] = $v;
+                    }
+                }
+                $marks[] = $mark;
+            }
+            $student = [
+                'info' => $student,
+                'class' => $class,
+                'teacher' => $teacher,
+                'marks' => $this->splitMarkByGrade($marks),
+            ];
+            $students[] = $student;
 
 			Helper::redirectTo('/guest', [
-				'markTable' => $markTable
+				'markTable' => $students
 			]);
 		}
 		catch(PDOException $e) {
@@ -68,4 +98,28 @@ class GuestController {
 			]);
 		}
 	}
+
+    public function splitMarkByGrade($markTable) {
+        $mark = [];
+        $marks = [];
+        $grades = [];
+        $grade = $markTable[0]['grade'];
+        foreach($markTable as $row) {
+            if($grade !== $row['grade']) {
+                $grades[$grade] = $marks;
+                
+                $grade = $row['grade'];
+                $marks = [];
+            }
+            foreach($row as $key => $value) {
+                if($key !== 'grade') {
+                    $mark[$key] = $value;
+                }
+            }
+            $marks[] = $mark;
+        }
+        $grades[$grade] = $marks;
+
+        return $grades;
+    }
 }
