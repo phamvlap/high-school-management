@@ -6,10 +6,12 @@ use PDOException;
 use App\models\RoomModel;
 use App\utils\{Helper, Validator, Paginator};
 
-class RoomController {
+class RoomController
+{
 	private array $rules;
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->rules = [
 			'room_number' => [
 				'isRequired' => 'Số phòng không được để trống',
@@ -23,14 +25,12 @@ class RoomController {
 		];
 	}
 
-	public function index() {
+	public function index()
+	{
 		try {
 			$roomModel = new RoomModel();
-			
-			$limit = (isset($_GET['limit']) && $_GET['limit'] !== 'all') ? (int)$_GET['limit'] : (int)MAX_RECORDS_PER_PAGE;
-			if(isset($_GET['limit']) && $_GET['limit'] === 'all') {
-				$limit = MAX_LIMIT;
-			}
+
+			$limit = (isset($_GET['limit']) && $_GET['limit'] !== 'none') ? (int)$_GET['limit'] : MAX_RECORDS_PER_PAGE;
 			$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 			$filter = [
 				'room_number' => !empty($_GET['room_number']) ? $_GET['room_number'] : null,
@@ -39,29 +39,9 @@ class RoomController {
 				'is_sort_by_capacity' => (isset($_GET['is_sort_by_capacity']) && $_GET['is_sort_by_capacity'] !== 'none') ? (int)$_GET['is_sort_by_capacity'] : null
 			];
 
-			if($limit < MAX_LIMIT) {
-				$totalRecords = $roomModel->getCount($filter);
-			
-				$paginator = new Paginator($limit, $totalRecords, $page);
-
-				$rooms = $roomModel->getByFilter($filter, $limit, ($page - 1) * $limit);
-
-				$pagination = [
-					'prevPage' => $paginator->getPrevPage(),
-					'currPage' => $paginator->getCurrPage(),
-					'nextPage' => $paginator->getNextPage(),
-					'pages' => $paginator->getPages(),
-				];
-			}
-			else {
-				$rooms = $roomModel->getByFilter($filter, $limit, 0);
-				$pagination = [
-					'prevPage' => false,
-					'currPage' => 1,
-					'nextPage' => false,
-					'pages' => [1],
-				];
-			}
+			$totalRecords = $roomModel->getCount($filter);
+			$paginator = new Paginator($limit, $totalRecords, $page);
+			$rooms = $roomModel->getByFilter($filter, $limit, ($page - 1) * $limit);
 
 			Helper::setIntoSession('download_data', [
 				'title' => 'DANH SÁCH PHÒNG HỌC',
@@ -71,12 +51,16 @@ class RoomController {
 
 			Helper::renderPage('/rooms/index.php', [
 				'rooms' => $rooms,
-				'pagination' => $pagination,
+				'pagination' => [
+					'prevPage' => $paginator->getPrevPage(),
+					'currPage' => $paginator->getCurrPage(),
+					'nextPage' => $paginator->getNextPage(),
+					'pages' => $paginator->getPages(),
+				],
 				'filter' => $filter,
 				'total' => $totalRecords,
 			]);
-		}
-		catch(PDOException $e) {
+		} catch (PDOException $e) {
 			Helper::redirectTo('/rooms', [
 				'status' => 'danger',
 				'message' => 'Lấy dữ liệu phòng học thất bại'
@@ -84,7 +68,8 @@ class RoomController {
 		}
 	}
 
-	public function store() {
+	public function store()
+	{
 		try {
 			$roomModel = new RoomModel();
 
@@ -95,7 +80,7 @@ class RoomController {
 
 			$errors = Validator::validate($data, $this->rules);
 
-			if($errors) {
+			if ($errors) {
 				throw new PDOException('Invalid data');
 			}
 			$roomModel->store($data);
@@ -103,8 +88,7 @@ class RoomController {
 				'status' => 'success',
 				'message' => ((int)$data['room_id'] === -1 ? 'Thêm' : 'Cập nhật') . ' phòng học thành công.'
 			]);
-		}
-		catch(PDOException $e) {
+		} catch (PDOException $e) {
 			Helper::redirectTo('/rooms', [
 				'form' => $data,
 				'errors' => $errors,
@@ -114,7 +98,8 @@ class RoomController {
 		}
 	}
 
-	public function delete() {
+	public function delete()
+	{
 		try {
 			$roomModel = new RoomModel();
 			$roomModel->delete((int)$_POST['room_id']);
@@ -122,8 +107,7 @@ class RoomController {
 				'status' => 'success',
 				'message' => 'Xóa phòng học thành công'
 			]);
-		}
-		catch(PDOException $e) {
+		} catch (PDOException $e) {
 			Helper::redirectTo('/rooms', [
 				'status' => 'danger',
 				'message' => 'Xóa phòng học thất bại'

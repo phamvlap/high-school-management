@@ -59,7 +59,7 @@ require __DIR__ . '/../partials/nav.php';
                             <option value="20" <?= ($limit === 20) ? 'selected' : '' ?>>20</option>
                             <option value="30" <?= ($limit === 30) ? 'selected' : '' ?>>30</option>
                             <option value="50" <?= ($limit === 50) ? 'selected' : '' ?>>50</option>
-                            <option value="all" <?= ($limit === MAX_LIMIT) ? 'selected' : '' ?>>Tất cả</option>
+                            <option value="<?= MAX_LIMIT ?>" <?= ($limit === MAX_LIMIT) ? 'selected' : '' ?>>Tất cả</option>
                         </select>
                     </div>
                     <div class="col-2">
@@ -109,12 +109,12 @@ require __DIR__ . '/../partials/nav.php';
                             <td class="room_number"><?= Helper::htmlEscape($room['room_number']) ?></td>
                             <td class="maximum_capacity"><?= Helper::htmlEscape($room['maximum_capacity']) ?></td>
                             <td>
-                                <button class="btn btn-sm edit_btn">
+                                <button class="btn btn-sm edit_btn btn-outline-warning border-0 py-0">
                                     <i class="fa fa-edit"></i>
                                 </button>
                                 <form action="/rooms/delete" method="POST" class="d-inline">
                                     <input type="text" name="room_id" value="<?= Helper::htmlEscape($room['room_id']) ?>" hidden>
-                                    <button class="btn btn-sm">
+                                    <button class="btn btn-sm btn-outline-danger border-0 py-0">
                                         <i class="fa fa-trash" aria-hidden="true"></i>
                                     </button>
                                 </form>
