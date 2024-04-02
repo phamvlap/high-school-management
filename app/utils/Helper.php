@@ -69,4 +69,10 @@ class Helper
         $uri = explode('?', $_SERVER['REQUEST_URI'])[0];
         return explode('/', $uri)[1];
     }
+
+    // format date from yyyy-mm-dd to dd-mm-yyyy
+    static public function formatDate(string $date): string
+    {
+        return date('d-m-Y', strtotime($date));
+    }
 }
