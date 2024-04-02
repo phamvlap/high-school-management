@@ -66,18 +66,18 @@ require_once __DIR__ . '/../partials/nav.php';
                         <label for="sort" class="form-label mb-0">Sắp xếp</label>
                         <?php $sort = $_GET['sort'] ?? 'none'; ?>
                         <select class="form-select" id="sort" name="sort">
-                            <option value="none" <?= ($sort === 'none') ? 'selected' : '' ?>>Không</option>
+                            <option value="none" <?= ($sort === 'none') ? 'selected' : '' ?>>-- Chọn --</option>
                             <option value="1" <?= ($sort === '1') ? 'selected' : '' ?>>Tên(A-Z)</option>
                             <option value="0" <?= ($sort === '0') ? 'selected' : '' ?>>Tên(Z-A)</option>
                         </select>
                     </div>
                     <div class="col-3">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Tìm kiếm theo tên" name="full_name">
+                            <input type="text" class="form-control" placeholder="Tìm theo tên" name="full_name">
                         </div>
                     </div>
                     <div class="col-3">
-                        <input type="text" class="form-control" placeholder="Tìm kiếm theo địa chỉ" name="address">
+                        <input type="text" class="form-control" placeholder="Tìm theo địa chỉ" name="address">
                     </div>
                     <div class="col-1">
                         <button type="submit" class="btn btn-outline-primary" type="button" id="button-addon2">
