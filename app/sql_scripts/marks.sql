@@ -1,7 +1,8 @@
 delimiter $$
 
--- [procedure]:	update_mark(_student_id, _subject_id, _semester, _oral_score, __15_minutes_score, __1_period_score, _semester_score)
+-- [procedure]:	add_mark(_student_id, _subject_id, _semester, _oral_score, __15_minutes_score, __1_period_score, _semester_score)
 -- [author]: cuong
+drop procedure if exists add_mark $$
 create procedure add_mark(	
 	in _student_id int,
 	in _subject_id int,
@@ -36,7 +37,7 @@ end $$
 
 -- [procedure]:	delete_mark(_student_id, _subject_id, _semester)
 -- [author]: cuong
-drop procedure if exists detete_mark$$
+drop procedure if exists delete_mark $$
 create procedure delete_mark(
     in _student_id int, 
     in _subject_id int,	
@@ -52,20 +53,50 @@ end $$
 
 -- [procedure]:	get_mark_by_student_id(_student_id, _subject_id, _semester)
 -- [author]: cuong
-drop procedure if exists get_all_mark$$
-create procedure get_all_mark(
+delimiter $$
+
+drop procedure if exists get_all_marks $$
+create procedure get_all_marks(
     in _student_id int,
     in _subject_id int,
-    in _semester tinyint
+    in _semester tinyint,
+    in _limit int,
+    in _offset int
 )
 begin
     select * 
     from marks as m
         join students as s on m.student_id = s.student_id
         join subjects as sb on m.subject_id = sb.subject_id
+        join teaching as t on m.subject_id = t.subject_id
     where 
         (_student_id is null or s.student_id = _student_id)
         and (_subject_id is null or sb.subject_id = _subject_id)
-        and (_semester is null or m.semester = _semester);
+        and (_semester is null or m.semester = _semester)
+        limit _limit offset _offset;
 end $$
--- [example]: call get_all_mark(3, null, null);
+
+-- [example]: call get_all_marks(null, null, null,3,0);
+-- viết hàm đếm toàn bộ bảng marks
+drop function if exists count_all_marks $$
+create function count_all_marks(
+    _student_id int,
+    _subject_id int,
+    _semester tinyint
+)
+	returns int
+	reads sql data
+    deterministic
+begin
+    declare count int;
+    select count(*) into count from marks
+        join students as s on marks.student_id = s.student_id
+        join subjects as sb on marks.subject_id = sb.subject_id
+        join teaching as t on marks.subject_id = t.subject_id
+    where 
+        (_student_id is null or s.student_id = _student_id)
+        and (_subject_id is null or sb.subject_id = _subject_id)
+        and (_semester is null or marks.semester = _semester);
+    return count;
+end $$
+-- [example]: select count_all_marks();

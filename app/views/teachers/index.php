@@ -44,44 +44,43 @@ require_once __DIR__ . '/../partials/nav.php';
             </form>
 
             <div class="d-flex mt-5">
-                <a class="ms-auto px-3 btn btn-sm btn-outline-success">
-                    Thêm từ excel
-                </a>
-                <a href="/teachers/download" class="ms-auto px-3 btn btn-sm btn-outline-success">
+                <a href="/excel" class="ms-auto px-3 btn btn-sm btn-outline-success">
                     Xuất ra excel
                 </a>
             </div>
         </div>
         <div class="col-9">
-            <form class="d-flex justify-content-between">
-                <div class="d-flex">
-                    <div class="mb-1">
-                        <label for="teacher_dob_sort" class="form-label mb-0">Lọc theo năm sinh</label>
-                        <br>
-                        <input type="date" class="form-control" name="teacher_dob_sort" id="teacher_dob_sort">
-                    </div>
-                    <div class="ms-1 mb-1">
-                        <label for="school-year" class="form-label mb-0">Lọc theo năm học</label>
-                        <select class="form-select" id="school-year" name="school-year">
-                            <option selected>Năm học</option>
-                            <option value="2023-2024">2023-2024</option>
-                            <option value="2024-2025">2024-2025</option>
-                            <option value="2025-2026">2025-2026</option>
+            <form action="/teachers" method="GET">
+                <div class="row align-items-end">
+                    <div class="col-2">
+                        <label for="limit" class="form-label mb-0">Hiển thị</label>
+                        <?php $limit = $_GET['limit'] ?? '10'; ?>
+                        <select class="form-select" id="limit" name="limit">
+                            <option value="<?= MAX_LIMIT ?>" <?= ($limit === 'all') ? 'selected' : '' ?>>Tất cả</option>
+                            <option value="10" <?= ($limit === '10') ? 'selected' : '' ?>>10</option>
+                            <option value="20" <?= ($limit === '20') ? 'selected' : '' ?>>20</option>
+                            <option value="50" <?= ($limit === '50') ? 'selected' : '' ?>>50</option>
                         </select>
                     </div>
-                    <div class="ms-1 mb-1">
+                    <div class="col-2">
                         <label for="sort" class="form-label mb-0">Sắp xếp</label>
+                        <?php $sort = $_GET['sort'] ?? 'none'; ?>
                         <select class="form-select" id="sort" name="sort">
-                            <option selected>Họ tên</option>
-                            <option value="name-asc">Tên A-Z</option>
-                            <option value="name-desc">Tên Z-A</option>
+                            <option value="none" <?= ($sort === 'none') ? 'selected' : '' ?>>-- Chọn --</option>
+                            <option value="1" <?= ($sort === '1') ? 'selected' : '' ?>>Tên(A-Z)</option>
+                            <option value="0" <?= ($sort === '0') ? 'selected' : '' ?>>Tên(Z-A)</option>
                         </select>
                     </div>
-                </div>
-                <div class="mt-2 align-self-center">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Tìm kiếm" aria-label="Recipient's username" aria-describedby="button-addon2">
-                        <button class="btn btn-outline-primary" type="button" id="button-addon2">
+                    <div class="col-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Tìm theo tên" name="full_name">
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="Tìm theo địa chỉ" name="address">
+                    </div>
+                    <div class="col-1 offset-1">
+                        <button type="submit" class="btn btn-outline-primary" type="button" id="button-addon2">
                             <i class="fa fa-search"></i>
                         </button>
                     </div>

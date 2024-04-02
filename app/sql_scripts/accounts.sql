@@ -31,7 +31,7 @@ create procedure get_account_by_username(
     in _username varchar(50)
 )
 begin 
-    (select username, type from accounts where username = _username);
+    (select * from accounts where username = _username);
 end $$
 
 delimiter $$

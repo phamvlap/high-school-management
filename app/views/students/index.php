@@ -6,31 +6,45 @@ require __DIR__ . '/../partials/header.php';
 require __DIR__ . '/../partials/nav.php';
 
 ?>
-
 <div id="main" class="">
     <div class="row">
         <div class="col-3 border-end">
-            <form action="/users/store" method="POST" id="user_form">
-                <span class="fw-bold" style="font-size: 1rem;">Thông tin nguời dùng</span>
+            <form action="/students/store" method="POST" id="student_form">
+                <span class="fw-bold" style="font-size: 1rem;">Nhập thông tin học sinh</span>
+                <input type="hidden" name="student_id" id="student_id" value="-1">
                 <div class="mb-1">
-                    <label for="username" class="form-label mb-0">Tên tài khoản<span style="color: red;"> *</span></label>
-                    <input type="text" class="form-control" id="username" name="username" value="<?= Helper::getFormDataFromSession('username') ?>">
+                    <label for="full_name" class="form-label mb-0">Họ và tên</label>
+                    <input type="text" class="form-control" id="full_name" name="full_name" value="<?= Helper::getFormDataFromSession('full_name') ?>">
                     <p class="text-danger text-end">
-                        <?= Helper::getFormErrorFromSession('username') ?>
+                        <?= Helper::getFormErrorFromSession('full_name') ?>
                     </p>
                 </div>
                 <div class="mb-1">
-                    <label for="password" class="form-label mb-0">Mật khẩu<span style="color: red;"> *</span></label>
-                    <input type="text" class="form-control" id="password" name="password" value="<?= Helper::getFormDataFromSession('password') ?>">
+                    <label for="date_of_birth" class="form-label mb-0">Ngày sinh</label>
+                    <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="<?= Helper::getFormDataFromSession('date_of_birth') ?>">
                     <p class="text-danger text-end">
-                        <?= Helper::getFormErrorFromSession('password') ?>
+                        <?= Helper::getFormErrorFromSession('date_of_birth') ?>
                     </p>
                 </div>
                 <div class="mb-1">
-                    <label for="type" class="form-label mb-0">Loại người dùng<span style="color: red;"> *</span></label>
-                    <input type="text" class="form-control" id="type" name="type" value="<?= Helper::getFormDataFromSession('type') ?>">
+                    <label for="address" class="form-label mb-0">Địa chỉ</label>
+                    <input type="text" class="form-control" id="address" name="address" value="<?= Helper::getFormDataFromSession('address') ?>">
                     <p class="text-danger text-end">
-                        <?= Helper::getFormErrorFromSession('type') ?>
+                        <?= Helper::getFormErrorFromSession('address') ?>
+                    </p>
+                </div>
+                <div class="mb-1">
+                    <label for="parent_phone_number" class="form-label mb-0">Số điện thoại phụ huynh</label>
+                    <input type="text" class="form-control" id="parent_phone_number" name="parent_phone_number" value="<?= Helper::getFormDataFromSession('parent_phone_number') ?>">
+                    <p class="text-danger text-end">
+                        <?= Helper::getFormErrorFromSession('parent_phone_number') ?>
+                    </p>
+                </div>
+                <div class="mb-1">
+                    <label for="class_id" class="form-label mb-0">Mã lớp</label>
+                    <input type="text" class="form-control" id="class_id" name="class_id" value="<?= Helper::getFormDataFromSession('class_id') ?>">
+                    <p class="text-danger text-end">
+                        <?= Helper::getFormErrorFromSession('class_id') ?>
                     </p>
                 </div>
                 <div class="d-flex mt-2">
@@ -43,102 +57,114 @@ require __DIR__ . '/../partials/nav.php';
                 </div>
             </form>
 
-             <!-- Thêm button cho phép them cùng lúc nhiều dữ liệu từ file excel -->
             <div class="d-flex mt-5">
-                <button class="ms-auto px-3 btn btn-sm btn-outline-success">
-                    Xuất từ file excel
-                </button>
+                <a href="/excel" class="ms-auto px-3 btn btn-sm btn-outline-success">
+                    Xuất ra file excel
+                </a>
             </div>
         </div>
         <div class="col-9">
-            <div class="d-flex justify-content-between">
-                <form action="/users" class="d-flex">
-                    <div class="ms-1 mb-1">
-                        <label for="type" class="form-label mb-0">Loại người dùng</label>
-                        <select class="form-select" name="type">
-                            <option value="" <?= (!empty($_GET['type']) && $_GET['type'] === null) ? 'selected' : '' ?>>Loại</option>
-                            <option value="admin" <?= (!empty($_GET['type']) && $_GET['type'] === 'admin') ? 'selected' : '' ?>>admin</option>
-                            <option value="teacher" <?= (!empty($_GET['type']) && $_GET['type'] === 'teacher') ? 'selected' : '' ?>>teacher</option>
+            <form action="/students" method="GET">
+                <div class="row align-items-end">
+                    <div class="col-2">
+                        <label for="limit" class="form-label mb-0">Hiển thị</label>
+                        <?php $limit = $_GET['limit'] ?? '10'; ?>
+                        <select class="form-select" id="limit" name="limit">
+                            <option value="<?= MAX_LIMIT ?>" <?= ($limit === 'all') ? 'selected' : '' ?>>Tất cả</option>
+                            <option value="10" <?= ($limit === '10') ? 'selected' : '' ?>>10</option>
+                            <option value="20" <?= ($limit === '20') ? 'selected' : '' ?>>20</option>
+                            <option value="50" <?= ($limit === '50') ? 'selected' : '' ?>>50</option>
                         </select>
                     </div>
-                    <div class="mt-2 ms-2 align-self-center">
+                    <div class="col-2">
+                        <label for="is_order_by_name" class="form-label mb-0">Sắp xếp</label>
+                        <?php $is_order_by_name = $_GET['is_order_by_name'] ?? 'none'; ?>
+                        <select class="form-select" id="is_order_by_name" name="is_order_by_name">
+                            <option value="none" <?= ($is_order_by_name === 'none') ? 'selected' : '' ?>>-- Chọn --</option>
+                            <option value="1" <?= ($is_order_by_name === '1') ? 'selected' : '' ?>>Theo tên</option>
+                            <option value="0" <?= ($is_order_by_name === '0') ? 'selected' : '' ?>>Tên mã</option>
+                        </select>
+                    </div>
+                    <div class="col-2">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Tìm kiếm"
-                                aria-label="Recipient's username" aria-describedby="button-addon2" name="username"
-                                value="<?= isset($_GET['username']) ? htmlspecialchars($_GET['username']) : '' ?>">
-                            <button class="btn " type="submit" id="button-addon2">
-                                <i class="fa fa-search"></i>
-                            </button>
+                            <input type="text" class="form-control" placeholder="Tìm theo tên" name="full_name">
                         </div>
                     </div>
-                    <div class="mt-2 ms-2 align-self-center">
-                        <div class="input-group">
-                            <a href="/users">
-                                <button type="button" class="ms-auto me-1 px-3 btn btn-sm btn-primary">
-                                    Làm mới
-                                </button>
-                            </a>
-                            
-                        </div>
+                    <div class="col-2">
+                        <input type="text" class="form-control" placeholder="Tìm theo địa chỉ" name="address">
                     </div>
-                    
-                 </form>
-
-                
-            </div>
+                    <div class="col-2">
+                        <input type="text" class="form-control" placeholder="Mã lớp" name="class_id">
+                    </div>
+                    <div class="col-2">
+                        <input type="text" class="form-control" placeholder="Năm học" name="academic_year">
+                    </div>
+                </div>
+                <div class="row align-items-center mt-1">
+                    <div class="col offset-11">
+                        <button type="submit" class="btn btn-outline-primary ms-auto d-block" type="button" id="button-addon2">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
 
             <table class="table table-striped table-hover mt-2">
                 <thead>
                     <tr>
-                        <th scope="col">Username</th>
-                        <th scope="col" style="display:none;">Password</th>
-                        <th scope="col">Loại người dùng</th>
+                        <th scope="col">Mã</th>
+                        <th scope="col">Họ và tên</th>
+                        <th scope="col">Ngày sinh</th>
+                        <th scope="col">Địa chỉ</th>
+                        <th scope="col">SĐT phụ huynh</th>
+                        <th scope="col">Lớp</th>
+                        <th scope="col">Năm học</th>
                         <th scope="col">Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
-
-                    <?php foreach($users as $user): ?>
-                        <tr class="user">
-                            <td scope="row" class="username"><?= Helper::htmlEscape($user['username']) ?></td>
-                            <td class="password" style="display: none;"><?= Helper::htmlEscape($user['password']) ?></td>
-                            <td class="type"><?= Helper::htmlEscape($user['type']) ?></td>
-                            <td>
-                                <!-- <button class="btn btn-sm edit_btn">
+                    <?php foreach ($students as $student) : ?>
+                        <tr class="student">
+                            <td scope="row" class="student_id"><?= Helper::htmlEscape($student['student_id']) ?></td>
+                            <td class="full_name"><?= Helper::htmlEscape($student['full_name']) ?></td>
+                            <td class="date_of_birth"><?= Helper::htmlEscape($student['date_of_birth']) ?></td>
+                            <td class="address"><?= Helper::htmlEscape($student['address']) ?></td>
+                            <td class="parent_phone_number"><?= Helper::htmlEscape($student['parent_phone_number']) ?></td>
+                            <td class="class_id" hidden><?= Helper::htmlEscape($student['class_id']) ?></td>
+                            <td class="class_name"><?= Helper::htmlEscape($student['class_name']) ?></td>
+                            <td class="academic_year"><?= Helper::htmlEscape($student['academic_year']) ?></td>
+                            <td class="text-xs">
+                                <button class="btn btn-outline-warning btn-sm border-0 py-0 edit_btn">
                                     <i class="fa fa-edit"></i>
-                                </button> -->
-                                <form action="/users/delete" method="POST" class="d-inline">
-                                    <input type="text" name="username" value="<?= Helper::htmlEscape($user['username']) ?>" hidden>
-                                    <button class="btn btn-sm btn-outline-danger" style="border: 0px;">
+                                </button>
+                                <form action="/students/delete" method="POST" class="d-inline">
+                                    <input type="text" name="student_id" value="<?= Helper::htmlEscape($student['student_id']) ?>" hidden>
+                                    <button class="btn btn-outline-danger btn-sm border-0 py-0">
                                         <i class="fa fa-trash" aria-hidden="true"></i>
                                     </button>
                                 </form>
                             </td>
                         </tr>
                     <?php endforeach ?>
-                    
                 </tbody>
             </table>
-
-            <script>
-                const fields = {
-                    'username': 'username',
-                    'password': 'password',
-                    'type': 'type',
-                    'sorted_type': 'sort_type'
-                };
-                const formId = 'user_form';
-                const trClass = 'user';
-            </script>
-            <?php
-
-            require __DIR__ . '/../partials/pagination.php';
-
-            ?>
-
+            <?php require_once __DIR__ . '/../partials/pagination.php'; ?>
         </div>
     </div>
 </div>
+
+<script>
+    const fields = {
+        'student_id': 'student_id',
+        'full_name': 'full_name',
+        'date_of_birth': 'date_of_birth',
+        'address': 'address',
+        'parent_phone_number': 'parent_phone_number',
+        'class_id': 'class_id',
+    };
+    const formId = 'student_form';
+    const trClass = 'student';
+</script>
 
 <?php
 

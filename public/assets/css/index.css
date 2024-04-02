@@ -11,7 +11,7 @@
     --color-success: #9CFDAC;
     --color-info: #9CE0FF;
     --header-height: 50px;
-    --nav-width: 210px;
+    --nav-width: 230px;
     --footer-height: 20px;
 }
 
@@ -30,10 +30,14 @@ h6 {
     font-weight: 500;
 }
 
+form label {
+    font-size: .9rem !important;
+}
+
 form input,
 form select,
 form textarea {
-    font-size: .8rem !important;
+    font-size: .9rem !important;
 }
 /* Layouts */
 
@@ -65,8 +69,8 @@ form textarea {
 #footer {
     background-color: var(--color-secondary);
     height: var(--footer-height);
-    width: calc(100% - var(--nav-width));
-    left: var(--nav-width);
+    width: calc(100%);
+    /* padding-left: var(--nav-width); */
     position: fixed;
     bottom: 0;
     display: flex;
@@ -81,8 +85,16 @@ form textarea {
     margin-top: var(--header-height);
     margin-left: var(--nav-width);
     padding: 20px;
-    font-size: .7rem;
+    font-size: .8rem;
     min-height: calc(100vh - var(--header-height) - var(--footer-height));
+}
+
+#main.main--auth {
+    margin-left: 0;
+}
+
+#main.main--guest {
+    margin-left: 0;
 }
 
 /* Header */
@@ -95,8 +107,15 @@ form textarea {
 
 .header-homepage {
     margin-right: 20px;
+    padding: 5px 10px;
     display: flex;
     align-items: center;
+    transition: all 0.3s;
+}
+
+.header-homepage:hover {
+    background-color: var(--color-tertiary);
+    border-radius: 5px;
 }
 
 /* Custom color */
@@ -182,7 +201,27 @@ form textarea {
 }
 
 .card--hover:hover {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    transform: translate(2px, -5px);
+    box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.3);
+    transform: translate(2px, -10px);
     cursor: pointer;
+    background-color: var(--color-info);
+}
+
+.auth-form {
+    width: 500px;
+}
+
+#toast-message {
+    z-index: 101;
+}
+
+.mark-table {
+    background-color: #fff;
+}
+.info-section {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+.info-section h5 {
+    padding: 4px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }

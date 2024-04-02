@@ -22,12 +22,17 @@ $links = [
     ],
     [
         'icon' => 'fa fa-tachometer-alt',
+        'title' => 'Quản lý phòng - lớp',
+        'url' => '/roomclass',
+    ],
+    [
+        'icon' => 'fa-solid fa-chalkboard-teacher',
         'title' => 'Quản lý giáo viên',
         'url' => '/teachers',
     ],
     [
         'icon' => 'fa fa-users',
-        'title' => 'Quản lý sinh viên',
+        'title' => 'Quản lý học sinh',
         'url' => '/students'
     ],
     [
@@ -35,15 +40,19 @@ $links = [
         'title' => 'Quản lý môn học',
         'url' => '/subjects'
     ],
-    // công tác giảng dạy
     [
-        'icon' => 'fa fa-chalkboard',
-        'title' => 'Công tác giảng dạy',
-        'url' => '/teaching'
+        'icon' => 'fa fa-pen',
+        'title' => 'Quản lý điểm',
+        'url' => '/marks'
+    ],
+    [
+        'icon' => 'fa fa-chart-bar',
+        'title' => 'Thống kê',
+        'url' => '/statistics'
     ],
     [
         'icon' => 'fa fa-user',
-        'title' => 'Quản lý người dùng',
+        'title' => 'Quản lý tài khoản',
         'url' => '/users'
     ]
 ];
@@ -52,7 +61,7 @@ $links = [
 ?>
 
 <div id="nav">
-    <div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary">
+    <div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary h-100">
         <ul class="nav nav-pills flex-column mb-auto">
             <?php foreach ($links as $link) : ?>
                 <li>
@@ -63,12 +72,14 @@ $links = [
                 </li>
             <?php endforeach; ?>
             <hr>
-            <li>
-                <a href="#" class="nav-link link-body-emphasis text-danger nav-logout--hover">
-                    <i class="fa fa-sign-out-alt"></i> &nbsp;
-                    Đăng xuất
-                </a>
-            </li>
+            <form action="/logout" method="POST" class="d-block w-100">
+                <li>
+                    <button type="submit" class="nav-link link-body-emphasis text-danger nav-logout--hover w-100 text-start">
+                        <i class="fa fa-sign-out-alt"></i> &nbsp;
+                        Đăng xuất
+                    </button>
+                </li>
+            </form>
         </ul>
     </div>
 </div>

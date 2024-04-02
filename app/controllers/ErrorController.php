@@ -2,8 +2,12 @@
 
 namespace App\controllers;
 
-class ErrorController {
-	public function set404() {
-		echo 'error 404';
+use App\utils\Helper;
+
+class ErrorController
+{
+	public function set404()
+	{
+		Helper::renderPage('/errors/notfound.php');
 	}
 }

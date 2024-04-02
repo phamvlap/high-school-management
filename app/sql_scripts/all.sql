@@ -29,7 +29,7 @@ create table if not exists students (
 );
 create table if not exists homeroom_teachers (
     teacher_id int not null,
-    class_id int not null,
+    class_id int not null unique,
     primary key (teacher_id, class_id),
     foreign key (teacher_id) references teachers(teacher_id),
     foreign key (class_id) references classes(class_id)
