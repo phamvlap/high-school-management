@@ -6,10 +6,12 @@ use PDOException;
 use App\models\StudentModel;
 use App\utils\{Helper, Validator, Paginator};
 
-class StudentController {
+class StudentController
+{
 	private $rules;
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->rules = [
 			'full_name' => [
 				'isRequired' => 'Họ và tên không được để trống',
@@ -27,19 +29,17 @@ class StudentController {
 				'isRequired' => 'Số điện thoại không được để trống',
 			],
 			'class_id' => [
-				'isRequired' => 'Mã lớp không được để trống'
-			],
-			'academic_year' => [
-				'isRequired' => 'Năm học không được để trống',
-				'isString' => 'Năm học phải là chuỗi'
+				'isRequired' => 'Mã lớp không được để trống',
+				'isNumber' => 'Mã lớp phải là số'
 			]
 		];
 	}
 
-	public function index() {
+	public function index()
+	{
 		try {
 			$studentModel = new StudentModel();
-			
+
 			$limit = (isset($_GET['limit']) && $_GET['limit'] !== 'none') ? (int)$_GET['limit'] : MAX_RECORDS_PER_PAGE;
 			$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 			$filter = [
@@ -51,14 +51,14 @@ class StudentController {
 			];
 
 			$totalRecords = $studentModel->getCount($filter);
-		
+
 			$paginator = new Paginator($limit, $totalRecords, $page);
 
 			$students = $studentModel->getByFilter($filter, $limit, ($page - 1) * $limit);
 
 			Helper::setIntoSession('download_data', [
 				'title' => 'DANH SÁCH HỌC SINH',
-				'header' => ['Mã','Họ và tên','Ngày sinh', 'Địa chỉ','SĐT cha mẹ','Mã lớp',	'Năm học'],
+				'header' => ['Mã', 'Họ và tên', 'Ngày sinh', 'Địa chỉ', 'SĐT cha mẹ', 'Mã lớp',	'Năm học'],
 				'data' => $students,
 			]);
 
@@ -81,7 +81,8 @@ class StudentController {
 		}
 	}
 
-	public function store() {
+	public function store()
+	{
 		try {
 			$studentModel = new StudentModel();
 
@@ -95,9 +96,10 @@ class StudentController {
 			$data['class_id'] = $_POST['class_id'] ?? '';
 
 			$errors = Validator::validate($data, $this->rules);
-			if($errors) {
+			if ($errors) {
 				throw new PDOException('Thông tin không hợp lệ');
 			}
+
 
 			$studentModel->store([
 				'student_id' => $data['student_id'],
@@ -107,22 +109,24 @@ class StudentController {
 				'parent_phone_number' => $data['parent_phone_number'],
 				'class_id' => $data['class_id']
 			]);
-			
+
 			Helper::redirectTo('/students', [
 				'status' => 'success',
 				'message' => ((int)$data['student_id'] === -1 ? 'Thêm' : 'Cập nhật') . ' học sinh thành công.'
 			]);
-		} catch(PDOException $e) {
+		} catch (PDOException $e) {
 			Helper::redirectTo('/students', [
 				'form' => $data,
 				'errors' => $errors,
 				'status' => 'danger',
-				'message' => 'Thêm học sinh thất bại'
+				'message' => 'Thêm học sinh thất bại',
+				'sql_error' => $e->getMessage()
 			]);
 		}
 	}
 
-	public function delete() {
+	public function delete()
+	{
 		try {
 			$studentModel = new StudentModel();
 			var_dump($_POST);
@@ -131,8 +135,7 @@ class StudentController {
 				'status' => 'success',
 				'message' => 'Xóa học sinh thành công'
 			]);
-		}
-		catch(PDOException $e) {
+		} catch (PDOException $e) {
 			Helper::redirectTo('/students', [
 				'status' => 'danger',
 				'message' => 'Xóa học sinh thất bại'
