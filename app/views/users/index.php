@@ -28,7 +28,10 @@ require __DIR__ . '/../partials/nav.php';
                 </div>
                 <div class="mb-1">
                     <label for="type" class="form-label mb-0">Loại người dùng<span style="color: red;"> *</span></label>
-                    <input type="text" class="form-control" id="type" name="type" value="<?= Helper::getFormDataFromSession('type') ?>">
+                    <select class="form-select" name="type">
+                        <option value="teacher" <?= Helper::getFormDataFromSession('type') === 'teacher' ? 'selected' : '' ?>>teacher</option>
+                        <option value="admin" <?= Helper::getFormDataFromSession('type') === 'admin' ? 'selected' : '' ?>>admin</option>
+                    </select>
                     <p class="text-danger text-end">
                         <?= Helper::getFormErrorFromSession('type') ?>
                     </p>
@@ -43,49 +46,35 @@ require __DIR__ . '/../partials/nav.php';
                 </div>
             </form>
 
-             <!-- Thêm button cho phép them cùng lúc nhiều dữ liệu từ file excel -->
             <div class="d-flex mt-5">
-                <button class="ms-auto px-3 btn btn-sm btn-outline-success">
-                    Xuất từ file excel
-                </button>
+                <a href="/excel" class="ms-auto px-3 btn btn-sm btn-outline-success">
+                    Xuất ra file excel
+                </a>
             </div>
         </div>
         <div class="col-9">
-            <div class="d-flex justify-content-between">
-                <form action="/users" class="d-flex">
-                    <div class="ms-1 mb-1">
+            <form action="/users">
+                <div class="row align-items-end">
+                    <div class="col-2">
                         <label for="type" class="form-label mb-0">Loại người dùng</label>
                         <select class="form-select" name="type">
-                            <option value="" <?= (!empty($_GET['type']) && $_GET['type'] === null) ? 'selected' : '' ?>>Loại</option>
+                            <option value="" <?= (!empty($_GET['type']) && $_GET['type'] === null) ? 'selected' : '' ?>>Tất cả</option>
                             <option value="admin" <?= (!empty($_GET['type']) && $_GET['type'] === 'admin') ? 'selected' : '' ?>>admin</option>
                             <option value="teacher" <?= (!empty($_GET['type']) && $_GET['type'] === 'teacher') ? 'selected' : '' ?>>teacher</option>
                         </select>
                     </div>
-                    <div class="mt-2 ms-2 align-self-center">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Tìm kiếm"
-                                aria-label="Recipient's username" aria-describedby="button-addon2" name="username"
-                                value="<?= isset($_GET['username']) ? htmlspecialchars($_GET['username']) : '' ?>">
-                            <button class="btn " type="submit" id="button-addon2">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="mt-2 ms-2 align-self-center">
-                        <div class="input-group">
-                            <a href="/users">
-                                <button type="button" class="ms-auto me-1 px-3 btn btn-sm btn-primary">
-                                    Làm mới
-                                </button>
-                            </a>
-                            
-                        </div>
-                    </div>
-                    
-                 </form>
 
-                
-            </div>
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="Tìm theo tên tài khoản" name="username" value="<?= isset($_GET['username']) ? htmlspecialchars($_GET['username']) : '' ?>">
+                    </div>
+
+                    <div class="col-1 offset-6">
+                        <button class="btn btn-outline-primary btn-sm" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
 
             <table class="table table-striped table-hover mt-2">
                 <thead>
@@ -96,52 +85,39 @@ require __DIR__ . '/../partials/nav.php';
                         <th scope="col">Hành động</th>
                     </tr>
                 </thead>
-                <tbody>
 
-                    <?php foreach($users as $user): ?>
+                <tbody>
+                    <?php foreach ($users as $user) : ?>
                         <tr class="user">
                             <td scope="row" class="username"><?= Helper::htmlEscape($user['username']) ?></td>
-                            <td class="password" style="display: none;"><?= Helper::htmlEscape($user['password']) ?></td>
                             <td class="type"><?= Helper::htmlEscape($user['type']) ?></td>
                             <td>
-                                <!-- <button class="btn btn-sm edit_btn">
+                                <button class="btn btn-sm btn-outline-warning border-0 py-0 edit_btn">
                                     <i class="fa fa-edit"></i>
-                                </button> -->
+                                </button>
                                 <form action="/users/delete" method="POST" class="d-inline">
                                     <input type="text" name="username" value="<?= Helper::htmlEscape($user['username']) ?>" hidden>
-                                    <button class="btn btn-sm btn-outline-danger" style="border: 0px;">
+                                    <button class="btn btn-sm btn-outline-danger border-0 py-0">
                                         <i class="fa fa-trash" aria-hidden="true"></i>
                                     </button>
                                 </form>
                             </td>
                         </tr>
                     <?php endforeach ?>
-                    
                 </tbody>
             </table>
-
-            <script>
-                const fields = {
-                    'username': 'username',
-                    'password': 'password',
-                    'type': 'type',
-                    'sorted_type': 'sort_type'
-                };
-                const formId = 'user_form';
-                const trClass = 'user';
-            </script>
-            <?php
-
-            require __DIR__ . '/../partials/pagination.php';
-
-            ?>
-
+            <?php require __DIR__ . '/../partials/pagination.php'; ?>
         </div>
     </div>
 </div>
 
-<?php
+<script>
+    const fields = {
+        'username': 'username',
+        'type': 'type',
+    };
+    const formId = 'user_form';
+    const trClass = 'user';
+</script>
 
-require __DIR__ . '/../partials/footer.php';
-
-?>
+<?php require __DIR__ . '/../partials/footer.php'; ?>
