@@ -9,11 +9,11 @@ require __DIR__ . '/../partials/nav.php';
 <div id="main" class="">
     <div class="row">
         <div class="col-3 border-end">
-            <form action="/students/store" method="POST">
+            <form action="/students/store" method="POST" id="student_form">
                 <span class="fw-bold" style="font-size: 1rem;">Nhập thông tin học sinh</span>
-                <input type="text" id="student_id" name="student_id" hidden>
+                <input type="hidden" name="student_id" id="student_id" value="-1">
                 <div class="mb-1">
-                    <label for="full_name" class="form-label mb-0">Họ tên</label>
+                    <label for="full_name" class="form-label mb-0">Họ và tên</label>
                     <input type="text" class="form-control" id="full_name" name="full_name" value="<?= Helper::getFormDataFromSession('full_name') ?>">
                     <p class="text-danger text-end">
                         <?= Helper::getFormErrorFromSession('full_name') ?>
@@ -47,13 +47,6 @@ require __DIR__ . '/../partials/nav.php';
                         <?= Helper::getFormErrorFromSession('class_id') ?>
                     </p>
                 </div>
-                <div class="mb-1">
-                    <label for="academic_year" class="form-label mb-0">Năm học</label>
-                    <input type="text" class="form-control" id="academic_year" name="academic_year" value="<?= Helper::getFormDataFromSession('academic_year') ?>">
-                    <p class="text-danger text-end">
-                        <?= Helper::getFormErrorFromSession('academic_year') ?>
-                    </p>
-                </div>
                 <div class="d-flex mt-2">
                     <button type="reset" class="ms-auto me-2 px-3 btn btn-sm btn-outline-danger">
                         Hủy
@@ -66,158 +59,108 @@ require __DIR__ . '/../partials/nav.php';
 
             <!-- Thêm button cho phép them cùng lúc nhiều dữ liệu từ file excel -->
             <div class="d-flex mt-5">
-                <button class="ms-auto px-3 btn btn-sm btn-outline-success">
-                    Thêm từ file excel
-                </button>
+                <a href="/excel" class="ms-auto px-3 btn btn-sm btn-outline-success">
+                    Xuất ra file excel
+                </a>
             </div>
         </div>
         <div class="col-9">
-            <!-- Hiển thị thông tin tất cả học sinh từ cơ sở dữ liệu kèm theo 2 button xem, sửa và xóa (sử dụng fa icon), ẩn địa chỉ-->
-            <!-- Hiển thị thanh filter và search -->
-            <div class="d-flex justify-content-between">
-                <form action="/students" class="d-flex">
-                    <div class="ms-1 mb-1">
-                        <label for="academic-year" class="form-label mb-0">Lọc theo niên khóa</label>
-                        <select class="form-select" id="academic-year" name="academic-year">
-                            <option selected>Niên khóa</option>
-                            <option value="2024-2025">2024-2025</option>
-                            <option value="2025-2026">2025-2026</option>
-                        </select>
+        <form action="/students" method="GET">
+            <div class="row align-items-end">
+                <div class="col-2">
+                    <label for="limit" class="form-label mb-0">Hiển thị</label>
+                    <?php $limit = $_GET['limit'] ?? '10'; ?>
+                    <select class="form-select" id="limit" name="limit">
+                        <option value="<?= MAX_LIMIT ?>" <?= ($limit === 'all') ? 'selected' : '' ?>>Tất cả</option>
+                        <option value="10" <?= ($limit === '10') ? 'selected' : '' ?>>10</option>
+                        <option value="20" <?= ($limit === '20') ? 'selected' : '' ?>>20</option>
+                        <option value="50" <?= ($limit === '50') ? 'selected' : '' ?>>50</option>
+                    </select>
+                </div>
+                <div class="col-2">
+                    <label for="is_order_by_name" class="form-label mb-0">Sắp xếp</label>
+                    <?php $is_order_by_name = $_GET['is_order_by_name'] ?? 'none'; ?>
+                    <select class="form-select" id="is_order_by_name" name="is_order_by_name">
+                        <option value="none" <?= ($is_order_by_name === 'none') ? 'selected' : '' ?>>Chọn</option>
+                        <option value="1" <?= ($is_order_by_name === '1') ? 'selected' : '' ?>>Theo tên</option>
+                        <option value="0" <?= ($is_order_by_name === '0') ? 'selected' : '' ?>>Tên mã</option>
+                    </select>
+                </div>
+                <div class="col-2">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Tên" name="full_name">
                     </div>
-                    <div class="ms-1 mb-1">
-                        <label for="is_sort_by_name_desc" class="form-label mb-0">Sắp xếp họ tên</label>
-                        <select class="form-select" id="is_sort_by_name_desc" name="is_sort_by_name_desc">
-                            <option selected>Thứ tự</option>
-                            <option value="name-asc">Tên A-Z</option>
-                            <option value="name-desc">Tên Z-A</option>
-                        </select>
-                    </div>
-                    <div class="ms-1 mb-1 d-flex align-items-end">
-                        <button class="btn btn-sm btn-outline-primary">Lọc</button>
-                    </div>
-                </form>
-                <div class="mt-2 align-self-center">
-                    <form action="/students" class="d-flex">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Họ tên">
-                        </div>
-                        <div class="input-group ms-2">
-                            <input type="text" class="form-control" placeholder="Địa chỉ">
-                        </div>
-                        <div class="input-group ms-2">
-                            <input type="text" class="form-control" placeholder="Mã lớp">
-                        </div>
-                        <button class="btn" type="button">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </form>
+                </div>
+                <div class="col-2">
+                    <input type="text" class="form-control" placeholder="Địa chỉ" name="address">
+                </div>
+                <div class="col-2">
+                    <input type="text" class="form-control" placeholder="Năm học" name="academic_year">
+                </div>
+                <div class="col-1">
+                    <button type="submit" class="btn btn-outline-primary" type="button" id="button-addon2">
+                        <i class="fa fa-search"></i>
+                    </button>
                 </div>
             </div>
+        </form>
 
             <table class="table table-striped table-hover mt-2">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Họ tên</th>
+                        <th scope="col">Mã</th>
+                        <th scope="col">Họ và tên</th>
                         <th scope="col">Ngày sinh</th>
-                        <th scope="col">Số điện thoại phụ huynh</th>
-                        <th scope="col">Tên lớp</th>
+                        <th scope="col" >Địa chỉ</th>
+                        <th scope="col">SĐT cha mẹ</th>
+                        <th scope="col">Mã lớp</th>
                         <th scope="col">Năm học</th>
                         <th scope="col">Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Nguyễn Văn A</td>
-                        <td>01/01/2001</td>
-                        <td>0123456789</td>
-                        <td>10A1</td>
-                        <td>2023-2024</td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Chi tiết">
-                                <i class="fa fa-eye"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-warning" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Chỉnh sửa">
-                                <i class="fa fa-edit"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Xóa">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Nguyễn Văn B</td>
-                        <td>01/01/2002</td>
-                        <td>0123456789</td>
-                        <td>10A2</td>
-                        <td>2023-2024</td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary">
-                                <i class="fa fa-eye"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-warning">
-                                <i class="fa fa-edit">
-                                </i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-danger">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Nguyễn Văn C</td>
-                        <td>01/01/2003</td>
-                        <td>0123456789</td>
-                        <td>10A3</td>
-                        <td>2023-2024</td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary">
-                                <i class="fa fa-eye"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-warning">
-                                <i class="fa fa-edit"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-danger">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
+                <?php foreach ($students as $student) : ?>
+                        <tr class="student">
+                            <td scope="row" class="student_id"><?= Helper::htmlEscape($student['student_id']) ?></td>
+                            <td class="full_name"><?= Helper::htmlEscape($student['full_name']) ?></td>
+                            <td class="date_of_birth"><?= Helper::htmlEscape($student['date_of_birth']) ?></td>
+                            <td class="address"><?= Helper::htmlEscape($student['address']) ?></td>
+                            <td class="parent_phone_number"><?= Helper::htmlEscape($student['parent_phone_number']) ?></td>
+                            <td class="class_id"><?= Helper::htmlEscape($student['class_id']) ?></td>
+                            <td class="academic_year"><?= Helper::htmlEscape($student['academic_year']) ?></td>
+                            <td class="text-xs">
+                                <button class="btn btn-outline-warning btn-sm border-0 py-0 edit_btn">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <form action="/students/delete" method="POST" class="d-inline">
+                                    <input type="text" name="student_id" value="<?= Helper::htmlEscape($student['student_id']) ?>" hidden>
+                                    <button class="btn btn-outline-danger btn-sm border-0 py-0">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
                 </tbody>
             </table>
-
-            <div class="d-flex justify-content-center">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">1</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">2</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">3</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-
-
+            <?php require_once __DIR__ . '/../partials/pagination.php'; ?>
         </div>
     </div>
 </div>
+
+<script>
+    const fields = {
+        'student_id' : 'student_id',
+        'full_name' : 'full_name',
+        'date_of_birth' : 'date_of_birth',
+        'address' : 'address',
+        'parent_phone_number' : 'parent_phone_number',
+        'class_id' : 'class_id',
+        'academic_year' : 'academic_year'
+    };
+    const formId = 'student_form';
+    const trClass = 'student';
+</script>
 
 <?php
 
