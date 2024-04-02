@@ -69,10 +69,10 @@ require_once __DIR__ . '/../partials/nav.php';
                     </div>
                     <div class="col-3">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Tìm kiếm theo tên môn" name="subject_name">
+                            <input type="text" class="form-control" placeholder="Tìm theo tên môn" name="subject_name">
                         </div>
                     </div>
-                    <div class="col-1">
+                    <div class="col-1 offset-4">
                         <button type="submit" class="btn btn-outline-primary" type="button" id="button-addon2">
                             <i class="fa fa-search"></i>
                         </button>

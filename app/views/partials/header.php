@@ -14,7 +14,7 @@
     <div id="app">
         <div id="header">
             <div class="header-brand">
-                <span class="fw-bold text-primary">Hệ thống quản lý Trường THPT Thực hành Sư phạm Cần Thơ</span>
+                <span class="fw-bold text-primary"><?= SYSTEM_NAME ?></span>
             </div>
 
             <div class="header-homepage">

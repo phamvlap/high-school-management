@@ -56,10 +56,24 @@ class StudentController
 
 			$students = $studentModel->getByFilter($filter, $limit, ($page - 1) * $limit);
 
+			// download data
+			$downloadData = [];
+			foreach ($students as $student) {
+				$downloadData[] = [
+					$student['student_id'],
+					$student['full_name'],
+					$student['date_of_birth'],
+					$student['address'],
+					$student['parent_phone_number'],
+					$student['class_name'],
+					$student['academic_year']
+				];
+			}
+
 			Helper::setIntoSession('download_data', [
 				'title' => 'DANH SÁCH HỌC SINH',
-				'header' => ['Mã', 'Họ và tên', 'Ngày sinh', 'Địa chỉ', 'SĐT cha mẹ', 'Mã lớp',	'Năm học'],
-				'data' => $students,
+				'header' => ['Mã số', 'Họ và tên', 'Ngày sinh', 'Địa chỉ', 'SĐT cha mẹ', 'Lớp', 'Năm học'],
+				'data' => $downloadData,
 			]);
 
 			Helper::renderPage('/students/index.php', [

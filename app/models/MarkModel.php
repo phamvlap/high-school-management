@@ -7,59 +7,52 @@ use PDO;
 use App\db\PDOFactory;
 use PDOException;
 
-class MarkModel  {
-	private PDO $pdo;
+class MarkModel
+{
+    private PDO $pdo;
 
-	public function __construct() {
+    public function __construct()
+    {
         $this->pdo = PDOFactory::connect();
-	}
-    public function getAll(): array {
-        try {
-            $pdo = PDOFactory::connect();
-            $preparedStmt = "call get_all_marks(null,null,null,:limit,:offset)";
-            $statement = $pdo->prepare($preparedStmt);
-            $statement->bindParam(':limit', $limit, PDO::PARAM_INT);
-            $statement->bindParam(':offset', $offset, PDO::PARAM_INT);
-            $statement->execute();
-            return $statement->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
     }
-    public function store( array $data): void {
-        try {
-            $pdo = PDOFactory::connect();
-            $preparedStmt = "call add_mark( :student_id, :subject_id, :semester,:oral_score,:_15_minutes_score,:_1_period_score,:semester_score)";
-            $statement = $pdo->prepare($preparedStmt);
-            $statement->bindParam(':student_id', $data['student_id'], PDO::PARAM_STR);
-            $statement->bindParam(':subject_id', $data['subject_id'], PDO::PARAM_STR);
-            $statement->bindParam(':semester', $data['semester'], PDO::PARAM_STR);
-            $statement->bindParam(':oral_score', $data['oral_score'], PDO::PARAM_STR);
-            $statement->bindParam(':_15_minutes_score', $data['_15_minutes_score'], PDO::PARAM_STR);
-            $statement->bindParam(':_1_period_score', $data['_1_period_score'], PDO::PARAM_STR);
-            $statement->bindParam(':semester_score', $data['semester_score'], PDO::PARAM_STR);
-            $statement->execute();
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
+    public function getAll(): array
+    {
+        $pdo = PDOFactory::connect();
+        $preparedStmt = "call get_all_marks(null,null,null,:limit,:offset)";
+        $statement = $pdo->prepare($preparedStmt);
+        $statement->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $statement->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function store(array $data): void
+    {
+        $pdo = PDOFactory::connect();
+        $preparedStmt = "call add_mark( :student_id, :subject_id, :semester,:oral_score,:_15_minutes_score,:_1_period_score,:semester_score)";
+        $statement = $pdo->prepare($preparedStmt);
+        $statement->bindParam(':student_id', $data['student_id'], PDO::PARAM_STR);
+        $statement->bindParam(':subject_id', $data['subject_id'], PDO::PARAM_STR);
+        $statement->bindParam(':semester', $data['semester'], PDO::PARAM_STR);
+        $statement->bindParam(':oral_score', $data['oral_score'], PDO::PARAM_STR);
+        $statement->bindParam(':_15_minutes_score', $data['_15_minutes_score'], PDO::PARAM_STR);
+        $statement->bindParam(':_1_period_score', $data['_1_period_score'], PDO::PARAM_STR);
+        $statement->bindParam(':semester_score', $data['semester_score'], PDO::PARAM_STR);
+        $statement->execute();
     }
     public function getByFilter(array $filter, int $limit, int $offset): array
     {
         $preparedStmt = 'call get_all_marks(:student_id, :subject_id, :semester, :limit, :offset)';
-        try {
-            $statement = $this->pdo->prepare($preparedStmt);
-            $statement->bindParam(':student_id', $filter['student_id'], PDO::PARAM_INT);
-            $statement->bindParam(':subject_id', $filter['subject_id'], PDO::PARAM_INT);
-            $statement->bindParam(':semester', $filter['semester'], PDO::PARAM_INT);
-            $statement->bindParam(':limit', $limit, PDO::PARAM_INT);
-            $statement->bindParam(':offset', $offset, PDO::PARAM_INT);
-            $statement->execute();
-            return $statement->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
+        $statement = $this->pdo->prepare($preparedStmt);
+        $statement->bindParam(':student_id', $filter['student_id'], PDO::PARAM_INT);
+        $statement->bindParam(':subject_id', $filter['subject_id'], PDO::PARAM_INT);
+        $statement->bindParam(':semester', $filter['semester'], PDO::PARAM_INT);
+        $statement->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $statement->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
-    public function delete(int $student_id,int $subject_id,int $semester): void {
+    public function delete(int $student_id, int $subject_id, int $semester): void
+    {
         $preparedStmt = "call delete_mark(:student_id,:subject_id,:semester)";
         $statement = $this->pdo->prepare($preparedStmt);
         $statement->bindParam(':student_id', $student_id, PDO::PARAM_INT);
@@ -69,18 +62,12 @@ class MarkModel  {
     }
     public function getCount($filter): int
     {
-        try {
-            $preparedStmt = 'select count_all_marks(:student_id, :subject_id, :semester)';
-            $statement = $this->pdo->prepare($preparedStmt);
-            $statement->bindParam(':student_id', $filter['student_id'], PDO::PARAM_INT);
-            $statement->bindParam(':subject_id', $filter['subject_id'], PDO::PARAM_INT);
-            $statement->bindParam(':semester', $filter['semester'], PDO::PARAM_INT);
-            $statement->execute();
-            return $statement->fetchColumn();
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
+        $preparedStmt = 'select count_all_marks(:student_id, :subject_id, :semester)';
+        $statement = $this->pdo->prepare($preparedStmt);
+        $statement->bindParam(':student_id', $filter['student_id'], PDO::PARAM_INT);
+        $statement->bindParam(':subject_id', $filter['subject_id'], PDO::PARAM_INT);
+        $statement->bindParam(':semester', $filter['semester'], PDO::PARAM_INT);
+        $statement->execute();
+        return $statement->fetchColumn();
     }
-
-   
 }

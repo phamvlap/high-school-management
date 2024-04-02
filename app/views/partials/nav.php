@@ -45,11 +45,15 @@ $links = [
         'title' => 'Quản lý điểm',
         'url' => '/marks'
     ],
-    // thống kê
     [
         'icon' => 'fa fa-chart-bar',
         'title' => 'Thống kê',
         'url' => '/statistics'
+    ],
+    [
+        'icon' => 'fa fa-user',
+        'title' => 'Quản lý tài khoản',
+        'url' => '/users'
     ]
 ];
 

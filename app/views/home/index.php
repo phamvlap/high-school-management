@@ -31,6 +31,12 @@ $listItems = [
         'title' => 'Quản lý học sinh',
         'link' => '/students'
     ],
+    // Quản lý môn học
+    [
+        'icon' => 'assets/img/subjects.png',
+        'title' => 'Quản lý môn học',
+        'link' => '/subjects'
+    ],
     [
         'icon' => 'assets/img/marks.png',
         'title' => 'Quản lý điểm',
@@ -51,7 +57,7 @@ $listItems = [
 ?>
 
 <div id="main" class="d-flex flex-column justify-content-center align-items-center">
-    <div class="row">
+    <div class="row mt-0">
         <div class="col">
             <h1 class="text-center text-primary">Chức năng</h1>
         </div>
@@ -59,8 +65,8 @@ $listItems = [
     <div class="row">
         <div class="col-12">
             <?php foreach ($listItems as $key => $item) : ?>
-                <?= $key % 4 === 0 ? '<div class="row mt-3 ?>">' : '' ?>
-                <div class="col-2  <?= $key % 4 === 0 ? 'offset-2' : '' ?>">
+                <?= $key % 6 === 0 ? '<div class="row mt-3 ?>">' : '' ?>
+                <div class="col-2 ">
                     <form action="<?= $item['link'] ?>" method="GET">
                         <button type="submit" class="card card--hover rounded-4">
                             <div class="card-body p-1 text-center">
@@ -70,8 +76,9 @@ $listItems = [
                         </button>
                     </form>
                 </div>
-                <?= $key % 4 === 3 ? '</div>' : '' ?>
+                <?= $key % 6 === 5 ? '</div>' : '' ?>
             <?php endforeach; ?>
+            <?= count($listItems) % 6 !== 0 ? '</div>' : '' ?>
         </div>
     </div>
 </div>

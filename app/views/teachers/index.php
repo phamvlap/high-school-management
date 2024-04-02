@@ -79,7 +79,7 @@ require_once __DIR__ . '/../partials/nav.php';
                     <div class="col-3">
                         <input type="text" class="form-control" placeholder="Tìm theo địa chỉ" name="address">
                     </div>
-                    <div class="col-1">
+                    <div class="col-1 offset-1">
                         <button type="submit" class="btn btn-outline-primary" type="button" id="button-addon2">
                             <i class="fa fa-search"></i>
                         </button>

@@ -80,24 +80,29 @@ require __DIR__ . '/../partials/nav.php';
                         <label for="is_order_by_name" class="form-label mb-0">Sắp xếp</label>
                         <?php $is_order_by_name = $_GET['is_order_by_name'] ?? 'none'; ?>
                         <select class="form-select" id="is_order_by_name" name="is_order_by_name">
-                            <option value="none" <?= ($is_order_by_name === 'none') ? 'selected' : '' ?>>Chọn</option>
+                            <option value="none" <?= ($is_order_by_name === 'none') ? 'selected' : '' ?>>-- Chọn --</option>
                             <option value="1" <?= ($is_order_by_name === '1') ? 'selected' : '' ?>>Theo tên</option>
                             <option value="0" <?= ($is_order_by_name === '0') ? 'selected' : '' ?>>Tên mã</option>
                         </select>
                     </div>
                     <div class="col-2">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Tên" name="full_name">
+                            <input type="text" class="form-control" placeholder="Tìm theo tên" name="full_name">
                         </div>
                     </div>
                     <div class="col-2">
-                        <input type="text" class="form-control" placeholder="Địa chỉ" name="address">
+                        <input type="text" class="form-control" placeholder="Tìm theo địa chỉ" name="address">
+                    </div>
+                    <div class="col-2">
+                        <input type="text" class="form-control" placeholder="Mã lớp" name="class_id">
                     </div>
                     <div class="col-2">
                         <input type="text" class="form-control" placeholder="Năm học" name="academic_year">
                     </div>
-                    <div class="col-1">
-                        <button type="submit" class="btn btn-outline-primary" type="button" id="button-addon2">
+                </div>
+                <div class="row align-items-center mt-1">
+                    <div class="col offset-11">
+                        <button type="submit" class="btn btn-outline-primary ms-auto d-block" type="button" id="button-addon2">
                             <i class="fa fa-search"></i>
                         </button>
                     </div>
@@ -111,8 +116,8 @@ require __DIR__ . '/../partials/nav.php';
                         <th scope="col">Họ và tên</th>
                         <th scope="col">Ngày sinh</th>
                         <th scope="col">Địa chỉ</th>
-                        <th scope="col">SĐT cha mẹ</th>
-                        <th scope="col">Mã lớp</th>
+                        <th scope="col">SĐT phụ huynh</th>
+                        <th scope="col">Lớp</th>
                         <th scope="col">Năm học</th>
                         <th scope="col">Hành động</th>
                     </tr>
@@ -125,7 +130,8 @@ require __DIR__ . '/../partials/nav.php';
                             <td class="date_of_birth"><?= Helper::htmlEscape($student['date_of_birth']) ?></td>
                             <td class="address"><?= Helper::htmlEscape($student['address']) ?></td>
                             <td class="parent_phone_number"><?= Helper::htmlEscape($student['parent_phone_number']) ?></td>
-                            <td class="class_id"><?= Helper::htmlEscape($student['class_id']) ?></td>
+                            <td class="class_id" hidden><?= Helper::htmlEscape($student['class_id']) ?></td>
+                            <td class="class_name"><?= Helper::htmlEscape($student['class_name']) ?></td>
                             <td class="academic_year"><?= Helper::htmlEscape($student['academic_year']) ?></td>
                             <td class="text-xs">
                                 <button class="btn btn-outline-warning btn-sm border-0 py-0 edit_btn">
