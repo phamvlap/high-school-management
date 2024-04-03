@@ -13,14 +13,14 @@ class GuestController {
 
 	public function getMarks() {
 		try {
-			$telephone = $_POST['parent_phone_number'];
+			$student_id = $_POST['student_id'];
 			$guestModel = new GuestModel();
-			$result = $guestModel->getMarkTableByParentTelephone($telephone);
+			$result = $guestModel->getMarkTableByStudentID($student_id);
 
 			if(count($result) === 0) {
 				Helper::redirectTo('/guest', [
 					'status' => 'danger',
-					'message' => 'Lấy dữ liệu bảng điẻm học sinh thất bại.'
+					'message' => 'Lấy dữ liệu bảng điểm học sinh thất bại.'
 				]);
 			}
 
@@ -48,7 +48,7 @@ class GuestController {
                         'info' => $student,
                         'class' => $class,
                         'teacher' => $teacher,
-                        'marks' => $this->splitMarkByGrade($marks),
+                        'marks' => $this->splitMarkBySemester($marks),
                     ];
                     $students[] = $student;
 
@@ -83,7 +83,7 @@ class GuestController {
                 'info' => $student,
                 'class' => $class,
                 'teacher' => $teacher,
-                'marks' => $this->splitMarkByGrade($marks),
+                'marks' => $this->splitMarkBySemester($marks),
             ];
             $students[] = $student;
 
@@ -99,27 +99,27 @@ class GuestController {
 		}
 	}
 
-    public function splitMarkByGrade($markTable) {
+    public function splitMarkBySemester($markTable) {
         $mark = [];
         $marks = [];
-        $grades = [];
-        $grade = $markTable[0]['grade'];
+        $semesters = [];
+        $semester = $markTable[0]['semester'];
         foreach($markTable as $row) {
-            if($grade !== $row['grade']) {
-                $grades[$grade] = $marks;
+            if($semester !== $row['semester']) {
+                $semesters[$semester] = $marks;
                 
-                $grade = $row['grade'];
+                $semester = $row['semester'];
                 $marks = [];
             }
             foreach($row as $key => $value) {
-                if($key !== 'grade') {
+                if($key !== 'semester') {
                     $mark[$key] = $value;
                 }
             }
             $marks[] = $mark;
         }
-        $grades[$grade] = $marks;
+        $semesters[$semester] = $marks;
 
-        return $grades;
+        return $semesters;
     }
 }
