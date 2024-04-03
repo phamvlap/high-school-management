@@ -52,7 +52,7 @@ class AccountModel
 		$statement = $this->pdo->prepare($preparedStmt);
 		$statement->bindParam(':username', $username, PDO::PARAM_STR);
 		$statement->execute();
-		return $statement->fetchAll(PDO::FETCH_ASSOC);
+		return $statement->fetch(PDO::FETCH_ASSOC);
 	}
 
 	public function store(array $data): void

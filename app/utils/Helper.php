@@ -75,4 +75,14 @@ class Helper
     {
         return date('d-m-Y', strtotime($date));
     }
+
+    static public function isLogged(): bool
+    {
+        return isset($_SESSION['auth']);
+    }
+
+    static public function isPermitted(array $allowedTypes): bool
+    {
+        return in_array($_SESSION['auth']['type'], $allowedTypes);
+    } 
 }
