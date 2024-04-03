@@ -23,4 +23,23 @@ window.addEventListener('load', () => {
     setTimeout(() => {
         toastMessage.classList.remove('show');
     }, 3000);
+
+
+    const modal = new bootstrap.Modal(document.querySelector('#delete-modal'));
+    // show delete confirmation
+    const editBtn = document.querySelectorAll('.edit_btn');
+    const formDelete = Array.from(editBtn).map((item) => {
+        return item.nextElementSibling;
+    });
+    formDelete.forEach((item) => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            modal.show();
+
+            const confirmSubmit = document.querySelector('#confirm-submit');
+            confirmSubmit.addEventListener('click', () => {
+                item.submit();
+            });
+        });
+    });
 });
