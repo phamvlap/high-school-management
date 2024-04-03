@@ -7,48 +7,48 @@ require_once __DIR__ . '/../partials/nav.php';
 
 $listItems = [
     [
-        'icon' => 'assets/img/classes.png',
+        'icon' => '/assets/img/classes.png',
         'title' => 'Quản lý lớp học',
         'link' => '/classes'
     ],
     [
-        'icon' => 'assets/img/rooms.png',
+        'icon' => '/assets/img/rooms.png',
         'title' => 'Quản lý phòng học',
         'link' => '/rooms'
     ],
     [
-        'icon' => 'assets/img/roomclass.png',
+        'icon' => '/assets/img/roomclass.png',
         'title' => 'Quản lý phòng - lớp',
         'link' => '/roomclass'
     ],
     [
-        'icon' => 'assets/img/teachers.png',
+        'icon' => '/assets/img/teachers.png',
         'title' => 'Quản lý giáo viên',
         'link' => '/teachers'
     ],
     [
-        'icon' => 'assets/img/students.png',
+        'icon' => '/assets/img/students.png',
         'title' => 'Quản lý học sinh',
         'link' => '/students'
     ],
     // Quản lý môn học
     [
-        'icon' => 'assets/img/subjects.png',
+        'icon' => '/assets/img/subjects.png',
         'title' => 'Quản lý môn học',
         'link' => '/subjects'
     ],
     [
-        'icon' => 'assets/img/marks.png',
+        'icon' => '/assets/img/marks.png',
         'title' => 'Quản lý điểm',
         'link' => '/marks'
     ],
     [
-        'icon' => 'assets/img/statistics.png',
+        'icon' => '/assets/img/statistics.png',
         'title' => 'Thống kê',
         'link' => '/statistics'
     ],
     [
-        'icon' => 'assets/img/users.png',
+        'icon' => '/assets/img/users.png',
         'title' => 'Quản lý người dùng',
         'link' => '/users'
     ]

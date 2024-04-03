@@ -35,10 +35,10 @@
 </div>
 </div>
 
-<script src="assets/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="assets/fontawesome/css/all.min.css"></script>
-<script src="assets/fontawesome/js/all.min.js"></script>
-<script src="assets/js/index.js"></script>
+<script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/assets/fontawesome/css/all.min.css"></script>
+<script src="/assets/fontawesome/js/all.min.js"></script>
+<script src="/assets/js/index.js"></script>
 </body>
 
 </html>
