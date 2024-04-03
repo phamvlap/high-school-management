@@ -13,18 +13,6 @@ class SubjectModel
     {
         $this->pdo = PDOFactory::connect();
     }
-    protected function getPDO(): PDO
-    {
-        return $this->pdo;
-    }
-    public function getAll(): array
-    {
-        $pdo = PDOFactory::connect();
-        $preparedStmt = "call get_all_subject(null,null,null)";
-        $statement = $pdo->prepare($preparedStmt);
-        $statement->execute();
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
-    }
     public function getById(int $subject_id): array
     {
         $pdo = PDOFactory::connect();
@@ -47,7 +35,7 @@ class SubjectModel
     }
     public function getByFilter(array $filter, int $limit, int $offset): array
     {
-        $preparedStmt = 'call get_all_subject(:subject_name, :grade, :limit, :offset)';
+        $preparedStmt = 'call get_all_subjects(:subject_name, :grade, :limit, :offset)';
         $statement = $this->pdo->prepare($preparedStmt);
         $statement->bindParam(':subject_name', $filter['subject_name'], PDO::PARAM_STR);
         $statement->bindParam(':grade', $filter['grade'], PDO::PARAM_INT);
@@ -65,7 +53,7 @@ class SubjectModel
     }
     public function getCount($filter): int
     {
-        $preparedStmt = 'select count_all_subjects(:subject_name,:grade)';
+        $preparedStmt = 'select get_total_subjects(:subject_name,:grade)';
         $statement = $this->pdo->prepare($preparedStmt);
         $statement->bindParam(':subject_name', $filter['subject_name'], PDO::PARAM_INT);
         $statement->bindParam(':grade', $filter['grade'], PDO::PARAM_INT);

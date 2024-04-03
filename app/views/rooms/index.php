@@ -12,7 +12,7 @@ require __DIR__ . '/../partials/nav.php';
         <div class="col-3 border-end">
             <form action="/rooms/store" method="POST" id="room_form">
                 <span class="fw-bold" style="font-size: 1rem;">Thông tin phòng học</span>
-                <input type="text" id="room_id" name="room_id" hidden>
+                <input type="text" id="room_id" name="room_id" value="-1" hidden>
                 <div class="mb-1">
                     <label for="room_number" class="form-label mb-0">Phòng học<span style="color: red;"> *</span></label>
                     <input type="text" class="form-control" id="room_number" name="room_number" value="<?= Helper::getFormDataFromSession('room_number') ?>">

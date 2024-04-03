@@ -8,6 +8,9 @@ require __DIR__ . '/../partials/nav.php';
 ?>
 
 <div id="main" class="">
+    <?php
+        var_dump($filter);
+    ?>
     <div class="row">
         <div class="col-3 border-end">
             <form action="/users/store" method="POST" id="user_form">

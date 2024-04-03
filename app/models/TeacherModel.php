@@ -64,10 +64,9 @@ class TeacherModel
         $statement->execute();
     }
 
-
     public function getCount(array $filter): int
     {
-        $preparedStmt = 'call get_total_teachers(:full_name, :address);';
+        $preparedStmt = 'select get_total_teachers(:full_name, :address);';
         $statement = $this->pdo->prepare($preparedStmt);
         $statement->bindParam(':full_name', $filter['full_name'], PDO::PARAM_STR);
         $statement->bindParam(':address', $filter['address'], PDO::PARAM_STR);

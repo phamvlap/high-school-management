@@ -44,12 +44,12 @@ class RoomClassModel
 
     public function getCount(array $filter): int
     {
-        $preparedStmt = 'call get_total_room_class(:room_id, :class_id, :grade, :semester, :academic_year)';
+        $preparedStmt = 'select get_total_room_class(:room_id, :class_id, :grade, :semester, :academic_year)';
         $statement = $this->pdo->prepare($preparedStmt);
-        $statement->bindParam(':room_id', $filter['room_id'], PDO::PARAM_INT);
-        $statement->bindParam(':class_id', $filter['class_id'], PDO::PARAM_INT);
-        $statement->bindParam(':grade', $filter['grade'], PDO::PARAM_INT);
-        $statement->bindParam(':semester', $filter['semester'], PDO::PARAM_INT);
+        $statement->bindParam(':room_id', $filter['room_id']);
+        $statement->bindParam(':class_id', $filter['class_id']);
+        $statement->bindParam(':grade', $filter['grade']);
+        $statement->bindParam(':semester', $filter['semester']);
         $statement->bindParam(':academic_year', $filter['academic_year'], PDO::PARAM_STR);
         $statement->execute();
         return $statement->fetchColumn();

@@ -61,7 +61,7 @@ class RoomController
 				'total' => $totalRecords,
 			]);
 		} catch (PDOException $e) {
-			Helper::redirectTo('/rooms', [
+			Helper::renderPage('/rooms/index.php', [
 				'status' => 'danger',
 				'message' => 'Lấy dữ liệu phòng học thất bại'
 			]);

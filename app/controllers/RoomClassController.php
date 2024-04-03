@@ -117,7 +117,7 @@ class RoomClassController
                 'form' => $data,
                 'errors' => $errors,
                 'status' => 'danger',
-                'message' => 'Cập nhật phòng - lớp thất bại: ' . explode('$', $e->getMessage())[1]
+                'message' => 'Cập nhật phòng - lớp thất bại',
             ]);
         }
     }

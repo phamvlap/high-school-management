@@ -1,7 +1,7 @@
 delimiter $$
 
 -- [procedure]: add_account(username, password, type)
--- [author]: tronghuu
+-- [example]: call add_account('admin', 'admin', 'admin');
 drop procedure if exists add_account $$
 create procedure add_account(
     in _username varchar(50), 
@@ -10,33 +10,34 @@ create procedure add_account(
 )
 begin
     insert into accounts(username, password, type)
-    values (_username, _password, _type);
+        values (_username, _password, _type);
 end $$
--- [example]: call add_account('admin', 'admin', 'admin');
 
 -- [procedure]: delete_account(username)
--- [author]: tronghuu
+-- [example]: call delete_account('admin');
 create procedure delete_account(
     in _username varchar(50)
 )
-begin 
+begin
     delete from accounts 
     where username = _username;
 end $$
--- [example]: call delete_account('admin');
 
 -- [procedure]: get_account_by_username(username)
--- [author]: camtu
+-- [example]: call get_account_by_username('admin');
 create procedure get_account_by_username(
     in _username varchar(50)
 )
 begin 
-    (select * from accounts where username = _username);
+    select *
+    from accounts
+    where username = _username;
 end $$
 
-delimiter $$
+-- [procedure]: get_all_accounts(username, type, limit, offset)
+-- [example]: call get_all_accounts();use high_school_management;
 drop procedure if exists get_all_accounts $$
-create procedure get_all_accounts(
+create procedure get_all_accounts (
 	in _username varchar(50),
 	in _type varchar(50),
     in _limit int,
@@ -47,7 +48,20 @@ begin
 	from accounts
 	where (_username is null or username like concat('%', _username, '%')) 
 		and (_type is null or type like concat('%', _type, '%'))
-	limit _limit offset _offset;
+	limit _limit
+    offset _offset;
 end $$
--- -- [example]: call get_all_accounts();use high_school_management;
-delimiter $$
+
+-- [procedure]: get_total_accounts(username, type)
+-- [example]: call get_total_accounts('admin', 'admin');
+drop procedure if exists get_total_accounts $$
+create procedure get_total_accounts (
+    _username varchar(50),
+    _type varchar(50)
+)
+begin 
+    select count(*)
+    from accounts
+    where (_username is null or username like concat('%', _username, '%')) 
+        and (_type is null or type like concat('%', _type, '%'));
+end $$
