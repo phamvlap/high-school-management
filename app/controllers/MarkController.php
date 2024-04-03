@@ -68,6 +68,7 @@ class MarkController
 
 			$downloadData = [];
 			foreach ($marks as $mark) {
+				$avg = ($mark['oral_score'] + $mark['_15_minutes_score'] + 2 * $mark['_1_period_score'] + 3 * $mark['semester_score']) / 7;
 				$downloadData[] = [
 					'student_id' => $mark['student_id'],
 					'full_name' => $mark['full_name'],
@@ -78,7 +79,7 @@ class MarkController
 					'_15_minutes_score' => $mark['_15_minutes_score'],
 					'_1_period_score' => $mark['_1_period_score'],
 					'semester_score' => $mark['semester_score'],
-					'avr_score' => $mark['avr_score'] ?? '--',
+					'average_score' => number_format($avg, 2, '.', ''),
 					'semester' => $mark['semester'],
 					'academic_year' => $mark['academic_year'],
 				];

@@ -17,8 +17,9 @@ require_once __DIR__ . '/../partials/header.php';
                     <div class="mb-3">
                         <label for="student_id" class="form-label fw-bold">Mã học sinh</label>
                         <input type="username" class="form-control" id="student_id" name="student_id" required>
+                        <input type="hidden" name="parent_phone_number" value="<?= $_SESSION['parent_phone_number'] ?>">
                     </div>
-                    
+
                     <div class="text-center">
                         <button type="submit" class="btn btn-info">Tra cứu</button>
                     </div>
@@ -27,8 +28,8 @@ require_once __DIR__ . '/../partials/header.php';
         </div>
     </div>
     <div class="d-flex flex-column justify-content-center align-items-center mt-4">
-        <?php if(isset($_SESSION['markTable'])): ?>
-            <?php foreach($_SESSION['markTable'] as $studentInfo): ?>
+        <?php if (isset($_SESSION['markTable'])) : ?>
+            <?php foreach ($_SESSION['markTable'] as $studentInfo) : ?>
                 <div class="mark-table p-2 mb-2">
                     <div class="row p-2">
                         <h4 class="text-center">Bảng điểm học sinh</h4>
@@ -52,7 +53,7 @@ require_once __DIR__ . '/../partials/header.php';
                                             </span>
                                         </span>
                                     </div>
-                                    
+
                                     <div>
                                         <span class="row">
                                             <span class="col-7">
@@ -60,7 +61,7 @@ require_once __DIR__ . '/../partials/header.php';
                                                 <span><?= Helper::htmlEscape($studentInfo['info']['address'] ?? '') ?></span>
                                             </span>
                                             <span class="col-5">
-                                            <span class="fw-bold">Niên khóa:</span>
+                                                <span class="fw-bold">Niên khóa:</span>
                                                 <span><?= Helper::htmlEscape($studentInfo['class']['academic_year'] ?? '') ?></span>
                                             </span>
                                         </span>
@@ -90,7 +91,7 @@ require_once __DIR__ . '/../partials/header.php';
                     </div>
 
                     <div class="mt-2">
-                        <?php foreach($studentInfo['marks'] as $semester => $marks): ?>
+                        <?php foreach ($studentInfo['marks'] as $semester => $marks) : ?>
                             <h5 class="text-start p-2 border-bottom">ĐIỂM HỌC KỲ <?= Helper::htmlEscape($semester) ?></h5>
                             <table class="table table-striped table-hover mt-2">
                                 <thead>
@@ -105,7 +106,7 @@ require_once __DIR__ . '/../partials/header.php';
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach($marks as $mark): ?>
+                                    <?php foreach ($marks as $mark) : ?>
                                         <tr class="room">
                                             <td scope="row" class="room_id">
                                                 <?= Helper::htmlEscape($mark['subject_id'] ?? '') ?>
@@ -126,11 +127,11 @@ require_once __DIR__ . '/../partials/header.php';
                                                 <?= Helper::htmlEscape($mark['mark_semester_score'] ?? '') ?>
                                             </td>
                                             <td>
-                                                <?php 
-                                                 // Tính điểm trung bình của từng môn, kết quả làm tròn 2 chữ số thập phân và lưu kết quả vừa tính vào biến mảng $mark['average_score']
-                                                $avegare_score = $mark['mark_oral_score'] + $mark['mark__15_minutes_score'] + $mark['mark__1_period_score']*2 + $mark['mark_semester_score']*3;
-                                                echo round($avegare_score/7,2);
-                                                $average_scores[] = round($avegare_score/7,2);
+                                                <?php
+                                                // Tính điểm trung bình của từng môn, kết quả làm tròn 2 chữ số thập phân và lưu kết quả vừa tính vào biến mảng $mark['average_score']
+                                                $avegare_score = $mark['mark_oral_score'] + $mark['mark__15_minutes_score'] + $mark['mark__1_period_score'] * 2 + $mark['mark_semester_score'] * 3;
+                                                echo round($avegare_score / 7, 2);
+                                                $average_scores[] = round($avegare_score / 7, 2);
                                                 ?>
                                             </td>
                                         </tr>
@@ -140,9 +141,9 @@ require_once __DIR__ . '/../partials/header.php';
                                         <td colspan="5" class="text-left ml-3 col-offset-3"><b>Điểm trung bình học kỳ:</b></td>
                                         <td class="fw-bold">
                                             <?php
-                                                $total_average = array_sum($average_scores) / count($average_scores);
-                                                echo round($total_average, 2);
-                                                $total_averages[] = $total_average;
+                                            $total_average = array_sum($average_scores) / count($average_scores);
+                                            echo round($total_average, 2);
+                                            $total_averages[] = $total_average;
                                             ?>
                                         </td>
                                     </tr>
@@ -151,8 +152,8 @@ require_once __DIR__ . '/../partials/header.php';
                                         <td colspan="5" class="text-left ml-3 col-offset-3"><b>Điểm trung bình cả năm:</b></td>
                                         <td class="fw-bold">
                                             <?php
-                                                $year_average = array_sum($total_averages) / count($total_averages);
-                                                echo round($year_average, 2);
+                                            $year_average = array_sum($total_averages) / count($total_averages);
+                                            echo round($year_average, 2);
                                             ?>
                                         </td>
                                     </tr>
@@ -160,10 +161,10 @@ require_once __DIR__ . '/../partials/header.php';
                             </table>
                         <?php endforeach ?>
 
-                        
+
                     </div>
 
-                    
+
                 </div>
             <?php endforeach ?>
         <?php endif ?>

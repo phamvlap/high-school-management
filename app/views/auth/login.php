@@ -26,21 +26,6 @@ require_once __DIR__ . '/../partials/header.php';
                         <?= Helper::getFormErrorFromSession('password') ?>
                     </p>
                 </div>
-                <div class="mb-3">
-                    <label for="captcha" class="form-label fw-bold">Mã xác nhận</label>
-                    <div class="row align-items-center">
-                        <div class="col-4">
-                            <img src="<?= $captcha ?>" alt="captcha" class="img-fluid">
-                            <input type="text" value="<?= $_SESSION['captcha'] ?>" hidden>
-                        </div>
-                        <div class="col-8">
-                            <input type="text" class="form-control" id="captcha" name="captcha" required>
-                        </div>
-                    </div>
-                    <p class=" text-danger text-end">
-                        <?= Helper::getFormErrorFromSession('captcha') ?>
-                    </p>
-                </div>
                 <div class="text-end">
                     <a href="/register" class="d-flex-inline me-4">
                         Đăng ký tài khoản

@@ -34,7 +34,12 @@ class StatisticsController
                 ]
             );
         } catch (\Exception $e) {
-            echo $e->getMessage();
+            Helper::renderPage('/statistics/teachers.php', [
+                'totalTeachers' => 0,
+                'totalHomeroomTeachers' => 0,
+                'status' => 'danger',
+                'message' => 'Lấy dữ liệu thất bại'
+            ]);
         }
     }
 
@@ -56,7 +61,11 @@ class StatisticsController
                 ]
             );
         } catch (\Exception $e) {
-            echo $e->getMessage();
+            Helper::renderPage('/statistics/students.php', [
+                'totalStudents' => 0,
+                'status' => 'danger',
+                'message' => 'Lấy dữ liệu thất bại'
+            ]);
         }
     }
 
@@ -125,7 +134,12 @@ class StatisticsController
                 'subjects' => $marksBySubject['subjects'],
             ]);
         } catch (\Exception $e) {
-            echo $e->getMessage();
+            Helper::renderPage('/statistics/marks.php', [
+                'marks' => [],
+                'subjects' => [],
+                'status' => 'danger',
+                'message' => 'Lấy dữ liệu thất bại'
+            ]);
         }
     }
 

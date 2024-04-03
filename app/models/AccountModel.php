@@ -46,7 +46,7 @@ class AccountModel
 		return $statement->fetchAll(PDO::FETCH_ASSOC);
 	}
 
-	public function getByUsername(string $username): array
+	public function getByUsername(string $username): array|bool
 	{
 		$preparedStmt = 'call get_account_by_username(:username)';
 		$statement = $this->pdo->prepare($preparedStmt);

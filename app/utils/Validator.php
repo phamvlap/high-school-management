@@ -43,7 +43,7 @@ class Validator
 		if (!isset($value)) {
 			return false;
 		}
-		return preg_match('/^(?=.*?[a-zA-Z])(?=.*?[0-9]).{8,}$/', $value);
+		return strlen($value) >= 6;
 	}
 	// validate string
 	static function isString($value)

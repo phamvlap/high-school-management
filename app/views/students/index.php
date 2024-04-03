@@ -81,8 +81,8 @@ require __DIR__ . '/../partials/nav.php';
                         <?php $is_order_by_name = $_GET['is_order_by_name'] ?? 'none'; ?>
                         <select class="form-select" id="is_order_by_name" name="is_order_by_name">
                             <option value="none" <?= ($is_order_by_name === 'none') ? 'selected' : '' ?>>-- Chọn --</option>
-                            <option value="1" <?= ($is_order_by_name === '1') ? 'selected' : '' ?>>Theo tên</option>
-                            <option value="0" <?= ($is_order_by_name === '0') ? 'selected' : '' ?>>Tên mã</option>
+                            <option value="1" <?= ($is_order_by_name === '1') ? 'selected' : '' ?>>Tên(A-Z)</option>
+                            <option value="0" <?= ($is_order_by_name === '0') ? 'selected' : '' ?>>Tên(Z-A)</option>
                         </select>
                     </div>
                     <div class="col-2">

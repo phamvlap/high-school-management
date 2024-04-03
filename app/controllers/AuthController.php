@@ -3,7 +3,6 @@
 namespace App\controllers;
 
 use App\utils\{Helper, Paginator, Validator};
-use Gregwar\Captcha\CaptchaBuilder;
 use App\models\{AccountModel, StudentModel};
 use PDOException;
 
@@ -53,7 +52,7 @@ class AuthController
 				$errors['confirm_password'] = 'Mật khẩu không khớp';
 			}
 
-			if($errors) {
+			if ($errors) {
 				Helper::redirectTo(
 					'/register',
 					[
@@ -66,7 +65,7 @@ class AuthController
 			$studentModel = new StudentModel();
 			$student = $studentModel->getByPhoneNumber($phoneNumber);
 
-			if($student) {
+			if ($student) {
 				$accountModel = new AccountModel();
 				$accountModel->store([
 					'username' => $student['parent_phone_number'],
@@ -90,8 +89,7 @@ class AuthController
 					'message' => 'Số điện thoại không tồn tại'
 				]
 			);
-		}
-		catch(PDOException $e){
+		} catch (PDOException $e) {
 			Helper::redirectTo(
 				'/register',
 				[
@@ -100,19 +98,12 @@ class AuthController
 				]
 			);
 		}
-	
 	}
 	public function createLogin()
 	{
 		try {
-			// Generate captcha
-			$builder = new CaptchaBuilder;
-			$builder->build();
-			Helper::setIntoSession('captcha', $builder->getPhrase());
 
-			Helper::renderPage('/auth/login.php', [
-				'captcha' => $builder->inline(),
-			]);
+			Helper::renderPage('/auth/login.php', []);
 		} catch (PDOException $e) {
 			Helper::redirectTo(
 				'/login',
@@ -126,23 +117,6 @@ class AuthController
 	public function login()
 	{
 		try {
-			// Validate captcha
-			$captcha = $_POST['captcha'];
-			$phrase = Helper::getFromSession('captcha');
-			/*if ($captcha !== $phrase) {
-				Helper::redirectTo(
-					'/login',
-					[
-						'status' => 'danger',
-						'message' => 'Mã xác nhận không đúng',
-						'form' => ['username' => $_POST['username']],
-						'errors' => ['captcha' => 'Mã xác nhận không đúng'],
-						'captcha' => $captcha,
-						'phrase' => $phrase
-					]
-				);
-				return;
-			}*/
 
 			$username = $_POST['username'];
 			$password = $_POST['password'];
@@ -161,6 +135,8 @@ class AuthController
 			$accountModel = new AccountModel();
 			$account = $accountModel->getByUsername($username);
 
+			echo $account;
+
 			if (!$account || !($password == $account['password'])) {
 				// if ($account && .password_verify($password, $account['password'])) {
 				Helper::redirectTo(
@@ -178,9 +154,9 @@ class AuthController
 				'username' => $account['username'],
 				'type' => $account['type']
 			]);
-			
+
 			$url = '/';
-			if($account['type'] === 'parent'){
+			if ($account['type'] === 'parent') {
 				$url = '/parents';
 			}
 			Helper::redirectTo($url, [
