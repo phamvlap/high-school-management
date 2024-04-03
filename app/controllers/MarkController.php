@@ -50,7 +50,7 @@ class MarkController
 	public function index()
 	{
 		try {
-			$MarkModel = new Markmodel();
+			$markModel = new MarkModel();
 
 			$limit = (isset($_GET['limit']) && $_GET['limit'] !== 'none') ? (int)$_GET['limit'] : MAX_RECORDS_PER_PAGE;
 			$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -60,11 +60,11 @@ class MarkController
 				'semester' => (!empty($_GET['semester']) && $_GET['semester'] !== 'none') ? (int)$_GET['semester'] : null,
 			];
 
-			$totalRecords = $MarkModel->getCount($filter);
+			$totalRecords = $markModel->getCount($filter);
 
 			$paginator = new Paginator($limit, $totalRecords, $page);
 
-			$marks = $MarkModel->getByFilter($filter, $limit, ($page - 1) * $limit);
+			$marks = $markModel->getByFilter($filter, $limit, ($page - 1) * $limit);
 
 			$downloadData = [];
 			foreach ($marks as $mark) {
@@ -103,7 +103,7 @@ class MarkController
 				'total' => $totalRecords
 			]);
 		} catch (PDOException $e) {
-			Helper::redirectTo('/marks', [
+			Helper::renderPage('/marks/index.php', [
 				'status' => 'danger',
 				'message' => 'Lấy dữ liệu môn học thất bại'
 			]);
@@ -144,7 +144,6 @@ class MarkController
 			$data['student_id'] = (int)$_POST['student_id'] ?? '';
 			$data['subject_id'] = (int)$_POST['subject_id'] ?? '';
 			$data['semester'] = (int)$_POST['semester'] ?? '';
-			var_dump($data);
 			$markModel->delete($data['student_id'], $data['subject_id'], $data['semester']);
 			Helper::redirectTo('/marks', ['status' => 'success', 'message' => 'Xóa điểm thành công']);
 		} catch (PDOException $e) {

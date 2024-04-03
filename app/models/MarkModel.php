@@ -15,16 +15,6 @@ class MarkModel
     {
         $this->pdo = PDOFactory::connect();
     }
-    public function getAll(): array
-    {
-        $pdo = PDOFactory::connect();
-        $preparedStmt = "call get_all_marks(null,null,null,:limit,:offset)";
-        $statement = $pdo->prepare($preparedStmt);
-        $statement->bindParam(':limit', $limit, PDO::PARAM_INT);
-        $statement->bindParam(':offset', $offset, PDO::PARAM_INT);
-        $statement->execute();
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
-    }
     public function store(array $data): void
     {
         $pdo = PDOFactory::connect();
@@ -43,9 +33,9 @@ class MarkModel
     {
         $preparedStmt = 'call get_all_marks(:student_id, :subject_id, :semester, :limit, :offset)';
         $statement = $this->pdo->prepare($preparedStmt);
-        $statement->bindParam(':student_id', $filter['student_id'], PDO::PARAM_INT);
-        $statement->bindParam(':subject_id', $filter['subject_id'], PDO::PARAM_INT);
-        $statement->bindParam(':semester', $filter['semester'], PDO::PARAM_INT);
+        $statement->bindParam(':student_id', $filter['student_id']);
+        $statement->bindParam(':subject_id', $filter['subject_id']);
+        $statement->bindParam(':semester', $filter['semester']);
         $statement->bindParam(':limit', $limit, PDO::PARAM_INT);
         $statement->bindParam(':offset', $offset, PDO::PARAM_INT);
         $statement->execute();
@@ -62,11 +52,11 @@ class MarkModel
     }
     public function getCount($filter): int
     {
-        $preparedStmt = 'select count_all_marks(:student_id, :subject_id, :semester)';
+        $preparedStmt = 'select get_total_marks(:student_id, :subject_id, :semester)';
         $statement = $this->pdo->prepare($preparedStmt);
-        $statement->bindParam(':student_id', $filter['student_id'], PDO::PARAM_INT);
-        $statement->bindParam(':subject_id', $filter['subject_id'], PDO::PARAM_INT);
-        $statement->bindParam(':semester', $filter['semester'], PDO::PARAM_INT);
+        $statement->bindParam(':student_id', $filter['student_id']);
+        $statement->bindParam(':subject_id', $filter['subject_id']);
+        $statement->bindParam(':semester', $filter['semester']);
         $statement->execute();
         return $statement->fetchColumn();
     }

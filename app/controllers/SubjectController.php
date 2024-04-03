@@ -64,7 +64,7 @@ class SubjectController
 				'total' => $totalRecords
 			]);
 		} catch (PDOException $e) {
-			Helper::redirectTo('/subjects', [
+			Helper::renderPage('/subjects/index.php', [
 				'status' => 'danger',
 				'message' => 'Lấy dữ liệu môn học thất bại'
 			]);

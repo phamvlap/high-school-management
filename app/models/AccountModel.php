@@ -48,7 +48,7 @@ class AccountModel
 
 	public function getByUsername(string $username): array
 	{
-		$preparedStmt = 'call get_account_by_username(:username';
+		$preparedStmt = 'call get_account_by_username(:username)';
 		$statement = $this->pdo->prepare($preparedStmt);
 		$statement->bindParam(':username', $username, PDO::PARAM_STR);
 		$statement->execute();

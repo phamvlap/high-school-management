@@ -93,24 +93,26 @@ class ClassController
 			}
 
 			$classModel->store($data);
+			
+			$isUpdate = true;
 
 			if ($data['class_id'] == -1) {
 				$data['class_id'] = $classModel->getClassId();
+				$isUpdate = false;
 			}
 
 			$homeRoomTeacherModel->store($data);
 
-			// var_dump($data);
 			Helper::redirectTo('/classes', [
 				'status' => 'success',
-				'message' => ($data['class_id'] == -1 ? 'Thêm' : 'Cập nhật') . ' lớp học thành công'
+				'message' => (!$isUpdate ? 'Thêm' : 'Cập nhật') . ' lớp học thành công'
 			]);
 		} catch (PDOException $e) {
 			Helper::redirectTo('/classes', [
 				'form' => $data,
 				'errors' => $errors,
 				'status' => 'danger',
-				'message' => ($data['class_id'] == -1 ? 'Thêm' : 'Cập nhật') . ' lớp học thất bại'
+				'message' => (!$isUpdate ? 'Thêm' : 'Cập nhật') . ' lớp học thất bại'
 			]);
 		}
 	}

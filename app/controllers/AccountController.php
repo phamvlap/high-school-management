@@ -54,7 +54,8 @@ class AccountController {
 					'prevPage' => $paginator->getPrevPage(),
 					'nextPage' => $paginator->getNextPage(),
 					'pages' => $paginator->getPages()
-				]
+				],
+				'filter' => $filter,
 			]);
 		} catch (PDOException $e) {
 			Helper::renderPage('/users/index.php', [

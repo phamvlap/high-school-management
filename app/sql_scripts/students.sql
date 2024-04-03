@@ -1,22 +1,9 @@
-use high_school_management;
-
-drop table if exists students;
-create table if not exists students (
-    student_id int primary key auto_increment,
-    full_name varchar(255) not null,
-    date_of_birth date not null,
-    address varchar(255) not null,
-    parent_phone_number char(10) not null,
-    class_id int not null,
-    foreign key (class_id) references classes(class_id) on delete cascade
-);
-select * from students;
-
--- [procedure]: add_student(full_name, date_of_birth, address, parent_phone_number, class_id)
--- [author]: camtu
 delimiter $$
+
+-- [procedure]: add_student(_student_id, _full_name, _date_of_birth, _address, _parent_phone_number, _class_id)
+-- [example]: call add_student(1, 'Nguyễn Thị Lan', '2007-05-15', '123 ABC Street, XYZ City', '0123456789', 1);
 drop procedure if exists add_student $$
-create procedure add_student	(
+create procedure add_student (
 	in _student_id int,
 	in _full_name varchar(255),
 	in _date_of_birth date,
@@ -40,10 +27,8 @@ begin
 	end if;
 end $$
 
-call add_student(1, 'Nguyễn Thị Lan', '2007-05-15', '123 ABC Street, XYZ City', '0123456789', 1);
-
 -- [procedure]: delete_student(student_id)
--- [author]: camtu
+-- [example]: call delete_student(1);
 delimiter $$
 drop procedure if exists delete_student $$
 create procedure delete_student	(
@@ -54,10 +39,8 @@ begin
 	where student_id = _student_id;
 end $$
 
--- call delete_student(82);
-
 -- [procedure]: get_student_by_id(student_id)
--- [author]: camtu
+-- [example]: call get_student_by_id(1);
 drop procedure if exists get_student_by_id $$
 create procedure get_student_by_id (
 	in _student_id int
@@ -68,15 +51,12 @@ begin
 	where student_id = _student_id;
 end $$
 
--- call get_student_by_id(81);
-
 -- [procedure]: get_all_students(_address, _class_id, _academic_year)
--- [author]: camtu
-delimiter $$
+-- [example]: call get_all_students('123 ABC Street, XYZ City', 1, '2023-2024', 0, 10, 0);
 drop procedure if exists get_all_students $$
 create procedure get_all_students   (
 	in _full_name varchar(50),
-	in  _address varchar(255),
+	in _address varchar(255),
 	in _class_id int,
 	in _academic_year char(9),
 	in _is_order_by_name tinyint,
@@ -84,11 +64,6 @@ create procedure get_all_students   (
     in _offset int
 )
 begin
-	if _is_order_by_name is null
-    then
-		set _is_order_by_name = 0;
-	end if;
-        
     select * 
 	from students 
 		join classes on students.class_id = classes.class_id
@@ -97,17 +72,15 @@ begin
           and (_class_id is null or students.class_id = _class_id)
           and (_academic_year is null or academic_year like concat('%', _academic_year, '%'))
 	order by 
-		case when _is_order_by_name = 1 then substring_index(full_name, ' ', -1) end asc,
-		case when _is_order_by_name = 0 then student_id end asc
+		case when _is_order_by_name = 1 then reverse_string(full_name) end COLLATE utf8mb4_unicode_ci asc,
+		case when _is_order_by_name = 0 then reverse_string(full_name) end COLLATE utf8mb4_unicode_ci desc,
+		student_id asc
 	limit _limit
     offset _offset;
 end $$
 
-call get_all_students(null,null,null,null,null,10,0);
-
--- [procedure]: delete_all_students()
--- [author]: camtu
-delimiter $$
+-- [function]: get_total_students(_full_name, _address, _class_id, _academic_year)
+-- [example]: select get_total_students(null,1,null);
 drop function if exists get_total_students $$
 create function get_total_students(
 	_full_name varchar(50),
@@ -115,7 +88,9 @@ create function get_total_students(
     _class_id int,
     _academic_year char(9)
 )
-returns int
+	returns int
+	reads sql data
+	deterministic
 begin
 	declare total_students int;
     
@@ -123,12 +98,8 @@ begin
     from students
 		join classes on students.class_id = classes.class_id
      where (_full_name is null or full_name like concat('%', _full_name, '%'))
-          and (_address is null or address like concat('%', _address, '%'))
-          and (_class_id is null or students.class_id = _class_id)
-          and (_academic_year is null or academic_year like concat('%', _academic_year, '%'));
+        and (_address is null or address like concat('%', _address, '%'))
+        and (_class_id is null or students.class_id = _class_id)
+        and (_academic_year is null or academic_year like concat('%', _academic_year, '%'));
 	return total_students;
 end $$
-
--- select get_total_students(null,1,null);
-
-select * from students;
