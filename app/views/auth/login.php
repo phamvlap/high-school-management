@@ -42,6 +42,9 @@ require_once __DIR__ . '/../partials/header.php';
                     </p>
                 </div>
                 <div class="text-end">
+                    <a href="/register" class="d-flex-inline me-4">
+                        Đăng ký tài khoản
+                    </a>
                     <button type="submit" class="btn btn-info">Đăng nhập</button>
                 </div>
             </form>

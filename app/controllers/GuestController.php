@@ -87,12 +87,12 @@ class GuestController {
             ];
             $students[] = $student;
 
-			Helper::redirectTo('/guest', [
+			Helper::redirectTo('/parents', [
 				'markTable' => $students
 			]);
 		}
 		catch(PDOException $e) {
-			Helper::redirectTo('/guest', [
+			Helper::redirectTo('/parents', [
 				'status' => 'danger',
 				'message' => 'Lấy dữ liệu bảng điẻm học sinh thất bại.'
 			]);

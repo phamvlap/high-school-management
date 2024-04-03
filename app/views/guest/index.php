@@ -13,7 +13,7 @@ require_once __DIR__ . '/../partials/header.php';
                 <h4 class="text-center text-primary">TRA CỨU KẾT QUẢ HỌC TẬP</h4>
             </div>
             <div class="card-body">
-                <form action="/guest/submit" method="POST">
+                <form action="/parents/submit" method="POST">
                     <div class="mb-3">
                         <label for="student_id" class="form-label fw-bold">Mã học sinh</label>
                         <input type="username" class="form-control" id="student_id" name="student_id" required>

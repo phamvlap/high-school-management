@@ -4,7 +4,7 @@ namespace App\controllers;
 
 use App\utils\{Helper, Paginator, Validator};
 use Gregwar\Captcha\CaptchaBuilder;
-use App\models\AccountModel;
+use App\models\{AccountModel, StudentModel};
 use PDOException;
 
 class AuthController
@@ -21,11 +21,86 @@ class AuthController
 
 	public function createRegister()
 	{
-		echo 'auth create register';
+		Helper::renderPage('/auth/register.php');
 	}
+
 	public function register()
 	{
-		echo 'auth register';
+		try {
+			$phoneNumber = $_POST['phone_number'];
+			$password = $_POST['password'];
+			$confirmPassword = $_POST['confirm_password'];
+
+			$errors = Validator::validate([
+				'phone_number' => $phoneNumber,
+				'password' => $password,
+				'confirm_password' => $confirmPassword
+			], [
+				'phone_number' => [
+					'isRequired' => 'Vui lòng nhập số điện thoại',
+					'isPhoneNumber' => 'Số điện thoại không hợp lệ'
+				],
+				'password' => [
+					'isRequired' => 'Vui lòng nhập mật khẩu',
+					'isPassword' => 'Mật khẩu phải chứa ít nhất 8 ký tự, bao gồm chữ cái và số'
+				],
+				'confirm_password' => [
+					'isRequired' => 'Vui lòng nhập lại mật khẩu'
+				],
+			]);
+
+			if ($password !== $confirmPassword) {
+				$errors['confirm_password'] = 'Mật khẩu không khớp';
+			}
+
+			if($errors) {
+				Helper::redirectTo(
+					'/register',
+					[
+						'form' => ['phone_number' => $phoneNumber],
+						'errors' => $errors
+					]
+				);
+			}
+
+			$studentModel = new StudentModel();
+			$student = $studentModel->getByPhoneNumber($phoneNumber);
+
+			if($student) {
+				$accountModel = new AccountModel();
+				$accountModel->store([
+					'username' => $student['parent_phone_number'],
+					'password' => $password,
+					'type' => 'parent',
+				]);
+
+				Helper::redirectTo(
+					'/login',
+					[
+						'status' => 'success',
+						'message' => 'Tạo tài khoản thành công',
+						'form' => ['username' => $phoneNumber]
+					]
+				);
+			}
+			Helper::redirectTo(
+				'/register',
+				[
+					'status' => 'danger',
+					'message' => 'Số điện thoại không tồn tại'
+				]
+			);
+		}
+		catch(PDOException $e){
+			Helper::redirectTo(
+				'/register',
+				[
+					'status' => 'danger',
+					'message' => 'Không thể tạo tài khoản.'
+				]
+			);
+		}
+	
 	}
 	public function createLogin()
 	{
@@ -87,7 +162,7 @@ class AuthController
 			$account = $accountModel->getByUsername($username);
 
 			if (!$account || !($password == $account['password'])) {
-				// if ($account && password_verify($password, $account['password'])) {
+				// if ($account && .password_verify($password, $account['password'])) {
 				Helper::redirectTo(
 					'/login',
 					[
@@ -103,7 +178,12 @@ class AuthController
 				'username' => $account['username'],
 				'type' => $account['type']
 			]);
-			Helper::redirectTo('/', [
+			
+			$url = '/';
+			if($account['type'] === 'parent'){
+				$url = '/parents';
+			}
+			Helper::redirectTo($url, [
 				'status' => 'success',
 				'message' => 'Đăng nhập thành công',
 			]);

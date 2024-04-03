@@ -11,10 +11,18 @@ $router->setNamespace('\App\controllers');
 // middleware // TODO: (dời các route vào một cấp để sử dụng middleware)
 $router->before('GET|POST', '/.*', function () {
     $prefixUrl = Helper::getPrefixUrl();
-    if(!Helper::isLogged() && $prefixUrl !== 'login') {
+    if(!Helper::isLogged() && $prefixUrl !== 'login' && $prefixUrl !== 'register') {
         Helper::redirectTo('/login');
     }
-    
+
+    // if(Helper::isLogged() && $prefixUrl === 'logout') {
+    //     Helper::redirectTo('/logout');
+    // }
+
+    // if(Helper::isLogged() && $_SESSION['auth']['type'] === 'parent' && $prefixUrl !== 'parents'){
+    //     Helper::redirectTo('/parents');
+    // }
+
     $permittedRoutes = ['', 'home', 'classes', 'marks', 'rooms', 'roomclass', 'statistics', 'students', 'subjects', 'teachers'];
 
     if(in_array($prefixUrl, $permittedRoutes) && !Helper::isPermitted(['admin', 'teacher'])) {
@@ -24,7 +32,7 @@ $router->before('GET|POST', '/.*', function () {
         Helper::redirectTo('/notpermission');
     }
     else if($prefixUrl === 'parents' && !Helper::isPermitted(['parent'])) {
-        Helper::redirectTo('/notpermission');
+        Helper::redirectTo('/login');
     }
 });
 // guest
