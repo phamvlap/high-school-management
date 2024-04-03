@@ -36,7 +36,7 @@ class AuthController
 			Helper::setIntoSession('captcha', $builder->getPhrase());
 
 			Helper::renderPage('/auth/login.php', [
-				'captcha' => $builder->inline()
+				'captcha' => $builder->inline(),
 			]);
 		} catch (PDOException $e) {
 			Helper::redirectTo(
@@ -54,18 +54,20 @@ class AuthController
 			// Validate captcha
 			$captcha = $_POST['captcha'];
 			$phrase = Helper::getFromSession('captcha');
-			if ($captcha !== $phrase) {
+			/*if ($captcha !== $phrase) {
 				Helper::redirectTo(
 					'/login',
 					[
 						'status' => 'danger',
 						'message' => 'Mã xác nhận không đúng',
 						'form' => ['username' => $_POST['username']],
-						'errors' => ['captcha' => 'Mã xác nhận không đúng']
+						'errors' => ['captcha' => 'Mã xác nhận không đúng'],
+						'captcha' => $captcha,
+						'phrase' => $phrase
 					]
 				);
 				return;
-			}
+			}*/
 
 			$username = $_POST['username'];
 			$password = $_POST['password'];
@@ -103,7 +105,7 @@ class AuthController
 			]);
 			Helper::redirectTo('/', [
 				'status' => 'success',
-				'message' => 'Đăng nhập thành công'
+				'message' => 'Đăng nhập thành công',
 			]);
 		} catch (PDOException $e) {
 			Helper::redirectTo(

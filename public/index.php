@@ -2,15 +2,29 @@
 
 require __DIR__ . '/../app/bootstrap.php';
 
+use App\utils\Helper;
+
 $router = new \Bramus\Router\Router();
 
 $router->setNamespace('\App\controllers');
 
 // middleware // TODO: (dời các route vào một cấp để sử dụng middleware)
-$router->before('GET|POST', '/admin/.*', function () {
-    if (!isset($_SESSION['auth'])) {
-        \App\utils\Helper::redirectTo('/login');
-        return;
+$router->before('GET|POST', '/.*', function () {
+    $prefixUrl = Helper::getPrefixUrl();
+    if(!Helper::isLogged() && $prefixUrl !== 'login') {
+        Helper::redirectTo('/login');
+    }
+    
+    $permittedRoutes = ['', 'home', 'classes', 'marks', 'rooms', 'roomclass', 'statistics', 'students', 'subjects', 'teachers'];
+
+    if(in_array($prefixUrl, $permittedRoutes) && !Helper::isPermitted(['admin', 'teacher'])) {
+        Helper::redirectTo('/notpermission');
+    }
+    else if($prefixUrl === 'users' && !Helper::isPermitted(['admin'])) {
+        Helper::redirectTo('/notpermission');
+    }
+    else if($prefixUrl === 'parents' && !Helper::isPermitted(['parent'])) {
+        Helper::redirectTo('/notpermission');
     }
 });
 // guest
