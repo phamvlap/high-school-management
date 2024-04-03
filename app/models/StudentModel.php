@@ -70,4 +70,12 @@ class StudentModel
 		$statement->bindParam(':student_id', $student_id, PDO::PARAM_INT);
 		$statement->execute();
 	}
+
+	public function getByPhoneNumber(string $phoneNumber) {
+		$preparedStmt = 'select * from students where parent_phone_number = :phone_number limit 1';
+		$statement = $this->pdo->prepare($preparedStmt);
+		$statement->bindParam(':phone_number', $phoneNumber, PDO::PARAM_STR);
+		$statement->execute();
+		return $statement->fetch(PDO::FETCH_ASSOC);
+	}
 }

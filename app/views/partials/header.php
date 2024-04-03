@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+<?php
+use App\utils\Helper;
+?>
 
 <head>
     <meta charset="UTF-8">
@@ -18,8 +21,18 @@
             </div>
 
             <div class="header-homepage">
-                <a href="/">
-                    <i class="fa fa-home"></i>
-                </a>
+                <?php if(Helper::isLogged() && $_SESSION['auth']['type'] === 'parent'): ?>
+                    <form action="/logout" method="POST" id="logout-form">
+                        <button type="submit" class="logout-btn">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                            <span>Đăng xuất</span>
+                        </button>
+                    </form>
+                <?php else: ?>
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                    </a>
+                <?php endif; ?>
+
             </div>
         </div>
