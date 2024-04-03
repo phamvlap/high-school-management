@@ -45,7 +45,7 @@ require_once __DIR__ . '/../partials/nav.php';
 
             <div class="d-flex mt-5">
                 <a href="/excel" class="ms-auto px-3 btn btn-sm btn-outline-success">
-                    Xuất ra excel
+                    Xuất ra file excel
                 </a>
             </div>
         </div>

@@ -8,9 +8,6 @@ require __DIR__ . '/../partials/nav.php';
 ?>
 
 <div id="main" class="">
-    <?php
-        var_dump($filter);
-    ?>
     <div class="row">
         <div class="col-3 border-end">
             <form action="/users/store" method="POST" id="user_form">
@@ -58,7 +55,7 @@ require __DIR__ . '/../partials/nav.php';
         <div class="col-9">
             <form action="/users">
                 <div class="row align-items-end">
-                    <div class="col-2">
+                    <div class="col-3">
                         <label for="type" class="form-label mb-0">Loại người dùng</label>
                         <select class="form-select" name="type">
                             <option value="" <?= (!empty($_GET['type']) && $_GET['type'] === null) ? 'selected' : '' ?>>Tất cả</option>
@@ -71,8 +68,8 @@ require __DIR__ . '/../partials/nav.php';
                         <input type="text" class="form-control" placeholder="Tìm theo tên tài khoản" name="username" value="<?= isset($_GET['username']) ? htmlspecialchars($_GET['username']) : '' ?>">
                     </div>
 
-                    <div class="col-1 offset-6">
-                        <button class="btn btn-outline-primary btn-sm" type="submit">
+                    <div class="col-1 offset-5">
+                        <button class="btn btn-outline-primary " type="submit">
                             <i class="fa fa-search"></i>
                         </button>
                     </div>

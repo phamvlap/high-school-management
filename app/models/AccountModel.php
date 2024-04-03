@@ -19,8 +19,8 @@ class AccountModel
 	{
 		$preparedStmt = 'select get_total_accounts(:username, :type)';
 		$statement = $this->pdo->prepare($preparedStmt);
-		$statement->bindParam(':username', $filter['username'], PDO::PARAM_STR);
-		$statement->bindParam(':type', $filter['type'], PDO::PARAM_STR);
+		$statement->bindParam(':username', $filter['username']);
+		$statement->bindParam(':type', $filter['type']);
 		$statement->execute();
 		return $statement->fetchColumn();
 	}

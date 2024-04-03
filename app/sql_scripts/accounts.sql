@@ -52,16 +52,23 @@ begin
     offset _offset;
 end $$
 
--- [procedure]: get_total_accounts(username, type)
+-- [function]: get_total_accounts(username, type)
 -- [example]: call get_total_accounts('admin', 'admin');
-drop procedure if exists get_total_accounts $$
-create procedure get_total_accounts (
+delimiter $$
+drop function if exists get_total_accounts $$
+create function get_total_accounts (
     _username varchar(50),
     _type varchar(50)
 )
+    returns int
+    reads sql data 
+    deterministic
 begin 
-    select count(*)
+    declare total int;
+    
+    select count(*) into total
     from accounts
     where (_username is null or username like concat('%', _username, '%')) 
         and (_type is null or type like concat('%', _type, '%'));
+    return total;
 end $$

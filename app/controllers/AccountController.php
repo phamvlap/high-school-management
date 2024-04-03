@@ -6,10 +6,12 @@ use PDOException;
 use App\models\AccountModel;
 use App\utils\{Helper, Validator, Paginator};
 
-class AccountController {
+class AccountController
+{
 	private $rules;
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->rules = [
 			'username' => [
 				'isRequired' => 'Tên tài khoản không được để trống',
@@ -29,23 +31,25 @@ class AccountController {
 		];
 	}
 
-	public function index() {
+	public function index()
+	{
 		try {
 			$accountModel = new AccountModel();
 			$limit = 10;
 			$page = 1;
 			$filter = [
-				'username' => isset($_GET['username']) ? $_GET['username'] : null,
-				'type' => isset($_GET['type']) ? $_GET['type'] : null
+				'username' => isset($_GET['username']) ? $_GET['username'] : '',
+				'type' => isset($_GET['type']) ? $_GET['type'] : ''
 			];
-			
+
 
 			$totalRecords = $accountModel->getCount($filter);
-			
+
 			$paginator = new Paginator($limit, $totalRecords, $page);
 
 			$users = $accountModel->getByFilter($filter, $limit, ($page - 1) * $limit);
-			
+
+
 			Helper::renderPage('/users/index.php', [
 				'users' => $users,
 				'pagination' => [
@@ -65,7 +69,8 @@ class AccountController {
 		}
 	}
 
-	public function store() {
+	public function store()
+	{
 		try {
 			$accountModel = new AccountModel();
 
@@ -78,21 +83,20 @@ class AccountController {
 
 			$errors = Validator::validate($data, $this->rules);
 
-			if($errors) {
+			if ($errors) {
 				throw new PDOException('Thông tin không hợp lệ');
 			}
 
 			$accountModel->store([
 				'username' => $data['username'],
 				'password' => $data['password'],
-                'type' => $data['type']
+				'type' => $data['type']
 			]);
 			Helper::redirectTo('/users', [
 				'status' => 'success',
 				'message' => 'Thêm tài khoản thành công.'
 			]);
-		}
-		catch(PDOException $e) {
+		} catch (PDOException $e) {
 			Helper::redirectTo('/users', [
 				'form' => $data,
 				'errors' => $errors,
@@ -102,7 +106,8 @@ class AccountController {
 		}
 	}
 
-	public function delete() {
+	public function delete()
+	{
 		try {
 			$accountModel = new AccountModel();
 			$accountModel->delete($_POST['username']);
@@ -110,8 +115,7 @@ class AccountController {
 				'status' => 'success',
 				'message' => 'Xóa tài khoản thành công'
 			]);
-		}
-		catch(PDOException $e) {
+		} catch (PDOException $e) {
 			Helper::redirectTo('/users', [
 				'status' => 'danger',
 				'message' => 'Xóa tài khoản thất bại'

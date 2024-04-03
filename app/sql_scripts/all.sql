@@ -101,6 +101,8 @@ BEGIN
 END $$
 delimiter $$
 
+delimiter $$
+
 -- [procedure]: add_account(username, password, type)
 -- [example]: call add_account('admin', 'admin', 'admin');
 drop procedure if exists add_account $$
@@ -138,7 +140,7 @@ end $$
 -- [procedure]: get_all_accounts(username, type, limit, offset)
 -- [example]: call get_all_accounts();use high_school_management;
 drop procedure if exists get_all_accounts $$
-create procedure get_all_accounts(
+create procedure get_all_accounts (
 	in _username varchar(50),
 	in _type varchar(50),
     in _limit int,
@@ -149,23 +151,30 @@ begin
 	from accounts
 	where (_username is null or username like concat('%', _username, '%')) 
 		and (_type is null or type like concat('%', _type, '%'))
-	limit _limit offset _offset;
+	limit _limit
+    offset _offset;
 end $$
 
--- [procedure]: get_total_accounts(username, type)
+-- [function]: get_total_accounts(username, type)
 -- [example]: call get_total_accounts('admin', 'admin');
-drop procedure if exists get_total_accounts $$
-create procedure get_total_accounts(
+delimiter $$
+drop function if exists get_total_accounts $$
+create function get_total_accounts (
     _username varchar(50),
     _type varchar(50)
 )
+    returns int
+    reads sql data 
+    deterministic
 begin 
-    select count(*)
+    declare total int;
+    
+    select count(*) into total
     from accounts
     where (_username is null or username like concat('%', _username, '%')) 
         and (_type is null or type like concat('%', _type, '%'));
+    return total;
 end $$
-delimiter $$
 
 -- [procedure]: add_homeroom_teacher(_teacher_id, _class_id)
 -- [example]: call add_homeroom_teacher(1, 1);
@@ -576,7 +585,8 @@ begin
     select * 
     from marks as m
         join students as s on m.student_id = s.student_id
-        right join subjects as sb on m.subject_id = sb.subject_id
+        join subjects as sb on m.subject_id = sb.subject_id
+        join classes as c on s.class_id = c.class_id
     where 
         (_student_id is null or s.student_id = _student_id)
         and (_subject_id is null or sb.subject_id = _subject_id)
@@ -602,7 +612,7 @@ begin
     from marks
         join students as s on marks.student_id = s.student_id
         join subjects as sb on marks.subject_id = sb.subject_id
-        join teaching as t on marks.subject_id = t.subject_id
+        join classes as c on s.class_id = c.class_id
     where 
         (_student_id is null or s.student_id = _student_id)
         and (_subject_id is null or sb.subject_id = _subject_id)
@@ -652,6 +662,7 @@ begin
         where s.parent_phone_number = _parent_phone_number;
     end if;
 end $$
+
 delimiter $$
 -- [procedure]: get_all_teachers(_full_name, _address, _is_order_by_name, _limit, _offset)
 -- [example]: call get_all_teachers(null, null, null, null, 1, 10, 0);
