@@ -93,7 +93,7 @@ class ClassController
 			}
 
 			$classModel->store($data);
-			
+
 			$isUpdate = true;
 
 			if ($data['class_id'] == -1) {
@@ -132,7 +132,7 @@ class ClassController
 		} catch (PDOException $e) {
 			Helper::redirectTo('/classes', [
 				'status' => 'danger',
-				'message' => 'Xóa lớp học thất bại ' . $e->getMessage()
+				'message' => 'Xóa lớp học thất bại '
 			]);
 		}
 	}

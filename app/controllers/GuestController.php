@@ -21,7 +21,7 @@ class GuestController
             $result = $guestModel->getMarkTableByStudentID($student_id);
 
             if (count($result) === 0) {
-                Helper::redirectTo('/guest', [
+                Helper::redirectTo('/parents', [
                     'status' => 'danger',
                     'message' => 'Lấy dữ liệu bảng điểm học sinh thất bại.'
                 ]);

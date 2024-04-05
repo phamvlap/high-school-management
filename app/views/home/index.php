@@ -54,6 +54,12 @@ $listItems = [
     ]
 ];
 
+if ($_SESSION['auth']['type'] === 'teacher') {
+    $listItems = array_filter($listItems, function ($link) {
+        return $link['link'] !== '/users';
+    });
+}
+
 ?>
 
 <div id="main" class="d-flex flex-column justify-content-center align-items-center">

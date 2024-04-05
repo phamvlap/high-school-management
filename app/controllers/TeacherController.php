@@ -22,7 +22,7 @@ class TeacherController
 			'date_of_birth' =>
 			[
 				'isRequired' => 'Ngày sinh không được để trống',
-				// 'isDate' => 'Ngày sinh không hợp lệ'
+				'isBeforeToday' => 'Ngày sinh không được sau ngày hiện tại',
 			],
 			'address' =>
 			[

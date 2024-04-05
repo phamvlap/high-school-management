@@ -57,6 +57,11 @@ $links = [
     ]
 ];
 
+if ($_SESSION['auth']['type'] === 'teacher') {
+    $links = array_filter($links, function ($link) {
+        return $link['url'] !== '/users';
+    });
+}
 
 ?>
 

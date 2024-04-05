@@ -28,7 +28,11 @@ require __DIR__ . '/../partials/nav.php';
                 </div>
                 <div class="mb-1">
                     <label for="type" class="form-label mb-0">Loại người dùng<span style="color: red;"> *</span></label>
-                    <input type="text" class="form-control" id="type" name="type" value="<?= Helper::getFormDataFromSession('type') ?>">
+                    <select class="form-select" name="type">
+                        <option value="admin" <?= Helper::getFormDataFromSession('type') === 'admin' ? 'selected' : '' ?>>admin</option>
+                        <option value="teacher" <?= Helper::getFormDataFromSession('type') === 'teacher' ? 'selected' : '' ?>>teacher</option>
+                        <option value="parent" <?= Helper::getFormDataFromSession('type') === 'parent' ? 'selected' : '' ?>>parent</option>
+                    </select>
                     <p class="text-danger text-end">
                         <?= Helper::getFormErrorFromSession('type') ?>
                     </p>

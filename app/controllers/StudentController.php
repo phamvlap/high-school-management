@@ -19,7 +19,8 @@ class StudentController
 				'maxLength:255' => 'Họ và tên không được quá 255 ký tự'
 			],
 			'date_of_birth' => [
-				'isRequired' => 'Ngày sinh không được để trống'
+				'isRequired' => 'Ngày sinh không được để trống',
+				'isBeforeToday' => 'Ngày sinh không được sau ngày hiện tại',
 			],
 			'address' => [
 				'isRequired' => 'Địa chỉ không được để trống',

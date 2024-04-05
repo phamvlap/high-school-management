@@ -62,11 +62,24 @@ class AuthController
 				);
 			}
 
+			$accountModel = new AccountModel();
+			$oldAccount = $accountModel->getByUsername($phoneNumber);
+
+			if ($oldAccount) {
+				Helper::redirectTo(
+					'/register',
+					[
+						'status' => 'danger',
+						'message' => 'Tài khoản đã tồn tại',
+						'form' => ['phone_number' => $phoneNumber]
+					]
+				);
+			}
+
 			$studentModel = new StudentModel();
 			$student = $studentModel->getByPhoneNumber($phoneNumber);
 
 			if ($student) {
-				$accountModel = new AccountModel();
 				$accountModel->store([
 					'username' => $student['parent_phone_number'],
 					'password' => $password,

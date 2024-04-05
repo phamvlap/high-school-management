@@ -86,6 +86,16 @@ class Validator
 		return $value >= 0 && $value <= 10;
 	}
 
+	static function isBeforeToday($value)
+	{
+		if (!isset($value)) {
+			return false;
+		}
+		$curentDate = new DateTime();
+		$date = new DateTime($value);
+		return $date < $curentDate;
+	}
+
 	static function validate(array $data, array $rules): array|bool
 	{
 		$errors = [];
@@ -125,6 +135,10 @@ class Validator
 					}
 				}
 				if ($r === 'isScore' && !self::isScore($data[$key])) {
+					$errors[$key] = $message;
+				}
+
+				if ($r === 'isBeforeToday' && !self::isBeforeToday($data[$key])) {
 					$errors[$key] = $message;
 				}
 			}
