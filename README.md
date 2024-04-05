@@ -15,7 +15,7 @@
 </VirtualHost>
 
 <VirtualHost *:80>  
-    DocumentRoot "<Link to yourz project directory>\high-school-management\public" 
+    DocumentRoot "<Link to your project directory>\high-school-management\public" 
     ServerName highschool.localhost
     # Set access permission 
     <Directory "<Link to your project directory>\high-school-management\public"> 
@@ -35,7 +35,7 @@
     - Cài đặt Composer
 - **Bật các extension trong php.ini**:
     - Bật extension `pdo_mysql` trong `php.ini` bằng cách xóa dấu `;` ở đầu dòng `;extension=pdo_mysql`
-    - Bật extension `gd` trong `php.ini` bằng cách xóa dấu `;` ở đầu dòng `extension=gd`
+    - Bật extension `gd` trong `php.ini` bằng cách xóa dấu `;` ở đầu dòng `;extension=gd`
     - Bật extension `zip` trong `php.ini` bằng cách xóa dấu `;` ở đầu dòng `;extension=zip`
 - **Chạy lệnh `composer install` trong thư mục gốc của project**
 
