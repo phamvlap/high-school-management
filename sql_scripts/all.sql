@@ -518,6 +518,32 @@ begin
 	limit 1;
 	return selected_class_id;
 end $$
+
+-- trigger for classes (before insert)
+drop trigger if exists before_insert_classes $$
+create trigger before_insert_classes
+before insert on classes
+for each row
+begin
+    declare _new_class_name varchar(10);
+    declare _new_academic_year char(9);
+
+    set _new_class_name = new.class_name;
+    set _new_academic_year = new.academic_year;
+
+    if exists (
+        select *
+        from classes
+        where class_name = _new_class_name
+            and academic_year = _new_academic_year
+    )
+    then
+        signal sqlstate '45000'
+            set message_text = '$Thông tin không hợp lệ';
+    end if;
+end $$
+
+
 delimiter $$
 -- [procedure]:	add_mark(_student_id, _subject_id, _semester, _oral_score, __15_minutes_score, __1_period_score, _semester_score)
 -- [example]: call add_mark(1, 2, 1, 3, 4, 5, 6);
@@ -858,6 +884,29 @@ begin
 	return total;
 end $$
 delimiter $$
+
+-- trigger for room_class (before insert)
+drop trigger if exists before_insert_room_class $$
+create trigger before_insert_room_class
+before insert on room_class
+for each row
+begin   
+    declare _new_academic_year char(9);
+
+    set _new_academic_year = (select academic_year from classes where class_id = new.class_id);
+
+    if exists (
+        select *
+        from room_class as rc join classes as c on rc.class_id = c.class_id
+        where room_id = new.room_id
+            and semester = new.semester
+            and academic_year = _new_academic_year
+    )
+    then
+        signal sqlstate '45000'
+            set message_text = '$Thông tin không hợp lệ';
+    end if;
+end $$
 
 -- [procedure]: add_student(_student_id, _full_name, _date_of_birth, _address, _parent_phone_number, _class_id)
 -- [example]: call add_student(1, 'Nguyễn Thị Lan', '2007-05-15', '123 ABC Street, XYZ City', '0123456789', 1);

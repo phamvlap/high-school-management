@@ -1,6 +1,13 @@
-Cài đặt Web Root:
+# **High School Management System**
 
--> Điều chỉnh Path to /public folder
+## **Hướng dẫn cài đặt**
+
+### **Cấu hình XAMPP**
+
+- **Cài đặt Web Root:** Điều chỉnh Path to /public folder
+- **Cài đặt Virtual Host**: 
+    - Mở file `httpd-vhosts.conf` trong `C:\xampp\apache\conf\extra\httpd-vhosts.conf`
+    - Thêm đoạn code sau vào cuối file:
 ```
 <VirtualHost *:80>  
     DocumentRoot "C:/xampp/htdocs" 
@@ -23,3 +30,17 @@ Cài đặt Web Root:
     </Directory>
 </VirtualHost>
 ```
+- **Cài đặt Composer**: 
+    - Tải Composer tại [đây](https://getcomposer.org/download/)
+    - Cài đặt Composer
+- **Bật các extension trong php.ini**:
+    - Bật extension `pdo_mysql` trong `php.ini` bằng cách xóa dấu `;` ở đầu dòng `;extension=pdo_mysql`
+    - Bật extension `gd` trong `php.ini` bằng cách xóa dấu `;` ở đầu dòng `extension=gd`
+    - Bật extension `zip` trong `php.ini` bằng cách xóa dấu `;` ở đầu dòng `;extension=zip`
+- **Chạy lệnh `composer install` trong thư mục gốc của project**
+
+### **Cài đặt cơ sở dữ liệu**
+- **Cài đặt Database**: Thực thi file 'sql_scripts/all.sql' bằng một phần mềm quản lý database như `MySQL Workbench`
+
+## **Sử dụng**
+- **Truy cập trang web:** Mở trình duyệt và truy cập vào `http://highschool.localhost`
